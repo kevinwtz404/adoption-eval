@@ -1,0 +1,7 @@
+{
+  "scenario": "revops",
+  "steps": [
+    { "id": "s1", "name": "lead qualification", "owner": "sdr" },
+    { "id": "s2", "name": "handoff to ae", "owner": "ops" }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "workflow-input",
+  "type": "object",
+  "required": ["scenario", "steps"],
+  "properties": {
+    "scenario": { "type": "string", "enum": ["revops", "support-triage"] },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "owner": { "type": "string" },
+          "inputs": { "type": "array", "items": { "type": "string" } },
+          "outputs": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

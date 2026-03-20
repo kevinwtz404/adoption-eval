@@ -1,0 +1,7 @@
+{
+  "scenario": "support-triage",
+  "steps": [
+    { "id": "s1", "name": "ticket intake", "owner": "support" },
+    { "id": "s2", "name": "priority routing", "owner": "support-ops" }
+  ]
+}
