@@ -65,7 +65,7 @@ Decision options:
 - revise
 - reject
 
-Feed learnings back into discovery and matching criteria.
+Feed learnings back into discovery and matching criteria so each cycle improves candidate selection and solution matching.
 
 ---
 

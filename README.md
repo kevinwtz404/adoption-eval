@@ -19,6 +19,13 @@ Evaluate a specific workflow and produce an implementation-ready plan for AI ado
 - interface doc: `docs/readiness-interface.md`
 - sample input: `examples/readiness-profile.input.example.json`
 
+## method and docs
+- docs map: `docs/README.md`
+- method overview: `docs/adoption-eval-method-overview.md`
+- discovery methods: `docs/ai-adoption-opportunity-discovery-methods.md`
+- matching canvas: `docs/opportunity-to-solution-matching-canvas.md`
+- outcome matrix: `docs/outcome-dimensions-matrix.md`
+
 ## quick practical usage
 - guide: `docs/how-to-use-adoption-eval.md`
 - run: `node bin/adoption-eval.js run --input <workflow.json> --out <dir>`
