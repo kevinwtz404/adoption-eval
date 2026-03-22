@@ -1,0 +1,16 @@
+{
+  "name": "adoption-eval",
+  "version": "0.1.0",
+  "description": "Workflow-first AI adoption evaluation CLI",
+  "type": "module",
+  "bin": {
+    "adoption-eval": "bin/adoption-eval.js"
+  },
+  "scripts": {
+    "start": "node bin/adoption-eval.js",
+    "validate": "node bin/adoption-eval.js validate --input examples/support-triage-workflow.example.json",
+    "map": "node bin/adoption-eval.js map --input examples/support-triage-workflow.example.json --out examples/out",
+    "eval": "node bin/adoption-eval.js eval --input examples/support-triage-workflow.example.json --out examples/out",
+    "run": "node bin/adoption-eval.js run --input examples/support-triage-workflow.example.json --out examples/out"
+  }
+}

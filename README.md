@@ -19,6 +19,10 @@ Evaluate a specific workflow and produce an implementation-ready plan for AI ado
 - interface doc: `docs/readiness-interface.md`
 - sample input: `examples/readiness-profile.input.example.json`
 
+## quick practical usage
+- guide: `docs/how-to-use-adoption-eval.md`
+- run: `node bin/adoption-eval.js run --input <workflow.json> --out <dir>`
+
 ## roadmap (draft)
 - define `run`, `map`, `eval` command contract
 - finalise revops and support triage sample workflows

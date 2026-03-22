@@ -1,8 +1,7 @@
 # adoption-eval plan (draft v1)
 
 status: in progress
-owner: cynthia
-last updated: 2026-03-20 16:49 GMT
+last updated: 2026-03-22 17:52 GMT
 
 ## purpose
 Build a practical pilot-to-scale toolkit for internal AI adoption.
@@ -13,8 +12,7 @@ Build a practical pilot-to-scale toolkit for internal AI adoption.
 - use cases: revops + support triage
 - guardrails: extended
 - voice: adoption/change focused
-- shipping: big content/code waits for explicit "ship it"
-- green money: small setup/config/issues allowed now
+- shipping: major content/code changes are reviewed before release
 
 ## command design (agreed)
 - `adoption-eval run` (combined map + eval)
@@ -26,7 +24,7 @@ Build a practical pilot-to-scale toolkit for internal AI adoption.
 - human summary: Markdown
 - optional export: CSV
 
-## decisions resolved (from Telegram thread)
+## decisions resolved
 1. readiness model approach: standard MVP scoring model with extended guardrails
 2. first scenarios: revops + support triage (both in v1 workflow set)
 3. output preference: JSON + Markdown summaries (with CSV export option)
@@ -34,5 +32,5 @@ Build a practical pilot-to-scale toolkit for internal AI adoption.
 ## immediate next steps
 - draft CLI contract and input schemas
 - draft first scenario data templates (revops + support triage)
-- open green-money roadmap issues
-- draft scoring model for Kevin review before "ship it"
+- open roadmap issues for implementation sequencing
+- draft scoring model for review before release
