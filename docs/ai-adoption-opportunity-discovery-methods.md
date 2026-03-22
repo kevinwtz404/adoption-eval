@@ -78,18 +78,18 @@ Use this as a practical field guide before solution design. The purpose is to fi
 - iSixSigma. (n.d.). *Preparing to Measure Process Work: Time Study*. https://www.isixsigma.com/business-process-management-bpm/preparing-measure-process-work-time-study/
 
 ## 6) process mining (event-log analysis)
-**What it is:** Process mining uses event logs from operational systems (CRM, ERP, ticketing, etc.) to reconstruct how workflows actually run. It compares observed process variants against expected flow.
+**What it is:** Process mining uses event logs from systems like CRM, ERP, and ticketing platforms to reconstruct how work actually runs. It shows real process variants rather than ideal process diagrams.
 
-**Benefits:** High evidence strength for bottlenecks, conformance drift, cycle-time variance, and hidden process paths at scale.
+**Benefits:** Strong evidence for bottlenecks, conformance drift, and cycle-time variance at scale. Useful when teams need to move from opinion to measurable process facts.
 
-**Caveats:** Heavily dependent on log quality and event definitions. If data is incomplete, outputs can mislead.
+**Caveats:** It only works as well as the logs. Weak event definitions or incomplete logging can produce false confidence.
 
-**How it works:** Extract logs, preprocess events, discover process flows, analyse variants, and interpret findings with business stakeholders.
+**How it works:** Extract logs, clean and normalise event data, discover actual process paths, compare variants, then interpret results with workflow owners.
 
-**How to design:** Define event semantics early (what each event means), validate data completeness, and pair mining outputs with domain interviews.
+**How to design:** Agree event definitions early, check data coverage before analysis, and combine findings with interviews so technical outputs are interpreted in business context.
 
 **Read more:**
-- van der Aalst, W. M. P., et al. (2012). *Process Mining Manifesto*.
+- van der Aalst, W. M. P., et al. (2012). *Process Mining Manifesto*. https://www.tf-pm.org/upload/1580737614108.pdf
 - Berti, A., Montali, M., & van der Aalst, W. M. P. (2023). *Advancements and Challenges in Object-Centric Process Mining: A Systematic Literature Review*. arXiv. https://arxiv.org/abs/2311.08795
 - García-Rojas, E., et al. (2021). *Event Log Preprocessing for Process Mining: A Review*. *Applied Sciences, 11*(22), 10556. https://www.mdpi.com/2076-3417/11/22/10556
 
@@ -136,7 +136,7 @@ Use this as a practical field guide before solution design. The purpose is to fi
 
 **Read more:**
 - Prosci. (2023). *Best Practices in Change Management (Executive Summary)*. https://empower.prosci.com/best-practices-change-management-executive-summary
-- Family Planning National Training Center. (2020). *Change Champion Network*.
+- Family Planning National Training Center. (2020). *Change Champion Network*. https://rhntc.org/sites/default/files/resources/fpntc_chng_champ_ntwk_2020-06.pdf
 
 ## 10) value-effort-risk scoring workshop
 **What it is:** A structured prioritisation workshop where candidate workflows are scored on value, effort, and risk to create a transparent shortlist.

@@ -1,6 +1,6 @@
 # adoption-eval docs map
 
-Use this map to navigate the methodology from discovery through pilot outcomes.
+This repo is designed to move from discovery to a decision-ready pilot quickly. Use this map to follow the method in order.
 
 ## start here
 1. `adoption-eval-method-overview.md` - end-to-end stage logic

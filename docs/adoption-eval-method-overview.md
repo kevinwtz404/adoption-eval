@@ -1,6 +1,6 @@
 # adoption-eval method overview (v1)
 
-This is the end-to-end operating logic.
+Most AI adoption efforts fail in the gap between a good idea and a runnable pilot. This method closes that gap with a simple loop: discover opportunities, choose the right intervention path, enforce boundaries, and measure outcomes.
 
 ## 0) discover opportunities
 Find candidate workflows using the discovery methods guide.
