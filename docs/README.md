@@ -16,8 +16,13 @@ This repo is designed to move from discovery to a decision-ready pilot quickly. 
 - `flagship-use-cases/03-creative-content-versioning-pipeline.md`
 - `flagship-use-cases/04-cfo-financial-intelligence.md`
 
-## implementation and contracts
-- `cli-contract.md`
-- `readiness-interface.md`
+## implementation and supporting docs
 - `how-to-use-adoption-eval.md`
-- `evaluation-pattern.md`
+- `readiness-interface.md`
+- `landscape-research-2026-03-22.md`
+
+## archived docs
+Legacy planning/contracts moved to `archive/`:
+- `archive/adoption-eval-plan.md`
+- `archive/cli-contract.md`
+- `archive/evaluation-pattern.md`
