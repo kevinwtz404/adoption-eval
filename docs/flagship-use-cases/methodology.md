@@ -7,6 +7,10 @@ without this step, use cases appear out of thin air. with it, every case traces 
 
 ## where this sits in the overall flow
 
+For full stage logic (discovery → qualification → matching → boundaries → pilot → outcomes), see `../adoption-eval-method-overview.md`.
+
+## where this sits in the overall flow
+
 ```
 ai-readiness (is the org ready?)
     → workflow discovery (find + prioritise candidate workflows)  ← this doc
@@ -137,6 +141,7 @@ once a workflow passes screening, it enters adoption-eval as an input:
 2. **record the discovery evidence** — which methods were used, what signals were found, why this workflow was selected
 3. **run `adoption-eval map`** to produce the could/should/must-stay-human decision map
 4. **run `adoption-eval eval`** to score pilot readiness and generate the 30-day plan
+5. **capture outcome dimensions** using a standard matrix (`time`, `cost`, `quality`, `risk`, `adoption friction`, `control confidence`)
 
 the flagship use cases in this folder are the first four workflows through this process. each one includes its discovery method and candidate signals as proof of methodology.
 
@@ -155,7 +160,7 @@ start with method 4 (tech stack audit) — it surfaces integration opportunities
 
 | case | primary discovery methods | buyer context |
 |------|--------------------------|---------------|
-| 01 — knowledge alignment | champion interviews, shadowing, time audit | ops leads, internal teams |
-| 02 — revops pipeline | champion interviews, tech stack audit, shadowing, pipeline review | CRO, sales leadership |
+| 01 — knowledge alignment | champion workshops, shadowing, time-spend analysis | ops leads, internal teams |
+| 02 — revops pipeline | champion workshops, tech stack audit, shadowing, retrospective/pipeline review | CRO, sales leadership |
 | 03 — creative content | time-spend analysis, shadowing, retrospective review | content/marketing leads |
-| 04 — CFO intelligence | structured interviews, process walkthrough, time audit, executive feedback | CFO, FP&A teams |
+| 04 — CFO intelligence | champion workshops, shadowing/process walkthrough, time-spend analysis, executive review | CFO, FP&A teams |

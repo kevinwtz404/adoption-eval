@@ -1,0 +1,7 @@
+scope_level,scope_id,dimension,baseline_value,current_value,delta,direction,confidence,evidence_source,notes
+workflow,cfo-financial-intelligence,time,5_days,3_days,-2_days,improved,high,reporting-cycle-log,cycle time reduced after automated assembly
+workflow,cfo-financial-intelligence,cost,40_analyst_hours,28_analyst_hours,-12_hours,improved,medium,time-audit,savings from reduced manual formatting
+workflow,cfo-financial-intelligence,quality,6.8/10,8.1/10,+1.3,improved,medium,stakeholder-survey,board feedback improved on clarity
+workflow,cfo-financial-intelligence,risk,medium,medium,0,neutral,high,control-review,deterministic calculator gate kept in place
+workflow,cfo-financial-intelligence,adoption_friction,high,medium,-1_level,improved,medium,user-feedback,initial training still needed
+workflow,cfo-financial-intelligence,control_confidence,medium,high,+1_level,improved,high,audit-trail-check,approval gate + source traceability improved trust

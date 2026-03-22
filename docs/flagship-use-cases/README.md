@@ -2,7 +2,7 @@
 
 these four use cases are the initial test set for validating the shared methodology.
 
-each case was identified using the discovery methods documented in [methodology.md](./methodology.md) and follows the full adoption-eval flow: discover → map → evaluate → plan.
+each case was identified using the discovery methods documented in [methodology.md](./methodology.md) and follows the adoption-eval method flow documented in [../adoption-eval-method-overview.md](../adoption-eval-method-overview.md).
 
 ## included scenarios
 1. `01-internal-knowledge-alignment.md` — operational, internal teams
