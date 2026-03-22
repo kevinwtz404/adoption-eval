@@ -1,0 +1,28 @@
+{
+  "version": "0.1",
+  "org_id": "acme-co",
+  "assessment_date": "2026-03-22",
+  "overall_score": 61,
+  "domain_scores": {
+    "strategy": 72,
+    "governance": 54,
+    "data": 58,
+    "capability": 66,
+    "change_readiness": 55
+  },
+  "required_controls": [
+    "human_review_required_for_customer_facing_outputs",
+    "pii_redaction_before_external_llm"
+  ],
+  "blocked_use_cases": [
+    "Fully autonomous outbound customer communications"
+  ],
+  "roadmap_priorities": [
+    {
+      "id": "R-01",
+      "title": "Define AI risk tiering and approval gate",
+      "time_horizon": "30d",
+      "owner": "Head of Ops"
+    }
+  ]
+}
