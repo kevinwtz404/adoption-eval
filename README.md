@@ -2,6 +2,19 @@
 
 workflow implementation layer.
 
+## purpose
+Evaluate a specific workflow and produce an implementation-ready plan for AI adoption.
+
+## this repo owns
+- workflow mapping and analysis
+- step-level decisions: could automate / should automate / must stay human
+- pilot design, measurement baseline, and 30-day implementation plan
+- recommendations adjusted by org readiness constraints
+
+## this repo does not own
+- organisation-wide readiness diagnostics and roadmap generation (that lives in `ai-readiness`)
+- deep technical architecture repos (`hybrid-rag`, `edge-agent`)
+
 ## accepts optional org readiness input
 - interface doc: `docs/readiness-interface.md`
 - sample input: `examples/readiness-profile.input.example.json`
