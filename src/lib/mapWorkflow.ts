@@ -1,4 +1,4 @@
-import type { WorkflowInput, WorkflowStep, ReadinessProfile, Opportunity, OpportunityMap } from '../types.js';
+import { METHOD_VERSION, SCHEMA_VERSION, type WorkflowInput, type WorkflowStep, type ReadinessProfile, type Opportunity, type OpportunityMap } from '../types.js';
 
 // Patterns that suggest a step should stay human
 const HUMAN_REQUIRED_PATTERNS = [
@@ -141,6 +141,8 @@ export function mapWorkflow(input: WorkflowInput, readinessProfile: ReadinessPro
   );
 
   return {
+    method_version: METHOD_VERSION,
+    schema_version: SCHEMA_VERSION,
     workflow: input.workflow.name,
     generated_at: new Date().toISOString(),
     opportunities,

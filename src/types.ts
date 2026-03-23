@@ -1,3 +1,6 @@
+export const METHOD_VERSION = '1.0';
+export const SCHEMA_VERSION = '1.0';
+
 export interface WorkflowStep {
   id: string;
   name: string;
@@ -65,12 +68,16 @@ export interface Opportunity {
 }
 
 export interface OpportunityMap {
+  method_version: string;
+  schema_version: string;
   workflow: string;
   generated_at: string;
   opportunities: Opportunity[];
 }
 
 export interface ReadinessScore {
+  method_version: string;
+  schema_version: string;
   workflow: string;
   overall_score: number;
   domain_scores: Record<string, number>;

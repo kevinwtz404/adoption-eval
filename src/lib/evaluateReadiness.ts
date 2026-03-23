@@ -1,4 +1,4 @@
-import type { WorkflowInput, ReadinessProfile, ReadinessScore } from '../types.js';
+import { METHOD_VERSION, SCHEMA_VERSION, type WorkflowInput, type ReadinessProfile, type ReadinessScore } from '../types.js';
 
 function computePenalty(readinessProfile: ReadinessProfile | null): { penalty: number; notes: string[] } {
   if (!readinessProfile) return { penalty: 0, notes: [] };
@@ -82,6 +82,8 @@ export function evaluateReadiness(input: WorkflowInput, readinessProfile: Readin
   );
 
   return {
+    method_version: METHOD_VERSION,
+    schema_version: SCHEMA_VERSION,
     workflow: input.workflow.name,
     overall_score: overall,
     domain_scores,

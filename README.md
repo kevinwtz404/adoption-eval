@@ -18,16 +18,17 @@ Use this repo to:
 - consultants running workflow discovery and pilot design
 - technical teams translating business workflow needs into build choices
 
-## what this repo owns
-- workflow-level analysis and decision logic
-- `could / should / must-stay-human` decisions
-- opportunity-to-solution matching
-- boundary design and approval-gate patterns
-- pilot planning and outcome evaluation
+## architecture at a glance
 
-## what this repo does not own
-- org-wide readiness diagnostics and roadmap generation (`ai-readiness`)
-- deep technical architecture implementation repos (`hybrid-rag`, `edge-agent`)
+This repo has three layers. They share one method backbone and one schema contract.
+
+| Layer | Location | Purpose | Audience |
+|-------|----------|---------|----------|
+| **Web app** | `site/` | Interactive walkthrough of the method. Pick a flagship case or enter your own workflow, score it, map opportunities, review boundaries, get a pilot plan. | Anyone learning or applying the method |
+| **CLI** | `src/` + `bin/` | Operational tool for running assessments in pipelines or local workflows. Same logic as the web app. | Technical teams, automation pipelines |
+| **Method docs** | `docs/` | Canonical method documentation, rubrics, discovery guides, flagship use cases. | Everyone — the source of truth for the method |
+
+The web app and CLI both import the same core logic from `src/lib/`. The method docs define the rules that the logic implements.
 
 ## method backbone (end-to-end)
 1. discover opportunities
@@ -39,6 +40,17 @@ Use this repo to:
 
 Detailed flow: `docs/adoption-eval-method-overview.md`
 
+## what this repo owns
+- workflow-level analysis and decision logic
+- `could / should / must-stay-human` decisions
+- opportunity-to-solution matching
+- boundary design and approval-gate patterns
+- pilot planning and outcome evaluation
+
+## what this repo does not own
+- org-wide readiness diagnostics and roadmap generation (`ai-readiness`)
+- deep technical architecture implementation repos (`hybrid-rag`, `edge-agent`)
+
 ## key principles
 - method is stable but adaptable
 - solutions are variable by context and risk
@@ -47,6 +59,20 @@ Detailed flow: `docs/adoption-eval-method-overview.md`
 - boundary enforcement should be architectural where risk is high
 
 ## start here
+
+### web app (interactive)
+```bash
+cd site && nvm use 22 && npm run dev
+```
+Or visit the hosted version (once GitHub Pages is enabled).
+
+### CLI
+```bash
+npm run build
+node bin/adoption-eval.js run --input examples/cli/support-triage-workflow.example.json --out examples/out
+```
+
+### docs
 - docs map: `docs/README.md`
 - method overview: `docs/adoption-eval-method-overview.md`
 - discovery methods: `docs/ai-adoption-opportunity-discovery-methods.md`
@@ -57,24 +83,45 @@ Detailed flow: `docs/adoption-eval-method-overview.md`
 - positioning draft: `docs/market-facing-positioning.md`
 - flagship examples: `docs/flagship-use-cases/README.md`
 
-## inputs and outputs
+## schema contract
+
+The canonical input shape is defined in `schemas/workflow-input.schema.json`. Both the CLI and web app validate against it.
+
+All outputs include `method_version` and `schema_version` tags to track drift between the method docs, CLI, and web app.
+
+Key fields: `workflow.name`, `workflow.steps[]`, `workflow.actors[]`, `workflow.data_assets[]`, `workflow.success_metrics[]`, and optional `workflow.qualification` scores (1-5 scale).
+
 ### optional upstream input
 - readiness profile contract: `docs/readiness-interface.md`
-- sample file: `examples/readiness-profile.input.example.json`
+- sample file: `examples/cli/readiness-profile.input.example.json`
 
 ### typical outputs
-- workflow map and intervention options
-- boundary/control design
-- pilot plan
+- opportunity map (could / should / must-stay-human per step)
+- qualification score with weighted criteria and gate checks
+- readiness score with domain breakdown
+- 30-day action plan with prerequisites, controls, and gate-failure remediation
 - outcome dimensions matrix (`time`, `cost`, `quality`, `risk`, `adoption friction`, `control confidence`)
 
-## quick practical usage
-- guide: `docs/how-to-use-adoption-eval.md`
-- run:
+## project structure
 
-```bash
-node bin/adoption-eval.js run --input <workflow.json> --out <dir>
+```
+adoption-eval/
+├── bin/                    # CLI entry point
+├── src/                    # TypeScript source (shared logic + CLI commands)
+│   ├── lib/                # Core logic (browser-safe, used by both CLI and web app)
+│   ├── commands/           # CLI command handlers
+│   ├── core/               # Output helpers, exit codes
+│   └── types.ts            # Shared type definitions
+├── site/                   # Astro + Preact web app
+│   └── src/
+│       ├── pages/          # 7 pages (landing + 6 method steps)
+│       ├── components/     # Interactive Preact islands
+│       └── data/           # Flagship case fixtures, localStorage state
+├── docs/                   # Method documentation (source of truth)
+├── schemas/                # JSON Schema for workflow input
+└── examples/
+    └── cli/                # CLI example inputs (workflow, readiness, outcome matrix)
 ```
 
 ## current state
-This repo is in active development. Core method docs and templates are in place. The next phase is iterative testing and refinement across the 4 flagship examples.
+This repo is in active development. The method docs, CLI logic, and web app prototype are in place. The web app is a prototype sandbox for learning and applying the method interactively. The next phase is iterative testing and refinement across the 4 flagship examples.

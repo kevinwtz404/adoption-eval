@@ -85,10 +85,12 @@ describe('mapWorkflow', () => {
     expect(result.opportunities[0].rationale).toContain('Senior');
   });
 
-  it('includes workflow name and timestamp', () => {
+  it('includes workflow name, timestamp, and version tags', () => {
     const input = makeInput([{ id: 's1', name: 'step one' }]);
     const result = mapWorkflow(input);
     expect(result.workflow).toBe('test');
     expect(result.generated_at).toBeTruthy();
+    expect(result.method_version).toBe('1.0');
+    expect(result.schema_version).toBe('1.0');
   });
 });

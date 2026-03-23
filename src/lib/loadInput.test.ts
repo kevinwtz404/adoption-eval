@@ -4,7 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const examplesDir = path.resolve(__dirname, '../../examples');
+const examplesDir = path.resolve(__dirname, '../../examples/cli');
 
 describe('loadInput', () => {
   it('loads canonical format', async () => {

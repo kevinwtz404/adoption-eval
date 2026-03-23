@@ -21,11 +21,13 @@ const baseProfile: ReadinessProfile = {
 };
 
 describe('evaluateReadiness', () => {
-  it('returns base scores when no profile provided', () => {
+  it('returns base scores with version tags when no profile provided', () => {
     const result = evaluateReadiness(input);
     expect(result.overall_score).toBe(67);
     expect(result.controls_required).toEqual([]);
     expect(result.notes).toEqual([]);
+    expect(result.method_version).toBe('1.0');
+    expect(result.schema_version).toBe('1.0');
   });
 
   it('applies no penalty when governance and data are above 60', () => {

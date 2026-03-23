@@ -9,10 +9,10 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node bin/adoption-eval.js",
-    "validate": "npm run build && node bin/adoption-eval.js validate --input examples/support-triage-workflow.example.json",
-    "map": "npm run build && node bin/adoption-eval.js map --input examples/support-triage-workflow.example.json --out examples/out",
-    "eval": "npm run build && node bin/adoption-eval.js eval --input examples/support-triage-workflow.example.json --out examples/out",
-    "run": "npm run build && node bin/adoption-eval.js run --input examples/support-triage-workflow.example.json --out examples/out",
+    "validate": "npm run build && node bin/adoption-eval.js validate --input examples/cli/support-triage-workflow.example.json",
+    "map": "npm run build && node bin/adoption-eval.js map --input examples/cli/support-triage-workflow.example.json --out examples/out",
+    "eval": "npm run build && node bin/adoption-eval.js eval --input examples/cli/support-triage-workflow.example.json --out examples/out",
+    "run": "npm run build && node bin/adoption-eval.js run --input examples/cli/support-triage-workflow.example.json --out examples/out",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
