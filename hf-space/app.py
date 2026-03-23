@@ -7,6 +7,7 @@ from collections import defaultdict
 
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+API_TOKEN = os.environ.get("API_TOKEN", "")
 
 # Simple rate limiting: max calls per IP per hour
 RATE_LIMIT = 20
@@ -64,8 +65,12 @@ def analyse_step(
     step_name: str,
     step_pain: str,
     user_description: str,
+    token: str = "",
     request: gr.Request = None,
 ) -> str:
+    if API_TOKEN and token != API_TOKEN:
+        return "Unauthorised. This API is restricted."
+
     if not GEMINI_API_KEY:
         return "API key not configured on the server."
 
@@ -131,6 +136,7 @@ demo = gr.Interface(
         gr.Textbox(label="Step name"),
         gr.Textbox(label="Current pain"),
         gr.Textbox(label="What do you want to change?", lines=3),
+        gr.Textbox(label="Token", visible=False),
     ],
     outputs=gr.Textbox(label="Analysis", lines=15),
     title="adoption-eval: Step Analysis",

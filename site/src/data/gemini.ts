@@ -1,8 +1,8 @@
 // This module calls a Hugging Face Space that proxies to the Gemini API.
 // The API key lives on the HF Space as a secret, never in this codebase.
 
-// TODO: Replace with your actual HF Space URL once deployed
-const HF_SPACE_URL = 'https://YOUR_USERNAME-adoption-eval-api.hf.space/api/predict';
+const HF_SPACE_URL = 'https://cantcomeupwithaname-adoption-eval-api.hf.space/api/predict';
+const API_TOKEN = 'ae-2026-kw-pilot';
 
 export async function analyseStep(
   stepName: string,
@@ -15,7 +15,7 @@ export async function analyseStep(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        data: [workflowContext, stepName, stepPain, userDescription],
+        data: [workflowContext, stepName, stepPain, userDescription, API_TOKEN],
       }),
     });
 
