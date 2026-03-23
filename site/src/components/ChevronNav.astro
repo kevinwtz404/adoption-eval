@@ -1,0 +1,14 @@
+---
+interface Props {
+  direction: 'prev' | 'next';
+  href: string;
+}
+
+const { direction, href } = Astro.props;
+---
+
+<div class:list={['chevron-nav', direction]}>
+  <a href={href} class="chevron-btn" aria-label={direction === 'prev' ? 'Previous step' : 'Next step'}>
+    {direction === 'prev' ? '‹' : '›'}
+  </a>
+</div>

@@ -1,7 +1,12 @@
 {
-  "scenario": "revops",
-  "steps": [
-    { "id": "s1", "name": "lead qualification", "owner": "sdr" },
-    { "id": "s2", "name": "handoff to ae", "owner": "ops" }
-  ]
+  "workflow": {
+    "name": "revops",
+    "steps": [
+      { "id": "s1", "name": "lead qualification", "owner": "sdr" },
+      { "id": "s2", "name": "handoff to ae", "owner": "ops" }
+    ],
+    "actors": ["sdr", "ops"],
+    "data_assets": ["crm-records", "lead-data"],
+    "success_metrics": ["pipeline_velocity", "lead_conversion_rate"]
+  }
 }

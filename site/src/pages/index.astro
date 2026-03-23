@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Home" next={`${base}1-discover/`}>
+  <div class="hero">
+    <h1>adoption-eval</h1>
+    <p class="hero-subtitle">
+      A practical method for turning workflow pain into decision-ready AI pilots.
+    </p>
+    <p class="hero-body">
+      Most teams don't fail because they lack AI tools. They fail because they can't reliably move from a painpoint to a safe, testable implementation plan. This method closes that gap.
+    </p>
+
+    <div class="method-loop">
+      <div class="loop-step"><span class="loop-num">1</span> Discover</div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step"><span class="loop-num">2</span> Qualify</div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step"><span class="loop-num">3</span> Map</div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step"><span class="loop-num">4</span> Bound</div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step"><span class="loop-num">5</span> Pilot</div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step"><span class="loop-num">6</span> Evaluate</div>
+    </div>
+
+    <div class="hero-cta">
+      <a href={`${base}1-discover/`} class="btn btn-primary">Start the method &rarr;</a>
+    </div>
+
+    <div class="principles">
+      <h2>Key principles</h2>
+      <ul>
+        <li>The method is stable but adaptable — solutions are variable by context</li>
+        <li>Multiple intervention paths are always considered, including non-AI</li>
+        <li>Not every problem is an AI problem</li>
+        <li>Boundary enforcement should be architectural where risk is high</li>
+        <li>A pilot is not a success if it is faster but less controllable</li>
+      </ul>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 3rem 0 2rem;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    color: var(--purple);
+  }
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0.5rem auto 1rem;
+  }
+  .hero-body {
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    color: var(--text-light);
+  }
+  .method-loop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .loop-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+  .loop-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--purple);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .loop-arrow { color: var(--text-muted); font-size: 1.25rem; }
+  .hero-cta { margin-bottom: 3rem; }
+  .hero-cta .btn { font-size: 1rem; padding: 0.75rem 2rem; }
+  .principles { text-align: left; max-width: 640px; margin: 0 auto; }
+  .principles h2 { margin-bottom: 0.75rem; }
+  .principles ul { list-style: none; padding: 0; }
+  .principles li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-light);
+    font-size: 0.9375rem;
+  }
+  .principles li:last-child { border-bottom: none; }
+</style>

@@ -1,2 +1,7 @@
+dist/
 examples/out/
 node_modules/
+site/dist/
+site/node_modules/
+site/.astro/
+.DS_Store

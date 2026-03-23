@@ -1,0 +1,37 @@
+---
+interface Props {
+  currentStep: number;
+  base: string;
+}
+
+const { currentStep, base } = Astro.props;
+
+const steps = [
+  { num: 1, label: 'Discover', href: `${base}1-discover/` },
+  { num: 2, label: 'Qualify', href: `${base}2-qualify/` },
+  { num: 3, label: 'Map', href: `${base}3-map/` },
+  { num: 4, label: 'Bound', href: `${base}4-bound/` },
+  { num: 5, label: 'Pilot', href: `${base}5-pilot/` },
+  { num: 6, label: 'Evaluate', href: `${base}6-evaluate/` },
+];
+---
+
+<nav class="step-nav">
+  <div class="step-nav-inner">
+    <a href={base} class="step-link" style="margin-right: 0.5rem; font-weight: 700; color: var(--purple);">
+      adoption-eval
+    </a>
+    {steps.map((s, i) => (
+      <>
+        {i > 0 && <div class="step-connector" />}
+        <a
+          href={s.href}
+          class:list={['step-link', { active: currentStep === s.num, completed: currentStep > s.num }]}
+        >
+          <div class="step-dot">{currentStep > s.num ? '✓' : s.num}</div>
+          <span>{s.label}</span>
+        </a>
+      </>
+    ))}
+  </div>
+</nav>

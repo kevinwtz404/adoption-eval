@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Step 6: Evaluate" step={6} prev={`${base}5-pilot/`}>
+  <div class="page-header">
+    <h1>Evaluate outcomes</h1>
+    <p class="subtitle">After your pilot, track what changed across 6 dimensions and decide: scale, revise, or reject.</p>
+  </div>
+
+  <div class="section">
+    <h2>Outcome dimensions</h2>
+    <p>Use this matrix at the end of every pilot to document what changed, where, and with what confidence.</p>
+
+    <div class="dimensions-grid">
+      <div class="dim-card">
+        <div class="dim-icon">⏱</div>
+        <strong>Time</strong>
+        <p>Faster or slower?</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">💰</div>
+        <strong>Cost</strong>
+        <p>Cheaper or more expensive?</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">✦</div>
+        <strong>Quality</strong>
+        <p>Better or worse output?</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">⚠</div>
+        <strong>Risk</strong>
+        <p>Higher or lower operational risk?</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">👥</div>
+        <strong>Adoption friction</strong>
+        <p>Easier or harder for teams?</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">🔒</div>
+        <strong>Control confidence</strong>
+        <p>Better or worse traceability?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Interpretation rule</h2>
+    <div class="card" style="border-left: 3px solid var(--purple);">
+      <p style="margin: 0;"><strong>Do not treat time savings alone as success.</strong> A pilot is only considered strong when improvements in time/cost do not degrade risk/control beyond accepted thresholds.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Decision and loop</h2>
+    <p>After evaluation, choose one of three paths:</p>
+    <div class="decision-options">
+      <div class="dec-opt">
+        <span class="badge badge-proceed">Scale</span>
+        <p>Expand the pilot to more workflow slices or teams.</p>
+      </div>
+      <div class="dec-opt">
+        <span class="badge badge-conditions">Revise</span>
+        <p>Adjust boundaries, controls, or scope and run another iteration.</p>
+      </div>
+      <div class="dec-opt">
+        <span class="badge badge-defer">Reject</span>
+        <p>The intervention didn't work for this workflow. Document learnings and move on.</p>
+      </div>
+    </div>
+    <p style="margin-top: 1rem; color: var(--text-light); font-size: 0.9375rem;">
+      Feed learnings back into discovery and matching criteria so each cycle improves candidate selection and solution matching.
+    </p>
+  </div>
+
+  <div class="section" style="text-align: center; padding: 2rem 0;">
+    <p style="color: var(--text-muted);">Outcome tracking form coming in v2.</p>
+    <a href={base} class="btn btn-secondary">Back to start</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .dimensions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .dim-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .dim-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .dim-card p { font-size: 0.8125rem; color: var(--text-light); margin: 0.25rem 0 0; }
+  .decision-options { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem; }
+  .dec-opt { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .dec-opt p { margin: 0; font-size: 0.9375rem; color: var(--text-light); }
+  @media (max-width: 480px) { .dimensions-grid { grid-template-columns: 1fr; } }
+</style>

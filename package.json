@@ -7,10 +7,22 @@
     "adoption-eval": "bin/adoption-eval.js"
   },
   "scripts": {
-    "start": "node bin/adoption-eval.js",
-    "validate": "node bin/adoption-eval.js validate --input examples/support-triage-workflow.example.json",
-    "map": "node bin/adoption-eval.js map --input examples/support-triage-workflow.example.json --out examples/out",
-    "eval": "node bin/adoption-eval.js eval --input examples/support-triage-workflow.example.json --out examples/out",
-    "run": "node bin/adoption-eval.js run --input examples/support-triage-workflow.example.json --out examples/out"
+    "build": "tsc",
+    "start": "npm run build && node bin/adoption-eval.js",
+    "validate": "npm run build && node bin/adoption-eval.js validate --input examples/support-triage-workflow.example.json",
+    "map": "npm run build && node bin/adoption-eval.js map --input examples/support-triage-workflow.example.json --out examples/out",
+    "eval": "npm run build && node bin/adoption-eval.js eval --input examples/support-triage-workflow.example.json --out examples/out",
+    "run": "npm run build && node bin/adoption-eval.js run --input examples/support-triage-workflow.example.json --out examples/out",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "ajv": "^8.18.0"
   }
 }

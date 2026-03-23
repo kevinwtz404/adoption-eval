@@ -1,10 +1,11 @@
+import type { CliOpts, ParsedArgs } from './types.js';
 import { runCommand } from './commands/run.js';
 import { mapCommand } from './commands/map.js';
 import { evalCommand } from './commands/eval.js';
 import { validateCommand } from './commands/validate.js';
 
-function parseArgs(args) {
-  const out = { _: [] };
+function parseArgs(args: string[]): ParsedArgs {
+  const out: ParsedArgs = { _: [] };
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a.startsWith('--')) {
@@ -15,12 +16,12 @@ function parseArgs(args) {
         out[key] = next;
         i++;
       }
-    } else out._.push(a);
+    } else (out._ as string[]).push(a);
   }
   return out;
 }
 
-export async function runCli(argv) {
+export async function runCli(argv: string[]): Promise<number> {
   const parsed = parseArgs(argv);
   const command = parsed._[0];
 
@@ -29,10 +30,10 @@ export async function runCli(argv) {
     return 0;
   }
 
-  const opts = {
-    input: parsed.input,
-    out: parsed.out || './out',
-    readiness: parsed.readiness,
+  const opts: CliOpts = {
+    input: parsed.input as string,
+    out: (parsed.out as string) || './out',
+    readiness: parsed.readiness as string | undefined,
     strict: Boolean(parsed.strict),
   };
 

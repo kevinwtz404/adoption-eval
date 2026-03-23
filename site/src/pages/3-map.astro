@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OpportunityMap from '../components/OpportunityMap.tsx';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Step 3: Map" step={3} prev={`${base}2-qualify/`} next={`${base}4-bound/`}>
+  <div class="page-header">
+    <h1>Map opportunities</h1>
+    <p class="subtitle">Classify each workflow step: could automate, should automate, or must stay human.</p>
+  </div>
+
+  <div class="section">
+    <h2>The could / should / must-stay-human framework</h2>
+    <p>Not everything that <em>can</em> be automated <em>should</em> be. This step applies structured rules to each workflow step based on its name, owner, tags, and boundary requirements.</p>
+
+    <div class="framework-items">
+      <div class="fw-item">
+        <div class="fw-dot" style="background: var(--warning);"></div>
+        <div>
+          <strong>Could automate</strong>
+          <p>Technically feasible but needs further assessment before committing.</p>
+        </div>
+      </div>
+      <div class="fw-item">
+        <div class="fw-dot" style="background: var(--success);"></div>
+        <div>
+          <strong>Should automate</strong>
+          <p>Clear repetitive/structured step with good input-output patterns. Recommended for pilot.</p>
+        </div>
+      </div>
+      <div class="fw-item">
+        <div class="fw-dot" style="background: var(--danger);"></div>
+        <div>
+          <strong>Must stay human</strong>
+          <p>Requires judgement, accountability, approval, or involves customer-facing/legal/compliance decisions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;" />
+
+  <div class="section">
+    <h2>Your opportunity map</h2>
+    <p>Review the automated classification below. Use the toggles to override any decisions.</p>
+    <OpportunityMap client:load />
+  </div>
+</BaseLayout>
+
+<style>
+  .framework-items { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+  .fw-item { display: flex; gap: 0.75rem; align-items: flex-start; }
+  .fw-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+  .fw-item p { font-size: 0.875rem; color: var(--text-light); margin: 0; }
+</style>

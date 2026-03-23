@@ -1,21 +1,56 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "workflow-input",
   "type": "object",
-  "required": ["scenario", "steps"],
+  "required": ["workflow"],
   "properties": {
-    "scenario": { "type": "string", "enum": ["revops", "support-triage"] },
-    "steps": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "name"],
-        "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "owner": { "type": "string" },
-          "inputs": { "type": "array", "items": { "type": "string" } },
-          "outputs": { "type": "array", "items": { "type": "string" } }
+    "workflow": {
+      "type": "object",
+      "required": ["name", "steps", "actors", "data_assets", "success_metrics"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "name": { "type": "string", "minLength": 1 },
+              "owner": { "type": "string" },
+              "inputs": { "type": "array", "items": { "type": "string" } },
+              "outputs": { "type": "array", "items": { "type": "string" } },
+              "must_stay_human": { "type": "boolean" },
+              "requires_approval": { "type": "boolean" },
+              "tags": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "actors": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "data_assets": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "success_metrics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "qualification": {
+          "type": "object",
+          "description": "Opportunity qualification scores (1-5 scale, from human assessment)",
+          "properties": {
+            "business_impact": { "type": "number", "minimum": 1, "maximum": 5 },
+            "frequency": { "type": "number", "minimum": 1, "maximum": 5 },
+            "baseline_measurability": { "type": "number", "minimum": 1, "maximum": 5 },
+            "data_readiness": { "type": "number", "minimum": 1, "maximum": 5 },
+            "boundary_clarity": { "type": "number", "minimum": 1, "maximum": 5 },
+            "pilotability": { "type": "number", "minimum": 1, "maximum": 5 }
+          }
         }
       }
     }

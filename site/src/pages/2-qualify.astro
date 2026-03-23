@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QualificationForm from '../components/QualificationForm.tsx';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Step 2: Qualify" step={2} prev={`${base}1-discover/`} next={`${base}3-map/`}>
+  <div class="page-header">
+    <h1>Qualify the opportunity</h1>
+    <p class="subtitle">Score the workflow against 6 criteria to determine if it's worth piloting.</p>
+  </div>
+
+  <div class="section">
+    <h2>How qualification works</h2>
+    <p>Each criterion is scored 1-5 and weighted. Two gates must pass: <strong>boundary clarity</strong> and <strong>baseline measurability</strong> must both score at least 3. The weighted score determines the decision band:</p>
+
+    <div class="bands">
+      <div class="band">
+        <span class="badge badge-proceed">4.0 – 5.0</span>
+        <span>Proceed</span>
+      </div>
+      <div class="band">
+        <span class="badge badge-conditions">3.0 – 3.9</span>
+        <span>Proceed with conditions</span>
+      </div>
+      <div class="band">
+        <span class="badge badge-defer">Below 3.0</span>
+        <span>Defer</span>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;" />
+
+  <div class="section">
+    <h2>Score your workflow</h2>
+    <p>Adjust the sliders to reflect your assessment. If you selected a flagship case, scores are pre-filled.</p>
+    <QualificationForm client:load />
+  </div>
+</BaseLayout>
+
+<style>
+  .bands {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .band {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+  }
+</style>

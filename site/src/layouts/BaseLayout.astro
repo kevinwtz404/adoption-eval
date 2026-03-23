@@ -1,0 +1,43 @@
+---
+import '../styles/global.css';
+import StepNav from '../components/StepNav.astro';
+import ChevronNav from '../components/ChevronNav.astro';
+
+interface Props {
+  title: string;
+  step?: number;
+  prev?: string;
+  next?: string;
+}
+
+const { title, step, prev, next } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} — adoption-eval</title>
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+</head>
+<body>
+  {step !== undefined && <StepNav currentStep={step} base={base} />}
+
+  {prev && <ChevronNav direction="prev" href={prev} />}
+  {next && <ChevronNav direction="next" href={next} />}
+
+  <main class="page-content">
+    <div class="container">
+      <slot />
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      adoption-eval &middot; workflow-first AI adoption evaluation
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CaseSelector from '../components/CaseSelector.tsx';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Step 1: Discover" step={1} prev={base} next={`${base}2-qualify/`}>
+  <div class="page-header">
+    <h1>Discover opportunities</h1>
+    <p class="subtitle">Find candidate workflows using structured discovery methods, then choose one to evaluate.</p>
+  </div>
+
+  <div class="section">
+    <h2>How discovery works</h2>
+    <p>Before you can evaluate a workflow, you need to find it. A good discovery pass uses 2-3 of these methods in combination:</p>
+
+    <div class="methods-grid">
+      <div class="method-card">
+        <h3>Champion workshops</h3>
+        <p>Facilitated sessions with team leads to surface pain points, repetitive tasks, and bottlenecks.</p>
+      </div>
+      <div class="method-card">
+        <h3>Workplace shadowing</h3>
+        <p>Observe how people actually work — reveals hidden handoffs, tool switching, and workarounds.</p>
+      </div>
+      <div class="method-card">
+        <h3>Time-spend analysis</h3>
+        <p>Quantify where effort goes. Identify workflows where structured/repetitive work exceeds 40% of total time.</p>
+      </div>
+      <div class="method-card">
+        <h3>Tech stack audit</h3>
+        <p>Review tools and data flows. Find redundancy, integration gaps, and manual transfer points.</p>
+      </div>
+      <div class="method-card">
+        <h3>Retrospective review</h3>
+        <p>Mine post-mortems and retros for recurring process failures and quality variance.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;" />
+
+  <div class="section">
+    <h2>Choose a workflow to evaluate</h2>
+    <p>Pick a flagship example to see the method in action, or enter your own workflow data.</p>
+    <CaseSelector client:load />
+  </div>
+</BaseLayout>
+
+<style>
+  .methods-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .method-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .method-card h3 { font-size: 0.9375rem; margin-bottom: 0.25rem; }
+  .method-card p { font-size: 0.875rem; color: var(--text-light); margin: 0; }
+  @media (max-width: 480px) {
+    .methods-grid { grid-template-columns: 1fr; }
+  }
+</style>
