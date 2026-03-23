@@ -1,68 +1,532 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CaseSelector from '../components/CaseSelector.tsx';
 const base = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title="Step 1: Discover" step={1} prev={base} next={`${base}2-qualify/`}>
-  <div class="page-header">
-    <h1>Discover opportunities</h1>
-    <p class="subtitle">Find candidate workflows using structured discovery methods, then choose one to evaluate.</p>
-  </div>
+<BaseLayout title="Step 1: Discover" step={1} prev={base} next={`${base}2-select/`}>
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
-  <div class="section">
-    <h2>How discovery works</h2>
-    <p>Before you can evaluate a workflow, you need to find it. A good discovery pass uses 2-3 of these methods in combination:</p>
-
-    <div class="methods-grid">
-      <div class="method-card">
-        <h3>Champion workshops</h3>
-        <p>Facilitated sessions with team leads to surface pain points, repetitive tasks, and bottlenecks.</p>
-      </div>
-      <div class="method-card">
-        <h3>Workplace shadowing</h3>
-        <p>Observe how people actually work — reveals hidden handoffs, tool switching, and workarounds.</p>
-      </div>
-      <div class="method-card">
-        <h3>Time-spend analysis</h3>
-        <p>Quantify where effort goes. Identify workflows where structured/repetitive work exceeds 40% of total time.</p>
-      </div>
-      <div class="method-card">
-        <h3>Tech stack audit</h3>
-        <p>Review tools and data flows. Find redundancy, integration gaps, and manual transfer points.</p>
-      </div>
-      <div class="method-card">
-        <h3>Retrospective review</h3>
-        <p>Mine post-mortems and retros for recurring process failures and quality variance.</p>
-      </div>
+    <div class="mb-10">
+      <h1>Discover opportunities</h1>
+      <p class="subtitle">Before you can evaluate anything, you need to find the right workflow to look at.</p>
     </div>
-  </div>
 
-  <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;" />
+    <div class="mb-10">
+      <h2>Why discovery matters</h2>
 
-  <div class="section">
-    <h2>Choose a workflow to evaluate</h2>
-    <p>Pick a flagship example to see the method in action, or enter your own workflow data.</p>
-    <CaseSelector client:load />
+      <p>
+        Most AI adoption efforts start in the wrong place. Someone picks a tool, or a vendor demos something impressive, and the organisation tries to find a use case that fits. That's backwards.
+      </p>
+
+      <p>
+        Good adoption starts with the work itself. What do people actually do every day? Where do they spend time on things that are repetitive, error-prone or slow? Where do handoffs break down? Where is information scattered across tools? These are the signals that point to real opportunities.
+      </p>
+
+      <p>
+        Discovery is the process of finding those signals. It's not about brainstorming AI ideas. It's about looking at workflows with fresh eyes and identifying where structured intervention (AI or otherwise) could genuinely help.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Discovery methods</h2>
+
+      <p>
+        There's no single right way to discover opportunities. A good discovery pass typically combines two or three of these methods. Click on any method to learn more about how it works and when to use it.
+      </p>
+
+      <div class="methods-grid" id="methods-grid">
+        <button class="method-tile" data-method="workflow-mapping">Workflow mapping</button>
+        <button class="method-tile" data-method="discovery-sessions">Discovery sessions</button>
+        <button class="method-tile" data-method="employee-surveys">Employee surveys</button>
+        <button class="method-tile" data-method="workplace-shadowing">Workplace shadowing</button>
+        <button class="method-tile" data-method="time-spend">Time-spend analysis</button>
+        <button class="method-tile" data-method="process-mining">Process mining</button>
+        <button class="method-tile" data-method="retrospectives">Retrospectives</button>
+        <button class="method-tile" data-method="tool-audit">Tool stack audit</button>
+        <button class="method-tile" data-method="champion-network">Champion network</button>
+        <button class="method-tile" data-method="scoring-workshop">Scoring workshop</button>
+      </div>
+
+      <div class="method-expanded" id="method-detail" style="display: none;">
+        <div id="method-content"></div>
+      </div>
+
+      <script>
+        const methods = {
+          'workflow-mapping': {
+            title: 'Workflow mapping',
+            when: 'Best as a starting method. Use this first to get a shared picture of how work actually happens before using other methods to go deeper.',
+            who: 'A facilitator (consultant, ops lead or project manager) plus one frontline operator and one process owner per workflow.',
+            time: '60\u201390 minutes per workflow slice.',
+            what: 'Workflow mapping is a structured way to document how work actually happens across people, systems and handoffs. You map steps, owners, inputs, outputs, delays and common failure points. The goal is to capture reality, not the idealised version in the process documentation.',
+            benefits: 'It creates immediate alignment, exposes rework loops and surfaces where work gets stuck. It also helps separate "we need better process clarity" from "we need AI support." Many workflows that look like AI candidates turn out to be process discipline problems once you map them properly.',
+            caveats: 'Teams often map ideal process, not real process. If you only use manager input, you miss frontline exceptions and workarounds. Always validate the map with people who do the work daily.',
+            steps: [
+              'Capture the current-state (as-is) process first, not the ideal one',
+              'Walk through the workflow step by step: who does what, with what tools, using what inputs',
+              'Annotate painpoints and friction at each step: delays, errors, rework, missing information',
+              'Identify where decisions are made, where data is re-entered and where work is blocked',
+              'Mark handoffs between people or systems \u2014 these are often where things break down',
+              'Validate the map with people who do the work daily before using it for prioritisation',
+            ],
+            reveals: [
+              'A shared picture of how work actually flows (vs how people think it flows)',
+              'Rework loops, bottlenecks and unnecessary handoffs',
+              'Where decisions are made vs where data lives',
+              'Clear separation between process clarity problems and AI-suitable problems',
+            ],
+            output: 'A visual or tabular workflow map showing steps, owners, inputs/outputs, handoffs and annotated painpoints. Typically a whiteboard, Miro board or structured document.',
+            refs: [
+              { text: 'Akinbowale et al. (2026). Business process management framework. Cogent Business & Management.', url: 'https://doi.org/10.1080/23311975.2026.2627025' },
+              { text: 'Moreno-Montes de Oca et al. (2014). Systematic literature review of business process modeling quality. Information and Software Technology.', url: 'https://doi.org/10.1016/j.infsof.2014.07.011' },
+            ],
+          },
+          'discovery-sessions': {
+            title: 'Discovery sessions with team leaders',
+            when: 'Best as a starting method, often run in the first week of an engagement. Use alongside workflow mapping to build a candidate backlog quickly.',
+            who: 'A facilitator running 60\u201390 minute sessions with 4\u20138 participants: team leads, process owners and ideally one or two frontline voices.',
+            time: '60\u201390 minutes per session. Plan 2\u20134 sessions across different teams to get a broad view.',
+            what: 'Facilitated workshops or interviews with team leads and process owners to surface recurring pain, high-friction workflows and constraints on change. This is often the fastest way to identify candidate workflows because you are talking directly to the people who feel the pain.',
+            benefits: 'Fast signal collection, quick stakeholder buy-in and better visibility into where leadership already sees urgency. Also identifies internal champions who will support a pilot later.',
+            caveats: 'Leader perspective alone can be biased. Some painpoints raised in sessions will be policy or operating-model issues, not AI candidates. Watch for solutions being proposed instead of problems being described.',
+            steps: [
+              'Ask: "Where does your team spend time on work that feels repetitive, manual or low-value?"',
+              'Ask: "Where do mistakes happen because of volume or complexity?"',
+              'Ask: "What would you automate tomorrow if you could?"',
+              'Ask: "What slows your team down the most on a weekly basis?"',
+              'Capture workflows, not solutions \u2014 the goal is to surface candidates, not design systems',
+              'Push for specifics: which workflow, how often, how many people, what happens when it goes wrong',
+              'End with a ranked shortlist of 3\u20135 candidate workflows, not a vague discussion',
+            ],
+            reveals: [
+              'Workflows with high perceived pain across multiple people',
+              'Processes that teams already want to change (readiness signal)',
+              'Internal champions who will support a pilot',
+              'Where leadership already sees urgency (useful for securing sponsorship and budget)',
+            ],
+            output: 'A ranked shortlist of 3\u20135 candidate workflows with a brief description, estimated frequency, who is affected and why it matters.',
+            refs: [
+              { text: 'Storvang et al. (2024). Workshops as a Research Method in Business Research. Springer.', url: 'https://link.springer.com/chapter/10.1007/978-3-031-70149-8_6' },
+              { text: 'AGUX (2022). Workshops vs Interviews: optimize design thinking discovery.', url: 'https://www.agux.co/blog/design-thinking-isnt-workshops' },
+            ],
+          },
+          'employee-surveys': {
+            title: 'Employee surveys',
+            when: 'Use early for broad coverage, especially in larger organisations where you cannot interview everyone. Best paired with a direct method (shadowing or workshops) to add depth to the quantitative data.',
+            who: 'Anyone can design and distribute the survey. Ideally an ops lead or HR partner who can reach across teams. Analysis should involve someone who understands workflows, not just survey design.',
+            time: '1\u20132 weeks from design to results. Keep the survey itself under 10 minutes to complete.',
+            what: 'Employee surveys collect broad, role-level evidence on where work is slow, repetitive, unclear or error-prone. They give you a scalable pulse check across the organisation before you invest time in deeper qualitative methods.',
+            benefits: 'Fast coverage across many teams at once. Useful for baseline metrics and for identifying where pain is concentrated by function or role. Can surface patterns that individual interviews miss because the sample is larger.',
+            caveats: 'Surveys flatten nuance. People tend to report what they think you want to hear, or they anchor on the most recent frustration rather than the most important one. Poorly phrased questions create low-value data that is hard to act on.',
+            steps: [
+              'Design 10\u201315 questions focused on workflow pain: frequency of repetitive tasks, time spent on admin vs judgement work, common sources of error',
+              'Include role and team filters so you can segment results meaningfully',
+              'Add 2\u20133 open-text prompts for unexpected signals: "What is the most frustrating part of your weekly workflow?"',
+              'Distribute broadly but set a clear deadline (1 week is usually enough)',
+              'Analyse by team and role, not just overall averages \u2014 the patterns are in the segments',
+              'Never use survey data alone to make prioritisation decisions. Always validate top candidates with a direct method.',
+            ],
+            reveals: [
+              'Where pain is concentrated by function or role (not just anecdotally but with numbers)',
+              'Baseline metrics for measuring future improvement (e.g. "70% of support staff spend >3 hours/week on manual data entry")',
+              'Which teams are most ready for change vs which are resistant',
+              'Patterns across roles that individual interviews might miss',
+            ],
+            output: 'A summary report segmented by team/role showing top painpoints by frequency and severity, with open-text highlights. Use this to target your workshops and shadowing.',
+            refs: [
+              { text: 'Harter et al. (2024). The Relationship Between Engagement at Work and Organizational Outcomes: Q12 Meta-Analysis (11th ed.). Gallup.', url: '' },
+              { text: 'Gallup. Q12 Employee Engagement Survey.', url: 'https://www.gallup.com/q12/' },
+            ],
+          },
+          'workplace-shadowing': {
+            title: 'Workplace shadowing (contextual inquiry)',
+            when: 'Use after workshops or surveys have identified candidate workflows. Shadowing validates whether the reported pain matches reality. Best for understanding the "how" of work that process docs miss.',
+            who: 'Someone external to the team being observed (consultant, ops analyst or a colleague from another function). The observer needs to be trusted and non-threatening.',
+            time: 'Half a day per person observed. Plan to shadow 2\u20133 people per role in the same workflow. Allow 30 minutes for a debrief after each session.',
+            what: 'Shadowing means sitting with someone while they work, watching what they actually do and asking clarifying questions as they go. It is one of the best methods for finding the tacit, informal work that never appears in process documentation: the workarounds, the tool switching, the "I just ask Sarah" steps.',
+            benefits: 'Reveals the real workflow, not the official one. Shows you hidden handoffs, interruptions, context switching between tools, and informal coordination practices that interviews and surveys miss entirely.',
+            caveats: 'Small samples can overfit conclusions. People may change their behaviour when being observed (Hawthorne effect). Poorly run shadowing can feel intrusive. Always explain why you are there and what you will do with the information.',
+            steps: [
+              'Get explicit consent from the person being shadowed and their manager',
+              'Explain the purpose: you are studying the workflow, not evaluating the person',
+              'Shadow 2\u20133 people per role for half a day each to see variation',
+              'Document the actual steps, tools, handoffs and interruptions as they happen',
+              'Note where people switch between tools, re-key data or ask colleagues for context',
+              'Compare observed workflow to the documented/official process \u2014 the gaps are where the insights are',
+              'Run a 30-minute debrief after each session to validate what you saw and ask follow-up questions',
+            ],
+            reveals: [
+              'Hidden repetition and workarounds that never show up in process maps',
+              'Tool fragmentation and data re-entry patterns (e.g. copying data from email into a spreadsheet into a CRM)',
+              'The gap between how work is supposed to happen and how it actually happens',
+              'Informal coordination practices that are critical but undocumented ("I always check with finance before submitting")',
+            ],
+            output: 'Observation notes for each session: actual steps taken, tools used, handoffs, interruptions, workarounds and debrief notes. A comparison of observed vs documented process.',
+            refs: [
+              { text: 'Nielsen Norman Group (2019). Contextual Inquiry: Inspire Design by Observing and Interviewing Users in Their Context.', url: 'https://www.nngroup.com/articles/contextual-inquiry/' },
+              { text: 'GOV.UK. Contextual inquiry.', url: 'https://www.gov.uk/guidance/contextual-inquiry' },
+            ],
+          },
+          'time-spend': {
+            title: 'Time-spend analysis',
+            when: 'Best as an early method, especially for internal teams. It is the least disruptive discovery method and gives you quantified data to justify further investigation. Use the results to decide where to focus workshops or shadowing.',
+            who: 'Anyone with access to time-tracking data or the ability to set up a simple self-reporting exercise. An ops lead or team manager is usually the right person to coordinate.',
+            time: '1\u20132 weeks of data collection, then half a day to analyse. Keep the tracking exercise simple or people will stop doing it after day two.',
+            what: 'Time-spend analysis quantifies where effort actually goes over a defined period. You categorise work into types (judgement work, repetitive tasks, admin, coordination, waiting) and measure how much time each type consumes. The goal is to put numbers on what people feel anecdotally.',
+            benefits: 'Gives you measurable opportunity size ("the support team spends 12 hours/week on manual ticket classification"). Helps distinguish high-friction workflows from low-impact annoyances. Provides baseline metrics you can measure against after a pilot.',
+            caveats: 'Tracking quality varies. People may alter their behaviour while measuring (Hawthorne effect again). Self-reported data can be inaccurate, especially for fragmented tasks. If you make the tracking too detailed, compliance drops quickly.',
+            steps: [
+              'Choose your data source: existing time-tracking tools, calendar analysis or structured self-reporting',
+              'Define 4\u20135 simple time categories: creative/judgement work, structured/repetitive work, admin/coordination, waiting/blocked, meetings',
+              'Run the tracking exercise for 1\u20132 weeks \u2014 long enough to capture a full cycle but short enough to maintain compliance',
+              'Aggregate by role and workflow stage, not just by individual',
+              'Identify roles or workflows where structured/repetitive work exceeds 40% of total time \u2014 these are your strongest candidates',
+              'Calculate the opportunity size in hours/week and estimate what could be recovered',
+            ],
+            reveals: [
+              'Quantified opportunity size in hours/week (e.g. "14 hours/week of manual report assembly across the finance team")',
+              'Which workflows have the highest volume and repetition',
+              'Baseline metrics for measuring pilot success later',
+              'Where "busy" work is crowding out the judgement and creative work people were hired to do',
+            ],
+            output: 'A time breakdown by role and workflow showing hours spent per category, with the top candidate workflows ranked by recoverable time.',
+            refs: [
+              { text: 'RescueTime (2019). The State of Work Life Balance in 2019.', url: 'https://blog.rescuetime.com/work-life-balance-study-2019/' },
+              { text: 'iSixSigma. Preparing to Measure Process Work: Time Study.', url: 'https://www.isixsigma.com/business-process-management-bpm/preparing-measure-process-work-time-study/' },
+            ],
+          },
+          'process-mining': {
+            title: 'Process mining (event-log analysis)',
+            when: 'Use when you have access to system logs and need evidence-based process analysis at scale. Most useful in organisations with mature CRM, ERP or ticketing systems that log events with timestamps. Not suitable for small teams or workflows that happen mostly in email and documents.',
+            who: 'Requires someone with data access and basic analysis skills (data analyst, ops analyst or a process mining specialist). Findings should always be interpreted with workflow owners, not just presented as charts.',
+            time: '1\u20132 weeks for data extraction and analysis, depending on data quality. Allow additional time for cleaning and normalising event data.',
+            what: 'Process mining uses event logs from business systems to reconstruct how work actually runs. Instead of asking people how they work, you look at what the systems recorded. This shows you real process variants, not just the documented happy path.',
+            benefits: 'Provides strong, objective evidence for bottlenecks, conformance drift (where the real process deviates from the official one) and cycle-time variance at scale. Particularly useful when teams disagree about where the problem is \u2014 the data settles it.',
+            caveats: 'It only works as well as the logs. If your systems do not log events consistently, or if key steps happen outside logged systems (email, phone, Slack), you will get an incomplete and potentially misleading picture. Weak event definitions produce false confidence.',
+            steps: [
+              'Identify which systems log the workflow events you care about (CRM, ERP, ticketing, billing)',
+              'Extract event logs: you need at least a case ID, activity name and timestamp per event',
+              'Clean and normalise the data \u2014 inconsistent naming and missing events are common',
+              'Discover actual process paths using a process mining tool (Celonis, Disco, ProM, or even a custom analysis)',
+              'Compare variants: where does the real process diverge from the documented one?',
+              'Interpret findings with workflow owners \u2014 the data shows what happened but not why',
+            ],
+            reveals: [
+              'Real process variants (not just the documented happy path)',
+              'Bottlenecks and conformance drift at scale with precise timestamps',
+              'Cycle-time variance across teams, time periods or customer segments',
+              'An evidence-based case for where intervention has the highest impact',
+            ],
+            output: 'Process maps derived from event data showing actual execution paths, variant frequencies, bottleneck locations and cycle-time distributions.',
+            refs: [
+              { text: 'van der Aalst et al. (2012). Process Mining Manifesto.', url: 'https://www.tf-pm.org/upload/1580737614108.pdf' },
+              { text: 'Berti et al. (2023). Advancements and Challenges in Object-Centric Process Mining. arXiv.', url: 'https://arxiv.org/abs/2311.08795' },
+              { text: 'Garc\u00eda-Rojas et al. (2021). Event Log Preprocessing for Process Mining: A Review. Applied Sciences.', url: 'https://www.mdpi.com/2076-3417/11/22/10556' },
+            ],
+          },
+          'retrospectives': {
+            title: 'Retrospectives and incident review',
+            when: 'Use when the organisation already runs retrospectives, postmortems or incident reviews. This method repurposes existing evidence rather than generating new data. If your organisation does not do retros, start with workshops or shadowing instead.',
+            who: 'Someone with access to past retro notes, incident reports or team feedback. An ops lead or engineering manager is usually the right person. The reviewer should understand the workflows involved.',
+            time: 'Half a day to one day to review 6\u201312 months of records and extract patterns.',
+            what: 'This method mines existing retrospectives, incident reports and postmortems to identify recurring failure patterns and weak workflow controls. Instead of asking people where things go wrong, you look at where things have already gone wrong and find the patterns.',
+            benefits: 'Uses evidence that already exists, so there is no additional burden on teams. Highlights systemic issues over isolated events. Supports high-trust improvement discussions because you are working from documented facts, not opinions.',
+            caveats: 'Output quality depends on the quality of the retros themselves. If retros are shallow, blame-heavy or poorly documented, you will not find much. Blameless culture is a prerequisite for useful incident data.',
+            steps: [
+              'Gather retrospective notes, incident reports, postmortems and team feedback from the last 6\u201312 months',
+              'Identify recurring themes: missed steps, inconsistent documentation, slow handoffs, quality variance, repeated manual errors',
+              'Classify each recurring issue by type: process gap, communication failure, tool limitation, skill gap, policy issue',
+              'Cross-reference recurring issues with the specific workflows they map to',
+              'Focus on issues that have occurred three or more times \u2014 these are systemic, not one-off',
+              'Convert repeated findings into candidate workflow interventions with evidence attached',
+            ],
+            reveals: [
+              'Workflows where quality or consistency is already a known, documented problem',
+              'Process failure patterns that structured automation or better tooling could prevent',
+              'Evidence for urgency and executive sponsorship ("this issue has cost us X three times this year")',
+              'Systemic issues that keep recurring despite manual fixes, indicating a structural problem',
+            ],
+            output: 'A list of recurring process issues mapped to specific workflows, classified by type, with frequency counts and links to original incident reports.',
+            refs: [
+              { text: 'Lunney & Lueder. Postmortem Culture: Learning from Failure. In Site Reliability Engineering.', url: 'https://sre.google/sre-book/postmortem-culture/' },
+              { text: 'Beebole. Project Post-Mortem Analysis Guide.', url: 'https://beebole.com/blog/project-post-mortem-analysis-guide' },
+            ],
+          },
+          'tool-audit': {
+            title: 'Tool stack and data-flow audit',
+            when: 'Use after initial discovery to find quick wins in tool consolidation and integration. Particularly useful for technical teams who want to start with a concrete, measurable analysis rather than workshops. Good for building the case for change with cost data.',
+            who: 'Someone who can access the tool stack across the workflow: an ops analyst, IT admin or technical lead. Should involve the people who use the tools daily for validation.',
+            time: '1\u20132 days per workflow. Longer if tool access is fragmented across teams.',
+            what: 'A targeted audit of every tool and data movement in a workflow. You map which systems are used, who owns them, how data moves between them and where information is duplicated, delayed, manually transferred or lost.',
+            benefits: 'Finds practical, often quick wins: tool consolidation, interface fixes, removal of manual copy/paste steps. Produces cost data that resonates with finance and leadership. Often the easiest method to sell internally because it speaks in money and efficiency.',
+            caveats: 'Can turn into inventory theatre if not tied to workflow outcomes. Listing every tool in the organisation is not useful. You need to focus on one specific workflow and trace the data through it end to end.',
+            steps: [
+              'Pick one high-value workflow and list every tool used across it (CRM, docs, comms, spreadsheets, analytics, etc.)',
+              'Map the data flow between tools: what is entered manually, what is automated, what is duplicated across systems',
+              'Identify overlapping capabilities (e.g. two tools that both track customer interactions)',
+              'Identify integration gaps where data is transferred manually (email attachments, copy/paste, CSV exports)',
+              'Estimate the cost of the current stack: licences, time spent on manual integration, error rates from re-entry',
+              'Quantify overlap and transfer risk so findings are decision-ready, not just an inventory',
+            ],
+            reveals: [
+              'Tool sprawl and redundancy (how many tools do the same thing, and what does that cost)',
+              'Manual integration points that AI or automation could replace',
+              'Data fragmentation that limits visibility and decision-making',
+              'Quick wins that can build momentum and trust before larger interventions',
+            ],
+            output: 'A tool map for the workflow showing systems, data flows, manual transfer points, redundancies and estimated costs. A shortlist of consolidation or automation opportunities.',
+            refs: [
+              { text: 'Wiz Academy. What is Data Flow Mapping?', url: 'https://www.wiz.io/academy/data-security/data-flow-mapping' },
+              { text: 'Alation. What is Data Mapping?', url: 'https://www.alation.com/blog/what-is-data-mapping-guide/' },
+            ],
+          },
+          'champion-network': {
+            title: 'Champion network method',
+            when: 'Use throughout the discovery and adoption process, not just at the start. Champions are most valuable as an ongoing feedback mechanism during pilots. Set up the network early and maintain it through implementation.',
+            who: 'Select 3\u20138 people across affected teams. Choose respected informal leaders, not only managers. They should be people their peers trust and listen to. The person coordinating the network needs mandate and time.',
+            time: 'Ongoing. Initial setup takes 1\u20132 weeks. Expect to run fortnightly or monthly feedback cycles for the duration of the discovery and pilot phases.',
+            what: 'A champion network is a small cross-functional group of trusted peers who bridge the gap between leadership intent and frontline reality. Champions observe how work happens in their teams, surface real blockers and opportunities, and provide honest feedback on proposed changes. They are the eyes and ears on the ground.',
+            benefits: 'Dramatically improves signal quality because champions see things that leadership interviews and surveys miss. Raises trust in the adoption process because feedback loops are local and credible. Accelerates adoption because champions become advocates.',
+            caveats: 'Fails when champions lack mandate ("I was told to do this but nobody listens to my feedback"), capacity ("I do not have time for this on top of my real job") or visible support from leadership. If champion feedback is collected but never acted on, trust erodes fast.',
+            steps: [
+              'Define the champion role clearly: what they are expected to observe, how often they report and what happens with their input',
+              'Select 3\u20138 champions across affected areas. Prioritise people who are respected by peers, not just seniority',
+              'Train them on what to look for: workflow friction, workarounds, team sentiment, resistance signals, quick wins',
+              'Run regular feedback cycles (fortnightly or monthly) where champions share observations',
+              'Track and communicate actions taken from champion feedback \u2014 this is critical for maintaining trust',
+              'Give champions visible support from leadership so their role is taken seriously by teams',
+            ],
+            reveals: [
+              'Ground-level signal quality that leadership interviews and surveys miss entirely',
+              'Whether teams are genuinely ready for change or quietly resistant',
+              'Who the natural early adopters and sceptics are (both are valuable)',
+              'Practical blockers that only surface in day-to-day work ("we would use the new tool but it does not integrate with X")',
+            ],
+            output: 'Regular champion feedback reports: observations on workflow friction, team readiness, blockers and opportunities. A running log of actions taken in response.',
+            refs: [
+              { text: 'Prosci (2023). Best Practices in Change Management (Executive Summary).', url: 'https://empower.prosci.com/best-practices-change-management-executive-summary' },
+              { text: 'Family Planning National Training Center (2020). Change Champion Network.', url: 'https://rhntc.org/sites/default/files/resources/fpntc_chng_champ_ntwk_2020-06.pdf' },
+            ],
+          },
+          'scoring-workshop': {
+            title: 'Value-effort-risk scoring workshop',
+            when: 'Use after you have a candidate list from other discovery methods. This is a prioritisation method, not a discovery method. It helps you decide which of your candidates to evaluate first. Best run after workshops, shadowing or surveys have produced 5\u201310 candidates.',
+            who: 'A facilitator plus 4\u20138 stakeholders who understand the candidate workflows: team leads, process owners, technical leads. Include someone from finance or ops who can speak to effort and cost.',
+            time: '90 minutes to 2 hours for the workshop itself. Allow 30 minutes beforehand for calibration.',
+            what: 'A structured prioritisation exercise where candidate workflows are scored on multiple dimensions (value, effort, risk) to create a transparent, comparable shortlist. The point is to make trade-offs explicit and reduce the influence of the loudest voice in the room.',
+            benefits: 'Makes trade-offs explicit and defensible. Reduces political bias in prioritisation. Supports quick pilot selection because the rationale is documented. Creates alignment across stakeholders who may have different priorities.',
+            caveats: 'Weak calibration leads to noisy scores. If participants do not agree on what "high value" or "low effort" means, the scores are not comparable across candidates. Always spend time calibrating before scoring.',
+            steps: [
+              'Prepare a list of 5\u201310 candidate workflows from prior discovery work, each with a one-paragraph description',
+              'Define 3\u20135 scoring criteria: value (business impact), effort (implementation complexity), risk (what could go wrong), urgency, readiness',
+              'Calibrate scale definitions before anyone scores: what does a 1, 3 and 5 look like for each criterion? Use concrete examples.',
+              'Score each candidate by consensus discussion, not individual averages \u2014 the conversation matters as much as the numbers',
+              'Calculate weighted scores and sort into priority bands (high/medium/low or proceed/defer)',
+              'Document the top 3\u20135 candidates with scores, rationale, deferred alternatives and triggers to revisit deferred candidates',
+            ],
+            reveals: [
+              'A transparent, comparable shortlist of candidates with documented rationale',
+              'Where stakeholders agree and disagree on priorities (the disagreements are often the most valuable insights)',
+              'Trade-offs that would otherwise stay implicit or be decided by whoever speaks loudest',
+              'A defensible rationale for why you are starting with a specific workflow \u2014 useful for leadership sign-off',
+            ],
+            output: 'A scored and ranked shortlist of 3\u20135 candidate workflows with per-criterion scores, overall ranking, deferred alternatives and documented triggers to revisit.',
+            refs: [
+              { text: 'West (2002). Integrating risk analysis and prioritization: a practitioner\u2019s tool. PMI.', url: '' },
+              { text: 'airfocus. 5-Minute Guide: How to Use the Value vs Effort Framework.', url: 'https://airfocus.com/resources/5-min-guides/value-effort.pdf' },
+            ],
+          },
+        };
+
+        let activeMethod = null;
+
+        document.querySelectorAll('.method-tile').forEach(tile => {
+          tile.addEventListener('click', () => {
+            const key = tile.dataset.method;
+            const detail = document.getElementById('method-detail');
+            const content = document.getElementById('method-content');
+
+            if (activeMethod === key) {
+              detail.style.display = 'none';
+              tile.classList.remove('active');
+              activeMethod = null;
+              return;
+            }
+
+            document.querySelectorAll('.method-tile').forEach(t => t.classList.remove('active'));
+            tile.classList.add('active');
+            activeMethod = key;
+
+            const m = methods[key];
+            const refsHtml = m.refs
+              .map(r => r.url
+                ? `<li>${r.text} <a href="${r.url}" target="_blank" rel="noopener">[source]</a></li>`
+                : `<li>${r.text}</li>`)
+              .join('');
+
+            const stepsHtml = m.steps.map(s => `<li>${s}</li>`).join('');
+            const revealsHtml = m.reveals.map(r => `<li>${r}</li>`).join('');
+
+            const gap = 'margin-top: 1.25em;';
+            content.innerHTML = `
+              <h3>${m.title}</h3>
+              <p class="method-meta" style="${gap}"><strong>When to use:</strong> ${m.when}</p>
+              <p class="method-meta" style="${gap}"><strong>Who runs it:</strong> ${m.who}</p>
+              <p class="method-meta" style="${gap}"><strong>Time required:</strong> ${m.time}</p>
+              <p style="${gap}">${m.what}</p>
+              <p style="${gap}"><strong>Benefits:</strong> ${m.benefits}</p>
+              <p style="${gap}"><strong>Caveats:</strong> ${m.caveats}</p>
+              <p style="${gap}"><strong>How to do it:</strong></p>
+              <ul class="method-steps" style="margin-top: 0.5em;">${stepsHtml}</ul>
+              <p style="${gap}"><strong>What it reveals:</strong></p>
+              <ul class="method-steps" style="margin-top: 0.5em;">${revealsHtml}</ul>
+              <p style="${gap}"><strong>Example output:</strong> ${m.output}</p>
+              <p style="${gap}"><strong>Read more:</strong></p>
+              <ul class="refs-list" style="margin-top: 0.5em;">${refsHtml}</ul>
+            `;
+            detail.style.display = 'block';
+            detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          });
+        });
+      </script>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>What makes a good candidate</h2>
+
+      <p>
+        Not every workflow surfaced in discovery is a good candidate for AI. A workflow can be painful and important without being the right place to introduce automation. Before investing time in a full evaluation, check it against these signals. You are looking for workflows where the opportunity is real, the data is there and the boundaries are clear enough to scope a safe pilot.
+      </p>
+
+      <p><strong>Strong signals (look for at least two):</strong></p>
+      <ul class="signal-list">
+        <li>High volume or frequency — the workflow runs often enough that automation has meaningful impact</li>
+        <li>High repetition — the same pattern of steps is repeated with minor variation</li>
+        <li>Measurable baseline — current performance (time, accuracy, cost) can be quantified</li>
+        <li>Clear human boundary — it's obvious which parts must stay human, making scope well-defined</li>
+      </ul>
+
+      <p><strong>Red flags (proceed with caution):</strong></p>
+      <ul class="signal-list">
+        <li>No clear boundary between what AI should do and what humans should keep</li>
+        <li>High regulatory exposure where errors have legal or financial consequences</li>
+        <li>Data quality issues — inputs are unreliable, inconsistent or inaccessible</li>
+        <li>Organisational resistance — the team isn't ready for change in this area</li>
+      </ul>
+    </div>
+
   </div>
 </BaseLayout>
 
 <style>
+  .landing-content .subtitle {
+    color: var(--text-light);
+    font-size: 15px;
+  }
+
   .methods-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
     margin-top: 1rem;
   }
-  .method-card {
-    background: var(--bg-card);
+
+  .method-tile {
+    padding: 0.75rem 0.5rem;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
+    border-radius: 8px;
+    background: var(--bg-card);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
   }
-  .method-card h3 { font-size: 0.9375rem; margin-bottom: 0.25rem; }
-  .method-card p { font-size: 0.875rem; color: var(--text-light); margin: 0; }
+
+  .method-tile:hover {
+    border-color: var(--purple-light);
+    color: var(--purple);
+  }
+
+  .method-tile.active {
+    border-color: var(--purple);
+    background: rgba(104, 48, 196, 0.06);
+    color: var(--purple);
+    font-weight: 600;
+  }
+
+  .method-expanded {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  #method-content h3 {
+    font-size: 1rem;
+  }
+
+  .method-expanded .method-meta {
+    color: var(--text-light);
+    padding-left: 0.75rem;
+    border-left: 2px solid var(--border);
+  }
+
+  .method-expanded ul.refs-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .method-expanded .refs-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .method-expanded .refs-list li {
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 0.2rem 0;
+    color: var(--text-light);
+  }
+
+  .method-expanded .refs-list a {
+    color: var(--purple);
+    text-decoration: none;
+  }
+
+  .method-expanded .refs-list a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .methods-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
   @media (max-width: 480px) {
-    .methods-grid { grid-template-columns: 1fr; }
+    .methods-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .signal-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0.5rem 0 1.25rem;
+  }
+
+  .signal-list li {
+    font-size: 15px;
+    line-height: 1.75;
+    padding: 0.25rem 0;
   }
 </style>

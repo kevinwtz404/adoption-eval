@@ -20,23 +20,37 @@ const base = import.meta.env.BASE_URL;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title} — adoption-eval</title>
-  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <link rel="icon" href={`${base}favicon.ico`} />
 </head>
 <body>
-  {step !== undefined && <StepNav currentStep={step} base={base} />}
+  <StepNav currentStep={step ?? 0} base={base} />
 
   {prev && <ChevronNav direction="prev" href={prev} />}
   {next && <ChevronNav direction="next" href={next} />}
 
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-section">
+        <p class="sidebar-heading">Connect</p>
+        <a href="mailto:kevin.witzenberger@posteo.de">Email</a>
+        <a href="https://linkedin.com/in/kevin-witzenberger/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://genai-arcade.net" target="_blank" rel="noopener">GenAI Arcade</a>
+        <a href="https://scholar.google.com.au/citations?user=rzyG0ucAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+        <a href="https://kevinwtz404.github.io/kevin-witzenberger/portfolio" target="_blank" rel="noopener">Portfolio</a>
+        <a href="https://github.com/kevinwtz404/adoption-eval" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </aside>
+
   <main class="page-content">
-    <div class="container">
+    <div class="max-w-4xl mx-auto px-6">
       <slot />
     </div>
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      adoption-eval &middot; workflow-first AI adoption evaluation
+    <div class="max-w-4xl mx-auto px-6">
+      adoption-eval &middot; kevin witzenberger
     </div>
   </footer>
 </body>

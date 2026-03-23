@@ -3,19 +3,16 @@ import { useState, useEffect, useMemo } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 import { scoreOpportunity } from '../../../src/lib/scoreOpportunity';
 import type { QualificationScores, QualificationResult } from '../../../src/types';
+import { flagshipCases } from '../data/flagship-cases';
 
-const PURPLE = '#6830C4';
-const PURPLE_LIGHT = '#9b6bd4';
-const PURPLE_DARK = '#4a1f8a';
-
-const CRITERIA_LABELS: Record<string, string> = {
-  business_impact: 'Business Impact',
-  frequency: 'Frequency',
-  baseline_measurability: 'Baseline Measurability',
-  data_readiness: 'Data Readiness',
-  boundary_clarity: 'Boundary Clarity',
-  pilotability: 'Pilotability',
-};
+const CRITERIA: Array<{ key: string; label: string; gate: boolean }> = [
+  { key: 'business_impact', label: 'Does it matter enough?', gate: false },
+  { key: 'frequency', label: 'Does it happen often enough?', gate: false },
+  { key: 'baseline_measurability', label: 'Can you measure how it works today?', gate: true },
+  { key: 'data_readiness', label: 'Is the data in good enough shape?', gate: false },
+  { key: 'boundary_clarity', label: 'Is it clear what should stay with people?', gate: true },
+  { key: 'pilotability', label: 'Can you test this in 2-4 weeks?', gate: false },
+];
 
 const GATE_KEYS = ['boundary_clarity', 'baseline_measurability'];
 
@@ -27,250 +24,201 @@ const decisionColors: Record<string, { bg: string; fg: string }> = {
 
 const decisionLabels: Record<string, string> = {
   proceed: 'Proceed',
-  proceed_with_conditions: 'Proceed with Conditions',
+  proceed_with_conditions: 'Proceed with conditions',
   defer: 'Defer',
 };
 
-const styles = {
-  container: {
-    maxWidth: 900,
-    margin: '0 auto',
-    padding: 24,
-  } as const,
-  heading: {
-    fontSize: 22,
-    fontWeight: 700,
-    color: '#1e1e2f',
-    marginBottom: 8,
-  } as const,
-  subheading: {
-    fontSize: 14,
-    color: '#6b7280',
-    marginBottom: 24,
-  } as const,
-  twoCol: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: 32,
-  } as const,
-  sliderGroup: {
-    marginBottom: 20,
-  } as const,
-  sliderLabel: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: 13,
-    fontWeight: 600,
-    color: '#374151',
-    marginBottom: 6,
-  } as const,
-  sliderValue: {
-    fontSize: 15,
-    fontWeight: 700,
-    color: PURPLE,
-  } as const,
-  slider: {
-    width: '100%',
-    accentColor: PURPLE,
-    cursor: 'pointer',
-  } as const,
-  gateIndicator: (passed: boolean) => ({
-    display: 'inline-block',
-    marginLeft: 8,
-    fontSize: 14,
-    fontWeight: 700,
-    color: passed ? '#16a34a' : '#dc2626',
-  }),
-  resultsCard: {
-    background: '#fafafa',
-    border: '1px solid #e5e7eb',
-    borderRadius: 12,
-    padding: 24,
-  } as const,
-  bigScore: {
-    fontSize: 48,
-    fontWeight: 800,
-    color: PURPLE_DARK,
-    textAlign: 'center' as const,
-    marginBottom: 4,
-  } as const,
-  bigScoreLabel: {
-    fontSize: 13,
-    color: '#6b7280',
-    textAlign: 'center' as const,
-    marginBottom: 20,
-  } as const,
-  criterionRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '8px 0',
-    borderBottom: '1px solid #f3f4f6',
-    fontSize: 13,
-  } as const,
-  criterionName: {
-    fontWeight: 500,
-    color: '#374151',
-  } as const,
-  criterionMeta: {
-    display: 'flex',
-    gap: 12,
-    alignItems: 'center',
-    color: '#6b7280',
-    fontSize: 12,
-  } as const,
-  decisionBadge: (decision: string) => {
-    const c = decisionColors[decision] || decisionColors.defer;
-    return {
-      display: 'inline-block',
-      padding: '6px 18px',
-      borderRadius: 999,
-      background: c.bg,
-      color: c.fg,
-      fontSize: 14,
-      fontWeight: 700,
-      textAlign: 'center' as const,
-      marginTop: 16,
-      width: '100%',
-      boxSizing: 'border-box' as const,
-    };
-  },
-  gatesSection: {
-    marginTop: 16,
-    padding: '12px 16px',
-    background: '#fff',
-    border: '1px solid #e5e7eb',
-    borderRadius: 8,
-  } as const,
-  gateRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '4px 0',
-    fontSize: 13,
-  } as const,
-};
+function buildFeedback(scores: QualificationScores, result: QualificationResult): Array<{ text: string; href?: string }> {
+  const feedback: Array<{ text: string; href?: string }> = [];
+  const s = scores as Record<string, number | undefined>;
+
+  if (result.decision === 'proceed') {
+    feedback.push({ text: 'This workflow looks ready for a pilot. Move on to mapping the steps.' });
+    return feedback;
+  }
+
+  if ((s.baseline_measurability ?? 3) < 3) {
+    feedback.push({ text: 'You cannot measure how this works today. Without a baseline, you will not know if a pilot improved anything. Consider tracking the process manually for 1-2 weeks first.', href: 'resources/#baseline-measurability' });
+  }
+  if ((s.boundary_clarity ?? 3) < 3) {
+    feedback.push({ text: 'It is not clear what should stay with people. Unclear boundaries make it hard to scope a safe pilot. Work through the mapping step to clarify this.', href: 'resources/#boundary-clarity' });
+  }
+
+  const weakAreas = CRITERIA.filter(c => !c.gate).filter(c => (s[c.key] ?? 3) < 3).sort((a, b) => ((s[a.key] ?? 3) as number) - ((s[b.key] ?? 3) as number));
+  for (const weak of weakAreas) {
+    const val = s[weak.key] ?? 3;
+    if (weak.key === 'business_impact') feedback.push({ text: `Business impact scored ${(val as number).toFixed(1)}. If improving this workflow would not meaningfully affect time, cost or quality, consider prioritising a different one.`, href: 'resources/#business-impact' });
+    else if (weak.key === 'frequency') feedback.push({ text: `This workflow runs infrequently (scored ${(val as number).toFixed(1)}). Automation gains multiply with frequency.`, href: 'resources/#frequency' });
+    else if (weak.key === 'data_readiness') feedback.push({ text: `Data readiness scored ${(val as number).toFixed(1)}. Poor data quality means automation will amplify the mess. Consider a data cleanup pass before piloting.`, href: 'resources/#data-readiness' });
+    else if (weak.key === 'pilotability') feedback.push({ text: `Pilotability scored ${(val as number).toFixed(1)}. This workflow may be hard to test in a small, time-boxed way. Look for a smaller slice you could isolate.`, href: 'resources/#pilotability' });
+  }
+
+  if (feedback.length === 0) feedback.push({ text: 'Scores are moderate across the board. This is workable but be deliberate about which conditions need to be met before starting a pilot.' });
+  return feedback;
+}
 
 export default function QualificationForm() {
   const [scores, setScores] = useState<QualificationScores>({
-    business_impact: 3,
-    frequency: 3,
-    baseline_measurability: 3,
-    data_readiness: 3,
-    boundary_clarity: 3,
-    pilotability: 3,
+    business_impact: 3, frequency: 3, baseline_measurability: 3,
+    data_readiness: 3, boundary_clarity: 3, pilotability: 3,
   });
+  const [workflowName, setWorkflowName] = useState<string | null>(null);
+  const [selectedCase, setSelectedCase] = useState<string | null>(null);
+  const [painPoint, setPainPoint] = useState<string | null>(null);
+  const [stepCount, setStepCount] = useState<number>(0);
+  const [actors, setActors] = useState<string[]>([]);
+
+  function loadFromState() {
+    const state = loadState();
+    if (state.qualification) setScores(state.qualification);
+    if (state.workflow?.name) {
+      setWorkflowName(state.workflow.name);
+      setStepCount(state.workflow.steps?.length || 0);
+      setActors(state.workflow.actors || []);
+    }
+    if (state.selectedCase) {
+      setSelectedCase(state.selectedCase);
+      const flagship = flagshipCases.find(c => c.id === state.selectedCase);
+      if (flagship) setPainPoint(flagship.painPoint);
+    }
+  }
 
   useEffect(() => {
-    const state = loadState();
-    if (state.qualification) {
-      setScores(state.qualification);
-    }
+    loadFromState();
+    // Sync when the questions component updates scores
+    const handler = () => loadFromState();
+    window.addEventListener('qualification-updated', handler);
+    return () => window.removeEventListener('qualification-updated', handler);
   }, []);
 
   const result: QualificationResult = useMemo(() => scoreOpportunity(scores), [scores]);
 
   function handleChange(key: string, value: number) {
-    const next = { ...scores, [key]: value };
+    const rounded = Math.round(value * 10) / 10;
+    const next = { ...scores, [key]: rounded };
     setScores(next);
     saveState({ qualification: next as any });
+    window.dispatchEvent(new Event('qualification-updated'));
   }
 
-  return (
-    <div style={styles.container}>
-      <div style={styles.heading}>Qualification Scoring</div>
-      <div style={styles.subheading}>
-        Rate each criterion from 1 (low) to 5 (high). Results update live.
-      </div>
+  const dc = decisionColors[result.decision] || decisionColors.defer;
 
-      <div style={styles.twoCol}>
-        {/* Sliders */}
+  return (
+    <div style={{ marginTop: '1.5rem' }}>
+
+      {/* Workflow context */}
+      {workflowName ? (
+        <div style={{ padding: '1.25rem', border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fafafa', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: painPoint ? '0.75rem' : 0 }}>
+            <div>
+              <div style={{ fontSize: '11px', color: '#999', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Scoring workflow</div>
+              <div style={{ fontWeight: 700, fontSize: '16px' }}>{workflowName}</div>
+            </div>
+            <span style={{ fontSize: '11px', padding: '0.125rem 0.5rem', borderRadius: '100px', background: 'rgba(104, 48, 196, 0.08)', color: '#6830C4', fontWeight: 600, whiteSpace: 'nowrap' as const }}>
+              {selectedCase === 'custom' ? 'Your workflow' : 'Flagship case'}
+            </span>
+          </div>
+          {painPoint && <div style={{ fontSize: '13px', color: '#666', lineHeight: '1.6', marginBottom: '0.75rem' }}>{painPoint}</div>}
+          <div style={{ display: 'flex', gap: '1.5rem', fontSize: '12px', color: '#999' }}>
+            <span>{stepCount} steps</span>
+            <span>{actors.length} roles involved</span>
+          </div>
+        </div>
+      ) : (
+        <div style={{ padding: '0.75rem 1rem', border: '1px solid #fca5a5', borderRadius: '8px', background: '#fef2f2', marginBottom: '1.5rem', fontSize: '13px', color: '#991b1b' }}>
+          No workflow selected. <a href="2-select/" style={{ color: '#6830C4' }}>Go back to Step 2</a> to pick one.
+        </div>
+      )}
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+
+        {/* Left: Sliders */}
         <div>
-          {Object.entries(CRITERIA_LABELS).map(([key, label]) => {
+          {CRITERIA.map(({ key, label, gate }) => {
             const value = (scores as Record<string, number | undefined>)[key] ?? 3;
-            const isGate = GATE_KEYS.includes(key);
-            const gatePassed = isGate ? (value as number) >= 3 : null;
+            const gateFailed = gate && (value as number) < 3;
 
             return (
-              <div key={key} style={styles.sliderGroup}>
-                <div style={styles.sliderLabel}>
-                  <span>
+              <div key={key} style={{ marginBottom: '1.25rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
+                  <span style={{ fontWeight: 600, fontSize: '13px', color: '#374151' }}>
                     {label}
-                    {isGate && (
-                      <span style={styles.gateIndicator(gatePassed!)}>
-                        {gatePassed ? '\u2713' : '\u2717'}
+                    {gate && (
+                      <span style={{ marginLeft: '0.5rem', fontSize: '13px', fontWeight: 700, color: gateFailed ? '#dc2626' : '#16a34a' }}>
+                        {gateFailed ? '\u2717' : '\u2713'}
                       </span>
                     )}
                   </span>
-                  <span style={styles.sliderValue}>{value}</span>
+                  <span style={{ fontSize: '15px', fontWeight: 700, color: '#6830C4' }}>{(value as number).toFixed(1)}</span>
                 </div>
                 <input
-                  type="range"
-                  min={1}
-                  max={5}
-                  step={1}
-                  value={value}
-                  style={styles.slider}
-                  onInput={(e: Event) =>
-                    handleChange(key, parseInt((e.target as HTMLInputElement).value, 10))
-                  }
+                  type="range" min={1} max={5} step={0.1} value={value}
+                  style={{ width: '100%', accentColor: '#6830C4', cursor: 'pointer' }}
+                  onInput={(e: Event) => handleChange(key, parseFloat((e.target as HTMLInputElement).value))}
                 />
               </div>
             );
           })}
         </div>
 
-        {/* Results */}
-        <div style={styles.resultsCard}>
-          <div style={styles.bigScore}>{result.weighted_score.toFixed(2)}</div>
-          <div style={styles.bigScoreLabel}>Weighted Score (out of 5)</div>
+        {/* Right: Results */}
+        <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1.5rem' }}>
+          <div style={{ fontSize: '3rem', fontWeight: 800, color: '#4a1f8a', textAlign: 'center' as const, marginBottom: '0.25rem' }}>
+            {result.weighted_score.toFixed(1)}
+          </div>
+          <div style={{ fontSize: '13px', color: '#6b7280', textAlign: 'center' as const, marginBottom: '1.25rem' }}>
+            Overall score (out of 5)
+          </div>
 
-          {Object.entries(result.criteria).map(([key, c]) => (
-            <div key={key} style={styles.criterionRow}>
-              <span style={styles.criterionName}>
-                {CRITERIA_LABELS[key] || key}
-              </span>
-              <span style={styles.criterionMeta}>
-                <span>Score: {c.score}</span>
-                <span>Weight: {(c.weight * 100).toFixed(0)}%</span>
-                <span style={{ fontWeight: 600, color: PURPLE }}>
-                  {c.weighted.toFixed(2)}
-                </span>
-              </span>
-            </div>
-          ))}
+          {/* Bar chart */}
+          {CRITERIA.map(({ key, label }) => {
+            const value = (scores as Record<string, number | undefined>)[key] ?? 3;
+            const pct = ((value as number) / 5) * 100;
+            return (
+              <div key={key} style={{ marginBottom: '0.625rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '0.25rem' }}>
+                  <span style={{ color: '#666' }}>{label}</span>
+                  <span style={{ fontWeight: 600, color: '#374151' }}>{(value as number).toFixed(1)}</span>
+                </div>
+                <div style={{ height: '6px', background: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${pct}%`, background: '#6830C4', borderRadius: '3px', transition: 'width 0.2s' }} />
+                </div>
+              </div>
+            );
+          })}
 
-          <div style={styles.gatesSection}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 8 }}>
-              Gate Status
-            </div>
+          {/* Gates */}
+          <div style={{ marginTop: '1.25rem', padding: '0.75rem 1rem', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>Gate status</div>
             {GATE_KEYS.map((key) => {
+              const criterion = CRITERIA.find(c => c.key === key);
               const value = (scores as Record<string, number | undefined>)[key] ?? 0;
               const passed = (value as number) >= 3;
               return (
-                <div key={key} style={styles.gateRow}>
-                  <span>{CRITERIA_LABELS[key]}</span>
-                  <span style={{ fontWeight: 700, color: passed ? '#16a34a' : '#dc2626' }}>
-                    {passed ? '\u2713 Pass' : '\u2717 Fail'} ({value})
-                  </span>
+                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.25rem 0', fontSize: '12px' }}>
+                  <span style={{ color: '#666' }}>{criterion?.label}</span>
+                  <span style={{ fontWeight: 700, color: passed ? '#16a34a' : '#dc2626' }}>{passed ? '\u2713 Pass' : '\u2717 Fail'}</span>
                 </div>
               );
             })}
           </div>
 
-          <div style={styles.decisionBadge(result.decision)}>
+          {/* Decision */}
+          <div style={{ display: 'block', padding: '0.625rem 1rem', borderRadius: '100px', background: dc.bg, color: dc.fg, fontSize: '15px', fontWeight: 700, textAlign: 'center' as const, marginTop: '1.25rem' }}>
             {decisionLabels[result.decision]}
           </div>
 
-          {result.gate_failures.length > 0 && (
-            <div style={{ marginTop: 12, fontSize: 12, color: '#991b1b' }}>
-              {result.gate_failures.map((f, i) => (
-                <div key={i} style={{ padding: '2px 0' }}>{f}</div>
-              ))}
-            </div>
-          )}
+          {/* Feedback */}
+          <div style={{ marginTop: '1rem' }}>
+            {buildFeedback(scores, result).map((item, i) => (
+              <div key={i} style={{ fontSize: '12px', color: '#374151', lineHeight: '1.6', padding: '0.5rem 0.75rem', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px', marginBottom: '0.5rem' }}>
+                {item.text}
+                {item.href && <span> <a href={item.href} style={{ color: '#6830C4', fontSize: '11px' }}>Learn more</a></span>}
+              </div>
+            ))}
+          </div>
         </div>
+
       </div>
     </div>
   );

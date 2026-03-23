@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CaseSelector from '../components/CaseSelector.tsx';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Step 2: Select" step={2} prev={`${base}1-discover/`} next={`${base}3-qualify/`}>
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
+
+    <div class="mb-10">
+      <h1>Select a workflow</h1>
+      <p class="subtitle">Pick a workflow to evaluate. You can use one of the built-in scenarios or define your own.</p>
+    </div>
+
+    <div class="mb-10">
+      <h2>Why selecting the right workflow matters</h2>
+
+      <p>
+        After discovery, you will usually have a list of candidate workflows. The temptation is to pick the one that feels most urgent or the one that leadership is most excited about. But the best workflow to evaluate first is not necessarily the most important one. It is the one where you can run a clean, bounded pilot and learn the most.
+      </p>
+
+      <p>
+        A good first candidate has clear boundaries, measurable baselines and enough repetition that you will see results quickly. If your first pilot is messy, politically charged or hard to measure, you will struggle to learn from it regardless of the outcome.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Choose a workflow to assess</h2>
+      <p>Pick a flagship case or define your own workflow. Flagship cases come with pre-filled data so you can see the method in action immediately. If you enter your own, you will fill in the details as you go through the guide.</p>
+      <CaseSelector client:load />
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .landing-content .subtitle {
+    color: var(--text-light);
+    font-size: 15px;
+  }
+</style>

@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
 
+import tailwindcss from '@tailwindcss/vite';
+
 export default defineConfig({
   site: 'https://kevin-witzenberger.github.io',
   base: '/adoption-eval',
@@ -13,5 +15,7 @@ export default defineConfig({
         '@types': new URL('../src/types.ts', import.meta.url).pathname,
       },
     },
+
+    plugins: [tailwindcss()],
   },
 });

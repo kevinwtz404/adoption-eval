@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QualificationQuestions from '../components/QualificationQuestions.tsx';
+import QualificationForm from '../components/QualificationForm.tsx';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Step 3: Qualify" step={3} prev={`${base}2-select/`} next={`${base}4-map/`}>
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
+
+    <div class="mb-10">
+      <h1>Is this ready to pilot?</h1>
+      <p class="subtitle">You have a workflow that hurts. This step helps you figure out if it is ready for a small, safe test.</p>
+    </div>
+
+    <div class="mb-10">
+      <h2>What this step is really about</h2>
+
+      <p>
+        This is not about whether the workflow is important. You already know it is painful. This is about whether you can actually run a useful pilot on it right now. Can you measure it? Is the data accessible? Do you know what should stay with people? Can you scope a test that fits in 2-4 weeks?
+      </p>
+
+      <p>
+        If the answer to most of these is yes, you have a good candidate for a pilot. If not, that does not mean the workflow is unimportant. It means you should either address the gaps first or pick a different workflow to start with. The goal is to learn as much as possible from your first pilot, and that is much easier when the conditions are right.
+      </p>
+
+      <p>
+        Click on each question below to understand what it means, see how the scoring works and set your score. Two questions are gates: if they score below 3, the workflow is not ready to pilot yet.
+      </p>
+
+      <QualificationQuestions client:load />
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Score your workflow</h2>
+
+      <p>
+        This is the same scoring as above in a compact view. Adjust the sliders and see the results update live. If you already scored using the questions above, these will be in sync.
+      </p>
+
+      <QualificationForm client:load />
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .landing-content .subtitle {
+    color: var(--text-light);
+    font-size: 15px;
+  }
+</style>

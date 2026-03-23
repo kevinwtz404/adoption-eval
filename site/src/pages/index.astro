@@ -4,108 +4,209 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Home" next={`${base}1-discover/`}>
-  <div class="hero">
-    <h1>adoption-eval</h1>
-    <p class="hero-subtitle">
-      A practical method for turning workflow pain into decision-ready AI pilots.
-    </p>
-    <p class="hero-body">
-      Most teams don't fail because they lack AI tools. They fail because they can't reliably move from a painpoint to a safe, testable implementation plan. This method closes that gap.
-    </p>
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
-    <div class="method-loop">
-      <div class="loop-step"><span class="loop-num">1</span> Discover</div>
-      <div class="loop-arrow">&rarr;</div>
-      <div class="loop-step"><span class="loop-num">2</span> Qualify</div>
-      <div class="loop-arrow">&rarr;</div>
-      <div class="loop-step"><span class="loop-num">3</span> Map</div>
-      <div class="loop-arrow">&rarr;</div>
-      <div class="loop-step"><span class="loop-num">4</span> Bound</div>
-      <div class="loop-arrow">&rarr;</div>
-      <div class="loop-step"><span class="loop-num">5</span> Pilot</div>
-      <div class="loop-arrow">&rarr;</div>
-      <div class="loop-step"><span class="loop-num">6</span> Evaluate</div>
+    <!-- Opening -->
+    <div class="mb-10">
+      <h1 class="text-3xl font-bold text-primary leading-tight mb-6">
+        AI adoption doesn't start with tools.<br />It starts with understanding your work.
+      </h1>
+
+      <p>
+        Every organisation is being told to "use AI." But when you actually sit down to figure out where it fits, the picture gets complicated fast. Which processes should you touch? How much should AI actually do? What needs to stay with people? And how do you test any of this without putting your operations, your data or your reputation at risk?
+      </p>
+
+      <p>
+        The reality is that everyone's work is a mix. Routine stuff that just needs doing, and moments where judgement, context and accountability actually matter. AI is exceptionally good at the first part. The risk is letting it bleed into the second without thinking it through.
+      </p>
     </div>
 
-    <div class="hero-cta">
-      <a href={`${base}1-discover/`} class="btn btn-primary">Start the method &rarr;</a>
+    <div class="divider"></div>
+
+    <!-- Why it's hard -->
+    <div class="mb-10">
+      <h2>Why most AI adoption efforts stall</h2>
+
+      <p>
+        Most organisations try one of two things. They buy a tool and hope people figure it out. Or they commission a maturity assessment that produces a report nobody acts on. Both start from the wrong end.
+      </p>
+
+      <p>
+        The tool-first approach skips the question of whether AI is even the right intervention. The assessment-first approach gives you a score but no concrete next step. What's missing is the middle: a practical way to look at your actual work, decide where automation makes sense, set boundaries and test it.
+      </p>
     </div>
 
-    <div class="principles">
-      <h2>Key principles</h2>
-      <ul>
-        <li>The method is stable but adaptable — solutions are variable by context</li>
-        <li>Multiple intervention paths are always considered, including non-AI</li>
-        <li>Not every problem is an AI problem</li>
-        <li>Boundary enforcement should be architectural where risk is high</li>
-        <li>A pilot is not a success if it is faster but less controllable</li>
+    <div class="divider"></div>
+
+    <!-- What this does differently -->
+    <div class="mb-10">
+      <h2>What this guide does differently</h2>
+
+      <p>
+        This guide starts with your work, not with AI capabilities. You pick a real workflow, break it into steps and ask practical questions about each one. Not "can AI do this?" but "how much should AI do here, and what needs to stay with people?"
+      </p>
+
+      <p>
+        When you bring AI into a workflow, you're mixing two different worlds. One is human: messy, contextual, full of judgement calls and informal coordination. The other is technical: fast, consistent, but rigid and blind to context it wasn't given. The hard part isn't the technology. It's figuring out where these two worlds overlap productively and where they don't. That's why this guide maps your workflow step by step, so you can see exactly where AI fits, where it doesn't and where you need both working together.
+      </p>
+
+      <p>
+        It won't sell you on AI. Some of the workflows you look at might not need it at all. Instead, it gives you a structured way to find real opportunities, assess the right level of automation for each step, put boundaries in place and design a small pilot you can actually learn from.
+      </p>
+
+      <p>
+        You don't need to be technical. You don't need to know which model to use. You just need a workflow you're curious about.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- What you'll do -->
+    <div class="mb-10">
+      <h2>What this guide walks you through</h2>
+
+      <div class="guide-steps">
+        <div class="guide-step">
+          <span class="guide-num">1</span>
+          <div>
+            <p class="step-title">Where are the real opportunities?</p>
+            <p class="step-desc">Learn how to find the workflows worth looking at. Not every problem needs AI.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="guide-num">2</span>
+          <div>
+            <p class="step-title">Is this opportunity worth pursuing?</p>
+            <p class="step-desc">Score it against practical criteria. Some ideas sound great but aren't ready for a pilot.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="guide-num">3</span>
+          <div>
+            <p class="step-title">For each step, how much should AI do?</p>
+            <p class="step-desc">Walk through your workflow and decide the right level of automation for each part.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="guide-num">4</span>
+          <div>
+            <p class="step-title">What boundaries and controls do you need?</p>
+            <p class="step-desc">Define what's off-limits, where approvals are required and how you enforce it.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="guide-num">5</span>
+          <div>
+            <p class="step-title">How do you test this safely?</p>
+            <p class="step-desc">Design a small pilot with clear success criteria and a concrete action plan.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="guide-num">6</span>
+          <div>
+            <p class="step-title">Did it work?</p>
+            <p class="step-desc">Measure what changed. Faster is not enough if you lost control. Then decide: scale, revise or stop.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- What you walk away with -->
+    <div class="mb-10">
+      <h2>What you walk away with</h2>
+
+      <p>
+        By the end of this guide, you'll have:
+      </p>
+
+      <ul class="takeaway-list">
+        <li>A clear picture of which parts of your workflow are candidates for AI and which aren't</li>
+        <li>A practical understanding of automation levels, from "AI assists" to "fully autonomous" and why most useful adoption sits in between</li>
+        <li>A scored qualification of your opportunity, so you know whether to proceed, adjust or defer</li>
+        <li>A boundary checklist covering what needs human approval, what's off-limits and how to enforce it</li>
+        <li>A concrete 30-day action plan you can actually execute</li>
       </ul>
+
+      <p>
+        You can try the guide with one of four built-in scenarios or bring your own workflow. Everything runs in your browser. Nothing is sent anywhere.
+      </p>
     </div>
+
+    <div class="divider"></div>
+
+    <!-- CTA -->
+    <div class="text-center mb-10">
+      <a href={`${base}1-discover/`} class="btn btn-primary btn-lg">Start the guide</a>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- About + feedback -->
+    <div class="mb-8">
+      <h2>About this project</h2>
+
+      <p>
+        I built this because I kept seeing the same gap. Organisations want to use AI but don't have a practical way to evaluate where it actually fits. The existing options are either too abstract, too technical or too focused on selling tools.
+      </p>
+
+      <p>
+        This guide is open source, free and a work in progress. I'm actively developing it and would genuinely appreciate feedback. If something doesn't make sense, if a step feels wrong or if you have ideas for how to make it more useful, I'd love to hear from you.
+      </p>
+
+      <div class="feedback-links">
+        <a href="mailto:kevin.witzenberger@posteo.de" class="link link-primary">Send me feedback</a>
+        <span class="text-base-content/30">|</span>
+        <a href="https://github.com/kevinwtz404/adoption-eval" class="link link-primary" target="_blank" rel="noopener">View on GitHub</a>
+        <span class="text-base-content/30">|</span>
+        <a href="https://linkedin.com/in/kevin-witzenberger/" class="link link-primary" target="_blank" rel="noopener">Connect on LinkedIn</a>
+      </div>
+    </div>
+
   </div>
 </BaseLayout>
 
 <style>
-  .hero {
-    text-align: center;
-    padding: 3rem 0 2rem;
+  .landing-content p {
+    font-size: 15px;
+    line-height: 1.75;
   }
-  .hero h1 {
-    font-size: 2.5rem;
-    color: var(--purple);
+
+  .landing-content h2 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
   }
-  .hero-subtitle {
-    font-size: 1.25rem;
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .step-desc {
+    font-size: 14px;
     color: var(--text-light);
-    max-width: 600px;
-    margin: 0.5rem auto 1rem;
+    margin-top: 0.125rem;
   }
-  .hero-body {
-    max-width: 640px;
-    margin: 0 auto 2.5rem;
-    color: var(--text-light);
+
+  .takeaway-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0.75rem 0 1.25rem;
   }
-  .method-loop {
+
+  .takeaway-list li {
+    font-size: 14px;
+    padding: 0.3rem 0;
+    line-height: 1.6;
+  }
+
+  .feedback-links {
     display: flex;
+    gap: 0.75rem;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 2.5rem;
+    margin-top: 1rem;
+    font-size: 14px;
   }
-  .loop-step {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-weight: 500;
-    font-size: 0.875rem;
-  }
-  .loop-num {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--purple);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-  .loop-arrow { color: var(--text-muted); font-size: 1.25rem; }
-  .hero-cta { margin-bottom: 3rem; }
-  .hero-cta .btn { font-size: 1rem; padding: 0.75rem 2rem; }
-  .principles { text-align: left; max-width: 640px; margin: 0 auto; }
-  .principles h2 { margin-bottom: 0.75rem; }
-  .principles ul { list-style: none; padding: 0; }
-  .principles li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-light);
-    font-size: 0.9375rem;
-  }
-  .principles li:last-child { border-bottom: none; }
 </style>

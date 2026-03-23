@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Resources">
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
+
+    <div class="mb-10">
+      <h1>Resources</h1>
+      <p class="subtitle">Practical guidance for assessing each aspect of pilot readiness.</p>
+    </div>
+
+    <!-- Business Impact -->
+    <div class="mb-10" id="business-impact">
+      <h2>Assessing business impact</h2>
+      <p>TODO: How to evaluate whether improving this workflow would have meaningful business impact. Frameworks for estimating time saved, cost reduced, quality improved or risk lowered. How to distinguish "nice to have" from "critical."</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Frequency -->
+    <div class="mb-10" id="frequency">
+      <h2>Assessing workflow frequency</h2>
+      <p>TODO: How to measure how often a workflow runs. Why frequency matters for automation ROI. How to account for workflows that are infrequent but high-impact vs frequent but low-stakes.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Baseline Measurability -->
+    <div class="mb-10" id="baseline-measurability">
+      <h2>Establishing a baseline</h2>
+      <p>TODO: How to measure current performance when no metrics exist. Practical approaches: manual time tracking for 2 weeks, pulling data from existing tools, asking the team to estimate cycle times. What "good enough" measurement looks like for a pilot. How to set up a baseline quickly without a big data project.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Data Readiness -->
+    <div class="mb-10" id="data-readiness">
+      <h2>Assessing data readiness</h2>
+      <p>TODO: What "good enough" data looks like for a pilot. Key questions to ask: Are the fields populated? Is it structured or unstructured? Can you access it programmatically? Are there privacy or compliance constraints? What to do when data quality is poor. The difference between "data is messy" and "data does not exist."</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Boundary Clarity -->
+    <div class="mb-10" id="boundary-clarity">
+      <h2>Figuring out what should stay with people</h2>
+      <p>TODO: How to identify which parts of a workflow require human judgement, accountability or approval. Common patterns: customer-facing decisions, financial sign-off, legal or compliance review, creative judgement. The automation levels framework (link to Map page). Why unclear boundaries are a signal to defer, not push through.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Pilotability -->
+    <div class="mb-10" id="pilotability">
+      <h2>Scoping a pilot</h2>
+      <p>TODO: How to carve out a testable slice of a workflow. What makes a pilot scope too big or too small. How to handle dependencies and approvals. Setting up success criteria before you start. The 2-4 week rule of thumb and when to break it.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- AI Paradigms -->
+    <div class="mb-10" id="ai-paradigms">
+      <h2>AI paradigms and their risk profiles</h2>
+      <p>TODO: Overview of different AI approaches (rules/automation, ML/classification, LLM copilot, LLM agent, RAG, hybrid) and their risk profiles. When to use which. What each paradigm is good at and where it fails. How the choice of paradigm affects boundary design and control requirements.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Automation Levels -->
+    <div class="mb-10" id="automation-levels">
+      <h2>Automation levels (0-5)</h2>
+      <p>TODO: Full explanation of the automation levels framework inspired by SAE driving automation levels. Detailed description of each level with examples. How to decide which level fits each workflow step. Why most useful adoption lives in levels 1-3.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Glossary -->
+    <div class="mb-10" id="glossary">
+      <h2>Glossary</h2>
+      <p>TODO: Plain-language definitions of key terms used throughout the guide. Gate, baseline, boundary, pilot, qualification, readiness profile, automation level, deterministic vs generative, approval gate, etc.</p>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .landing-content .subtitle {
+    color: var(--text-light);
+    font-size: 15px;
+  }
+</style>
