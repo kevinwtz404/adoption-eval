@@ -2,6 +2,7 @@ import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 import { flagshipCases } from '../data/flagship-cases';
+import { analyseStep } from '../data/gemini';
 
 const PARADIGMS = [
   { value: 'rules', label: 'Follow set rules', desc: 'Deterministic logic, automation, templates' },
@@ -34,6 +35,8 @@ export default function InterventionDesigner() {
   const [designs, setDesigns] = useState<Record<string, StepDesign>>({});
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
   const [painPoint, setPainPoint] = useState<string | null>(null);
+  const [analyses, setAnalyses] = useState<Record<string, string>>({});
+  const [analysing, setAnalysing] = useState<string | null>(null);
 
   useEffect(() => {
     const state = loadState();
@@ -243,7 +246,7 @@ export default function InterventionDesigner() {
                       )}
 
                       {/* Notes */}
-                      <div style={{ marginBottom: '0.5em' }}>
+                      <div style={{ marginBottom: '1em' }}>
                         <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '0.375rem' }}>
                           Anything else to note?
                         </label>
@@ -254,6 +257,51 @@ export default function InterventionDesigner() {
                           rows={2}
                           style={{ width: '100%', padding: '0.5rem', border: '1px solid #e0e0e0', borderRadius: '6px', fontFamily: 'inherit', fontSize: '13px', resize: 'vertical' as const }}
                         />
+                      </div>
+
+                      {/* AI Analysis */}
+                      <div>
+                        <button
+                          onClick={async () => {
+                            setAnalysing(step.id);
+                            const description = [
+                              design.humanWork && `Should stay human: ${design.humanWork}`,
+                              design.deterministicWork && `Could be automated with rules: ${design.deterministicWork}`,
+                              design.aiWork && `Could use AI: ${design.aiWork}`,
+                              design.notes && `Notes: ${design.notes}`,
+                            ].filter(Boolean).join('. ') || 'No description provided yet.';
+                            const result = await analyseStep(
+                              step.name,
+                              (step as any).pain || '',
+                              description,
+                              workflowName,
+                            );
+                            setAnalyses(prev => ({ ...prev, [step.id]: result }));
+                            setAnalysing(null);
+                          }}
+                          disabled={analysing === step.id}
+                          style={{
+                            padding: '0.5rem 1.25rem', borderRadius: '6px', fontSize: '13px',
+                            fontFamily: 'inherit', fontWeight: 600, cursor: analysing === step.id ? 'wait' : 'pointer',
+                            background: '#6830C4', color: '#fff', border: 'none',
+                            opacity: analysing === step.id ? 0.6 : 1,
+                          }}
+                        >
+                          {analysing === step.id ? 'Analysing...' : 'Analyse this step'}
+                        </button>
+
+                        {analyses[step.id] && (
+                          <div style={{
+                            marginTop: '1rem', padding: '1rem', background: '#fafafa',
+                            border: '1px solid #e0e0e0', borderRadius: '8px',
+                            fontSize: '13px', lineHeight: '1.7', whiteSpace: 'pre-wrap' as const,
+                          }}>
+                            <div style={{ fontSize: '12px', fontWeight: 600, color: '#6830C4', marginBottom: '0.5rem' }}>
+                              AI Analysis
+                            </div>
+                            {analyses[step.id]}
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

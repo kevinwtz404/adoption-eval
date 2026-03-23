@@ -7,3 +7,5 @@ site/.astro/
 site/.vscode/
 .astro/
 .DS_Store
+.env
+site/.env
