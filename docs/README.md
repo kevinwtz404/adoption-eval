@@ -6,7 +6,10 @@ This repo is designed to move from discovery to a decision-ready pilot quickly. 
 1. `adoption-eval-method-overview.md` - end-to-end stage logic
 2. `ai-adoption-opportunity-discovery-methods.md` - discovery methods and references
 3. `opportunity-to-solution-matching-canvas.md` - compare intervention options
-4. `outcome-dimensions-matrix.md` - evaluate pilot outcomes consistently
+4. `rubric-and-thresholds.md` - scoring defaults and pass/watch/fail thresholds
+5. `outcome-dimensions-matrix.md` - evaluate pilot outcomes consistently
+6. `llm-limitations-and-boundary-design.md` - practical boundary implications
+7. `market-facing-positioning.md` - concise external framing
 
 ## flagship examples
 - `flagship-use-cases/README.md`

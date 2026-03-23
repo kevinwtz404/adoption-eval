@@ -57,7 +57,9 @@ Run a small pilot and track outcomes via the dimensions matrix:
 - adoption friction
 - control confidence
 
-Reference: `docs/outcome-dimensions-matrix.md`
+References:
+- `docs/rubric-and-thresholds.md`
+- `docs/outcome-dimensions-matrix.md`
 
 ## 5) decide and loop
 Decision options:

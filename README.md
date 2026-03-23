@@ -51,7 +51,10 @@ Detailed flow: `docs/adoption-eval-method-overview.md`
 - method overview: `docs/adoption-eval-method-overview.md`
 - discovery methods: `docs/ai-adoption-opportunity-discovery-methods.md`
 - matching canvas: `docs/opportunity-to-solution-matching-canvas.md`
+- rubric + thresholds: `docs/rubric-and-thresholds.md`
 - outcome matrix: `docs/outcome-dimensions-matrix.md`
+- LLM boundary guide: `docs/llm-limitations-and-boundary-design.md`
+- positioning draft: `docs/market-facing-positioning.md`
 - flagship examples: `docs/flagship-use-cases/README.md`
 
 ## inputs and outputs
