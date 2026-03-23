@@ -62,7 +62,40 @@ const base = import.meta.env.BASE_URL;
     <!-- AI Paradigms -->
     <div class="mb-10" id="ai-paradigms">
       <h2>AI paradigms and their risk profiles</h2>
-      <p>TODO: Overview of different AI approaches (rules/automation, ML/classification, LLM copilot, LLM agent, RAG, hybrid) and their risk profiles. When to use which. What each paradigm is good at and where it fails. How the choice of paradigm affects boundary design and control requirements.</p>
+
+      <p>
+        These are fundamentally different technologies. An LLM can be asked to "follow rules" but that is not the same as a rules engine. A rules engine is deterministic: given the same input, it always produces the same output. An LLM following instructions is probabilistic: it might follow them correctly most of the time but it can hallucinate, misinterpret or drift. The choice of paradigm determines your risk profile, your boundary requirements and your testing strategy.
+      </p>
+
+      <p>TODO: For each paradigm below, add detailed sections covering:</p>
+      <ul>
+        <li>What it actually is (technically, in plain language)</li>
+        <li>What it is NOT (common misconceptions)</li>
+        <li>When to use it (concrete examples)</li>
+        <li>When not to use it</li>
+        <li>Risk profile and what can go wrong</li>
+        <li>What boundaries you need</li>
+        <li>How to test it before going live</li>
+        <li>Real-world examples (good and bad)</li>
+      </ul>
+
+      <h3 id="paradigm-rules">Rules and automation</h3>
+      <p>TODO: Deterministic logic. If X then Y. No model, no learning, no uncertainty. Spreadsheet formulas, workflow automation tools, business rules engines. Why this is the safest option for high autonomy. When people think they need AI but actually need rules. The difference between an LLM following instructions and a rules engine.</p>
+
+      <h3 id="paradigm-ml">Machine learning (classification and prediction)</h3>
+      <p>TODO: Trained models that learn patterns from historical data. How they work at a high level. Bias, data drift, retraining requirements. The black-box problem. When ML is the right choice vs when rules or LLMs are better. Examples: lead scoring, spam filtering, demand forecasting.</p>
+
+      <h3 id="paradigm-llm-copilot">LLM as copilot</h3>
+      <p>TODO: A language model that supports a human. The human drives, AI assists. Drafting, summarisation, explanation, brainstorming. Why the human-in-the-loop makes this lower risk. Hallucination is still a problem but the human catches it. When copilot mode is enough vs when you need more autonomy.</p>
+
+      <h3 id="paradigm-llm-agent">LLM as agent</h3>
+      <p>TODO: An LLM that takes actions autonomously. The human sets the goal, AI figures out the steps. Tool calling, API access, multi-step workflows. Why this is significantly higher risk than copilot mode. Compounding errors. Scope creep. The importance of strong boundaries and monitoring. When agent mode is justified vs when it is unnecessary risk.</p>
+
+      <h3 id="paradigm-rag">RAG (retrieval-augmented generation)</h3>
+      <p>TODO: An LLM that retrieves information from a knowledge base before generating a response. How it differs from a plain LLM (grounded in actual sources). The critical importance of source quality and access control. Chunking strategies and how they affect output quality. Why citation does not guarantee correctness. When RAG is the right choice for knowledge retrieval.</p>
+
+      <h3 id="paradigm-hybrid">Hybrid (deterministic core + AI layer)</h3>
+      <p>TODO: Systems where the critical logic is deterministic and AI handles the language-rich parts. The CFO reporting example: calculations are rules-based, narrative is LLM-generated. Why boundary enforcement between the two layers is architectural, not just policy. When hybrid is worth the complexity.</p>
     </div>
 
     <div class="divider"></div>
@@ -70,7 +103,26 @@ const base = import.meta.env.BASE_URL;
     <!-- Automation Levels -->
     <div class="mb-10" id="automation-levels">
       <h2>Automation levels (0-5)</h2>
-      <p>TODO: Full explanation of the automation levels framework inspired by SAE driving automation levels. Detailed description of each level with examples. How to decide which level fits each workflow step. Why most useful adoption lives in levels 1-3.</p>
+
+      <p>Inspired by the SAE levels of driving automation. A reference framework for describing how much control AI has in a given context. Not currently used as a per-step classification in the guide but useful as a shared language.</p>
+
+      <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+        <thead>
+          <tr>
+            <th style="padding: 0.5rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px;">Level</th>
+            <th style="padding: 0.5rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px;">Name</th>
+            <th style="padding: 0.5rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px;">What it means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--purple);">0</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 600;">Fully human</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-light);">People do everything. AI is not involved.</td></tr>
+          <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--purple);">1</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 600;">AI-assisted</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-light);">Human drives. AI supports with suggestions, lookups or drafts.</td></tr>
+          <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--purple);">2</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 600;">AI-led, human-supervised</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-light);">AI handles the task. A human reviews and approves before it goes anywhere.</td></tr>
+          <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--purple);">3</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 600;">AI-led, human on standby</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-light);">AI handles it and only escalates when something looks wrong.</td></tr>
+          <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--purple);">4</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); font-weight: 600;">Autonomous within boundaries</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-light);">AI runs independently within defined rules. Humans set the rules, not the actions.</td></tr>
+          <tr><td style="padding: 0.5rem 1rem; font-weight: 700; color: var(--purple);">5</td><td style="padding: 0.5rem 1rem; font-weight: 600;">Fully autonomous</td><td style="padding: 0.5rem 1rem; color: var(--text-light);">AI handles everything, any conditions. Rare in practice and high risk.</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="divider"></div>

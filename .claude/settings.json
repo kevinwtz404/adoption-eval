@@ -1,0 +1,52 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/kevin/dev/repos/adoption-eval log --oneline -10)",
+      "Bash(npm install:*)",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js run --input /Users/kevin/dev/repos/adoption-eval/examples/support-triage-workflow.example.json --out /tmp/adoption-eval-test)",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js validate --input /Users/kevin/dev/repos/adoption-eval/examples/support-triage-workflow.example.json)",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js validate --input /Users/kevin/dev/repos/adoption-eval/examples/revops-workflow.example.json)",
+      "Bash(node -e \":*)",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js validate --input /tmp/bad-input.json)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js run --input /Users/kevin/dev/repos/adoption-eval/examples/support-triage-workflow.example.json --out /tmp/adoption-eval-test2)",
+      "Bash(npx vitest:*)",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js run --input /Users/kevin/dev/repos/adoption-eval/examples/support-triage-workflow.example.json --readiness /Users/kevin/dev/repos/adoption-eval/examples/readiness-profile.input.example.json --out /tmp/adoption-eval-test3)",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js run --input /Users/kevin/dev/repos/adoption-eval/examples/support-triage-workflow.example.json --out /tmp/adoption-eval-test4)",
+      "Bash(node /Users/kevin/dev/repos/adoption-eval/bin/adoption-eval.js run --input /Users/kevin/dev/repos/adoption-eval/examples/support-triage-workflow.example.json --readiness /Users/kevin/dev/repos/adoption-eval/examples/readiness-profile.input.example.json --out /tmp/adoption-eval-final)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:kevin-witzenberger.github.io)",
+      "Bash(mkdir -p site)",
+      "Bash(npm create:*)",
+      "Bash(nvm ls:*)",
+      "Bash(fnm ls:*)",
+      "Bash(volta list:*)",
+      "Bash(source ~/.nvm/nvm.sh)",
+      "Bash(nvm install:*)",
+      "Bash(nvm use:*)",
+      "Bash(npx astro:*)",
+      "Bash(ls /Users/kevin/dev/repos/adoption-eval/src/types*)",
+      "Bash(pkill -f \"astro dev\")",
+      "Bash(git -C /Users/kevin/dev/repos/adoption-eval status)",
+      "Bash(git -C /Users/kevin/dev/repos/adoption-eval log --oneline -5)",
+      "Bash(git -C /Users/kevin/dev/repos/adoption-eval push origin main)",
+      "Bash(git mv:*)",
+      "Bash(git reset:*)",
+      "Bash(git add:*)",
+      "WebFetch(domain:kevinwtz404.github.io)",
+      "Bash(curl -sL https://kevinwtz404.github.io/kevin-witzenberger/favicon.ico -o /Users/kevin/dev/repos/adoption-eval/site/public/favicon.ico)",
+      "Bash(curl -sL https://raw.githubusercontent.com/kevinwtz404/kevin-witzenberger/main/favicon.ico -o /Users/kevin/dev/repos/adoption-eval/site/public/favicon.ico)",
+      "Bash(curl -sL https://raw.githubusercontent.com/kevinwtz404/kevin-witzenberger/main/favicon.png -o /Users/kevin/dev/repos/adoption-eval/site/public/favicon.png)",
+      "Bash(mv 2-qualify.astro 3-qualify.astro)",
+      "Bash(mv 3-map.astro 4-map.astro)",
+      "Bash(mv 4-bound.astro 5-bound.astro)",
+      "Bash(mv 5-pilot.astro 6-pilot.astro)",
+      "Bash(mv 6-evaluate.astro 7-evaluate.astro)"
+    ],
+    "additionalDirectories": [
+      "/Users/kevin/Downloads"
+    ]
+  }
+}

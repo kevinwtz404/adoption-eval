@@ -138,7 +138,7 @@ const base = import.meta.env.BASE_URL;
 
     <!-- CTA -->
     <div class="text-center mb-10">
-      <a href={`${base}1-discover/`} class="btn btn-primary btn-lg">Start the guide</a>
+      <a href={`${base}1-discover/`} class="cta-link">Start the guide →</a>
     </div>
 
     <div class="divider"></div>
@@ -200,6 +200,23 @@ const base = import.meta.env.BASE_URL;
     font-size: 14px;
     padding: 0.3rem 0;
     line-height: 1.6;
+  }
+
+  .cta-link {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    border: 1px solid var(--purple);
+    border-radius: 8px;
+    color: var(--purple);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  .cta-link:hover {
+    background: var(--purple);
+    color: white;
   }
 
   .feedback-links {
