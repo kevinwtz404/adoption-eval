@@ -24,12 +24,14 @@ export interface AppState {
     pilotability: number;
   } | null;
   selectedCase: string | null;
+  mappings: Record<string, { level: number; paradigm: string | null }> | null;
 }
 
 const defaultState: AppState = {
   workflow: null,
   qualification: null,
   selectedCase: null,
+  mappings: null,
 };
 
 export function loadState(): AppState {

@@ -1,56 +1,265 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import OpportunityMap from '../components/OpportunityMap.tsx';
+import AutomationMapper from '../components/AutomationMapper.tsx';
 const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Step 4: Map" step={4} prev={`${base}3-qualify/`} next={`${base}5-bound/`}>
-  <div class="page-header">
-    <h1>Map opportunities</h1>
-    <p class="subtitle">Classify each workflow step: could automate, should automate, or must stay human.</p>
-  </div>
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
-  <div class="section">
-    <h2>The could / should / must-stay-human framework</h2>
-    <p>Not everything that <em>can</em> be automated <em>should</em> be. This step applies structured rules to each workflow step based on its name, owner, tags, and boundary requirements.</p>
-
-    <div class="framework-items">
-      <div class="fw-item">
-        <div class="fw-dot" style="background: var(--warning);"></div>
-        <div>
-          <strong>Could automate</strong>
-          <p>Technically feasible but needs further assessment before committing.</p>
-        </div>
-      </div>
-      <div class="fw-item">
-        <div class="fw-dot" style="background: var(--success);"></div>
-        <div>
-          <strong>Should automate</strong>
-          <p>Clear repetitive/structured step with good input-output patterns. Recommended for pilot.</p>
-        </div>
-      </div>
-      <div class="fw-item">
-        <div class="fw-dot" style="background: var(--danger);"></div>
-        <div>
-          <strong>Must stay human</strong>
-          <p>Requires judgement, accountability, approval, or involves customer-facing/legal/compliance decisions.</p>
-        </div>
-      </div>
+    <div class="mb-10">
+      <h1>Map your workflow</h1>
+      <p class="subtitle">For each step, decide how much AI should do and what kind of AI fits.</p>
     </div>
-  </div>
 
-  <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;" />
+    <div class="mb-10">
+      <h2>How much should AI do?</h2>
 
-  <div class="section">
-    <h2>Your opportunity map</h2>
-    <p>Review the automated classification below. Use the toggles to override any decisions.</p>
-    <OpportunityMap client:load />
+      <p>
+        Most people intuitively understand the levels of self-driving cars. No automation at one end, fully autonomous at the other, and a spectrum in between where humans and machines share control differently.
+      </p>
+
+      <p>
+        The same thinking applies to work. For each step in a workflow, the question is not "can AI do this?" It is "how much should AI do here?" The answer depends on the step's complexity, the risk of getting it wrong, whether human judgement is needed and how predictable the output is.
+      </p>
+
+      <div class="levels-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Name</th>
+              <th>What it means</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0</td>
+              <td>Fully human</td>
+              <td>People do everything. AI is not involved.</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>AI-assisted</td>
+              <td>Human drives. AI supports with suggestions, lookups or drafts.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>AI-led, human-supervised</td>
+              <td>AI handles the task. A human reviews and approves before it goes anywhere.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>AI-led, human on standby</td>
+              <td>AI handles it and only escalates when something looks wrong.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Autonomous within boundaries</td>
+              <td>AI runs independently within defined rules. Humans set the rules, not the actions.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Fully autonomous</td>
+              <td>AI handles everything, any conditions. Rare in practice and high risk.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Most useful AI adoption lives in levels 1 to 3. The goal is not to push everything to level 5. It is to find the right level for each step.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>What kind of AI?</h2>
+
+      <p>
+        Once you decide a step should involve AI, you need to know what kind. Different AI approaches have fundamentally different capabilities, limitations and risk profiles. Choosing the wrong paradigm for a step is one of the most common adoption mistakes.
+      </p>
+
+      <div class="paradigms">
+        <details class="paradigm-item">
+          <summary>Rules and automation</summary>
+          <div class="paradigm-detail">
+            <p>Deterministic logic: if X then Y. No learning, no uncertainty. Spreadsheet formulas, workflow automation tools, business rules engines.</p>
+            <p><strong>Good for:</strong> Predictable, structured tasks with clear rules. Routing, validation, formatting, calculations.</p>
+            <p><strong>Risks:</strong> Low. Predictable and auditable. But rigid: breaks when rules change or edge cases appear.</p>
+            <p><strong>Best at levels:</strong> 3-5. Rules-based systems are the safest option for high autonomy because the output is deterministic.</p>
+          </div>
+        </details>
+
+        <details class="paradigm-item">
+          <summary>Machine learning (classification and prediction)</summary>
+          <div class="paradigm-detail">
+            <p>Trained models that learn patterns from data. Classification, scoring, anomaly detection, forecasting.</p>
+            <p><strong>Good for:</strong> Pattern recognition at scale. Spam filtering, lead scoring, fraud detection, demand forecasting.</p>
+            <p><strong>Risks:</strong> Bias in training data, data drift over time, black-box decision-making. Needs monitoring and retraining.</p>
+            <p><strong>Best at levels:</strong> 2-4. Works well with human oversight for high-stakes decisions, or autonomously for low-stakes pattern matching.</p>
+          </div>
+        </details>
+
+        <details class="paradigm-item">
+          <summary>LLM as copilot (human drives, AI assists)</summary>
+          <div class="paradigm-detail">
+            <p>A large language model that supports a human: drafting text, summarising documents, suggesting next steps, answering questions.</p>
+            <p><strong>Good for:</strong> Drafting, summarisation, explanation, brainstorming, research support. Any task where a human makes the final call.</p>
+            <p><strong>Risks:</strong> Hallucination (plausible but wrong output), prompt sensitivity, inconsistency across runs. Output must be reviewed.</p>
+            <p><strong>Best at levels:</strong> 1-2. The human is in control, AI accelerates the work.</p>
+          </div>
+        </details>
+
+        <details class="paradigm-item">
+          <summary>LLM as agent (AI drives, human reviews)</summary>
+          <div class="paradigm-detail">
+            <p>An LLM that takes actions autonomously: calling tools, making API requests, executing multi-step workflows. Human sets the goal, AI figures out the steps.</p>
+            <p><strong>Good for:</strong> Multi-step tasks with clear success criteria. Data collection, report assembly, workflow orchestration.</p>
+            <p><strong>Risks:</strong> Loss of control, scope creep, compounding errors across steps, unexpected tool usage. Needs strong boundaries and monitoring.</p>
+            <p><strong>Best at levels:</strong> 2-3. High enough to be useful, low enough to catch errors before they propagate.</p>
+          </div>
+        </details>
+
+        <details class="paradigm-item">
+          <summary>RAG (retrieval-augmented generation)</summary>
+          <div class="paradigm-detail">
+            <p>An LLM that retrieves information from a knowledge base before generating a response. Grounds output in actual sources rather than relying on training data.</p>
+            <p><strong>Good for:</strong> Question answering over internal documents, support triage, knowledge retrieval with citations.</p>
+            <p><strong>Risks:</strong> Source quality determines output quality. Access control matters: who should see what. Citation does not guarantee correctness.</p>
+            <p><strong>Best at levels:</strong> 1-3. Good as a copilot for research, or semi-autonomous for low-risk knowledge retrieval.</p>
+          </div>
+        </details>
+
+        <details class="paradigm-item">
+          <summary>Hybrid (deterministic core + AI layer)</summary>
+          <div class="paradigm-detail">
+            <p>A system where the critical logic is deterministic (rules, calculations, validated pipelines) and AI handles the language-rich or unstructured parts (narrative, summaries, signal detection).</p>
+            <p><strong>Good for:</strong> High-stakes domains where accuracy matters but communication is also important. Financial reporting, compliance, medical documentation.</p>
+            <p><strong>Risks:</strong> Architectural complexity. The boundary between deterministic and generative components must be enforced, not assumed.</p>
+            <p><strong>Best at levels:</strong> 2-4. The deterministic core can run at high autonomy while the AI layer stays supervised.</p>
+          </div>
+        </details>
+      </div>
+
+      <p>
+        <a href={`${base}resources/#ai-paradigms`}>Read more about AI paradigms and their risk profiles</a>
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Map your steps</h2>
+
+      <p>
+        Below are the workflow steps you defined earlier. For each one, choose an automation level and (if level 1 or above) select the AI paradigm that fits. The combination of level and paradigm will determine the risks and boundaries in the next step.
+      </p>
+
+      <AutomationMapper client:load />
+    </div>
+
   </div>
 </BaseLayout>
 
 <style>
-  .framework-items { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
-  .fw-item { display: flex; gap: 0.75rem; align-items: flex-start; }
-  .fw-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-  .fw-item p { font-size: 0.875rem; color: var(--text-light); margin: 0; }
+  .landing-content .subtitle {
+    color: var(--text-light);
+    font-size: 15px;
+  }
+
+  .levels-table {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  .levels-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .levels-table th,
+  .levels-table td {
+    padding: 0.625rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .levels-table th {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .levels-table td:first-child {
+    font-weight: 700;
+    color: var(--purple);
+    width: 3rem;
+  }
+
+  .levels-table td:nth-child(2) {
+    font-weight: 600;
+  }
+
+  .levels-table td:nth-child(3) {
+    color: var(--text-light);
+  }
+
+  .paradigms {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .paradigm-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+  }
+
+  .paradigm-item summary {
+    padding: 0.875rem 1.25rem;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .paradigm-item summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .paradigm-item[open] summary::after {
+    content: '\2212';
+  }
+
+  .paradigm-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .paradigm-detail {
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .paradigm-detail p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .paradigm-detail p + p {
+    margin-top: 0.75em;
+  }
 </style>
