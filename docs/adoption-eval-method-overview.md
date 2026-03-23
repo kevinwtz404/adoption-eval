@@ -8,7 +8,7 @@ Find candidate workflows using the discovery methods guide.
 - output: shortlist of candidate opportunities
 - note: not every painpoint is an AI problem
 
-Reference: `docs/ai-adoption-opportunity-discovery-methods.md`
+Reference: `ai-adoption-opportunity-discovery-methods.md`
 
 ## 1) qualify opportunities
 Check each candidate for:
@@ -37,7 +37,7 @@ Also evaluate deployment/runtime options:
 
 - output: chosen path for pilot + deferred alternatives
 
-Reference: `docs/opportunity-to-solution-matching-canvas.md`
+Reference: `opportunity-to-solution-matching-canvas.md`
 
 ## 3) design boundaries and controls
 Define:
@@ -58,8 +58,8 @@ Run a small pilot and track outcomes via the dimensions matrix:
 - control confidence
 
 References:
-- `docs/rubric-and-thresholds.md`
-- `docs/outcome-dimensions-matrix.md`
+- `rubric-and-thresholds.md`
+- `outcome-dimensions-matrix.md`
 
 ## 5) decide and loop
 Decision options:
