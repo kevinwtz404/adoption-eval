@@ -25,6 +25,7 @@ export interface AppState {
   } | null;
   selectedCase: string | null;
   mappings: Record<string, { level: number; paradigm: string | null }> | null;
+  designs: Record<string, { humanWork: string; deterministicWork: string; aiWork: string; aiParadigm: string | null; notes: string; isCandidate: boolean }> | null;
 }
 
 const defaultState: AppState = {
@@ -32,6 +33,7 @@ const defaultState: AppState = {
   qualification: null,
   selectedCase: null,
   mappings: null,
+  designs: null,
 };
 
 export function loadState(): AppState {

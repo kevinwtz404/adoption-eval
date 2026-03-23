@@ -1,163 +1,151 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import AutomationMapper from '../components/AutomationMapper.tsx';
+import InterventionDesigner from '../components/InterventionDesigner.tsx';
 const base = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title="Step 4: Map" step={4} prev={`${base}3-qualify/`} next={`${base}5-bound/`}>
+<BaseLayout title="Step 4: Design" step={4} prev={`${base}3-qualify/`} next={`${base}5-bound/`}>
   <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
     <div class="mb-10">
-      <h1>Map your workflow</h1>
-      <p class="subtitle">For each step, decide how much AI should do and what kind of AI fits.</p>
+      <h1>Design the intervention</h1>
+      <p class="subtitle">You have a qualified workflow. Now figure out what to actually build and test.</p>
     </div>
 
     <div class="mb-10">
-      <h2>How much should AI do?</h2>
+      <h2>What this step is about</h2>
 
       <p>
-        Most people intuitively understand the levels of self-driving cars. No automation at one end, fully autonomous at the other, and a spectrum in between where humans and machines share control differently.
+        You have a workflow with steps, and you know it is worth piloting. The question now is: what does the intervention actually look like? Not "apply AI to step 4" but "how does the work change, what does AI handle, what stays with people, and how do they connect?"
       </p>
 
       <p>
-        The same thinking applies to work. For each step in a workflow, the question is not "can AI do this?" It is "how much should AI do here?" The answer depends on the step's complexity, the risk of getting it wrong, whether human judgement is needed and how predictable the output is.
-      </p>
-
-      <div class="levels-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Level</th>
-              <th>Name</th>
-              <th>What it means</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>0</td>
-              <td>Fully human</td>
-              <td>People do everything. AI is not involved.</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>AI-assisted</td>
-              <td>Human drives. AI supports with suggestions, lookups or drafts.</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>AI-led, human-supervised</td>
-              <td>AI handles the task. A human reviews and approves before it goes anywhere.</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>AI-led, human on standby</td>
-              <td>AI handles it and only escalates when something looks wrong.</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Autonomous within boundaries</td>
-              <td>AI runs independently within defined rules. Humans set the rules, not the actions.</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Fully autonomous</td>
-              <td>AI handles everything, any conditions. Rare in practice and high risk.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p>
-        Most useful AI adoption lives in levels 1 to 3. The goal is not to push everything to level 5. It is to find the right level for each step.
+        Most real interventions are a mix. A single workflow step might involve something deterministic (a calculation, a format conversion), something generative (drafting text, adjusting tone) and something that needs a person (reviewing, approving, making a judgement call). The goal here is to look at each step and figure out that mix.
       </p>
     </div>
 
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>What kind of AI?</h2>
+      <h2>Three kinds of work</h2>
 
       <p>
-        Once you decide a step should involve AI, you need to know what kind. Different AI approaches have fundamentally different capabilities, limitations and risk profiles. Choosing the wrong paradigm for a step is one of the most common adoption mistakes.
+        When you look at any workflow step, the work in it falls into three categories. Most steps contain more than one.
       </p>
 
-      <div class="paradigms">
-        <details class="paradigm-item">
-          <summary>Rules and automation</summary>
-          <div class="paradigm-detail">
-            <p>Deterministic logic: if X then Y. No learning, no uncertainty. Spreadsheet formulas, workflow automation tools, business rules engines.</p>
-            <p><strong>Good for:</strong> Predictable, structured tasks with clear rules. Routing, validation, formatting, calculations.</p>
-            <p><strong>Risks:</strong> Low. Predictable and auditable. But rigid: breaks when rules change or edge cases appear.</p>
-            <p><strong>Best at levels:</strong> 3-5. Rules-based systems are the safest option for high autonomy because the output is deterministic.</p>
+      <div class="work-types">
+        <div class="work-type">
+          <div class="work-type-header">
+            <div class="work-type-icon">H</div>
+            <strong>Human work</strong>
           </div>
-        </details>
+          <p>Requires judgement, creativity, accountability or relationships. A person needs to be involved because the outcome depends on context, experience or trust. Examples: strategic decisions, client conversations, creative direction, legal review, final sign-off.</p>
+        </div>
 
-        <details class="paradigm-item">
-          <summary>Machine learning (classification and prediction)</summary>
-          <div class="paradigm-detail">
-            <p>Trained models that learn patterns from data. Classification, scoring, anomaly detection, forecasting.</p>
-            <p><strong>Good for:</strong> Pattern recognition at scale. Spam filtering, lead scoring, fraud detection, demand forecasting.</p>
-            <p><strong>Risks:</strong> Bias in training data, data drift over time, black-box decision-making. Needs monitoring and retraining.</p>
-            <p><strong>Best at levels:</strong> 2-4. Works well with human oversight for high-stakes decisions, or autonomously for low-stakes pattern matching.</p>
+        <div class="work-type">
+          <div class="work-type-header">
+            <div class="work-type-icon">D</div>
+            <strong>Deterministic work</strong>
           </div>
-        </details>
+          <p>Predictable and rule-based. Same input always produces the same output. Does not need AI. Examples: reformatting data between systems, resizing images to platform specs, routing based on territory rules, applying a tax calculation, generating a PDF from a template.</p>
+        </div>
 
-        <details class="paradigm-item">
-          <summary>LLM as copilot (human drives, AI assists)</summary>
-          <div class="paradigm-detail">
-            <p>A large language model that supports a human: drafting text, summarising documents, suggesting next steps, answering questions.</p>
-            <p><strong>Good for:</strong> Drafting, summarisation, explanation, brainstorming, research support. Any task where a human makes the final call.</p>
-            <p><strong>Risks:</strong> Hallucination (plausible but wrong output), prompt sensitivity, inconsistency across runs. Output must be reviewed.</p>
-            <p><strong>Best at levels:</strong> 1-2. The human is in control, AI accelerates the work.</p>
+        <div class="work-type">
+          <div class="work-type-header">
+            <div class="work-type-icon">AI</div>
+            <strong>AI work</strong>
           </div>
-        </details>
-
-        <details class="paradigm-item">
-          <summary>LLM as agent (AI drives, human reviews)</summary>
-          <div class="paradigm-detail">
-            <p>An LLM that takes actions autonomously: calling tools, making API requests, executing multi-step workflows. Human sets the goal, AI figures out the steps.</p>
-            <p><strong>Good for:</strong> Multi-step tasks with clear success criteria. Data collection, report assembly, workflow orchestration.</p>
-            <p><strong>Risks:</strong> Loss of control, scope creep, compounding errors across steps, unexpected tool usage. Needs strong boundaries and monitoring.</p>
-            <p><strong>Best at levels:</strong> 2-3. High enough to be useful, low enough to catch errors before they propagate.</p>
-          </div>
-        </details>
-
-        <details class="paradigm-item">
-          <summary>RAG (retrieval-augmented generation)</summary>
-          <div class="paradigm-detail">
-            <p>An LLM that retrieves information from a knowledge base before generating a response. Grounds output in actual sources rather than relying on training data.</p>
-            <p><strong>Good for:</strong> Question answering over internal documents, support triage, knowledge retrieval with citations.</p>
-            <p><strong>Risks:</strong> Source quality determines output quality. Access control matters: who should see what. Citation does not guarantee correctness.</p>
-            <p><strong>Best at levels:</strong> 1-3. Good as a copilot for research, or semi-autonomous for low-risk knowledge retrieval.</p>
-          </div>
-        </details>
-
-        <details class="paradigm-item">
-          <summary>Hybrid (deterministic core + AI layer)</summary>
-          <div class="paradigm-detail">
-            <p>A system where the critical logic is deterministic (rules, calculations, validated pipelines) and AI handles the language-rich or unstructured parts (narrative, summaries, signal detection).</p>
-            <p><strong>Good for:</strong> High-stakes domains where accuracy matters but communication is also important. Financial reporting, compliance, medical documentation.</p>
-            <p><strong>Risks:</strong> Architectural complexity. The boundary between deterministic and generative components must be enforced, not assumed.</p>
-            <p><strong>Best at levels:</strong> 2-4. The deterministic core can run at high autonomy while the AI layer stays supervised.</p>
-          </div>
-        </details>
+          <p>Requires language understanding, pattern recognition, synthesis or generation. The output is not fully predictable, which is both its strength and its risk. Examples: adjusting copy for different channels, summarising a long document, enriching a lead profile from multiple sources, drafting commentary from data.</p>
+        </div>
       </div>
 
       <p>
-        <a href={`${base}resources/#ai-paradigms`}>Read more about AI paradigms and their risk profiles</a>
+        The boundaries between these matter. Where human work hands off to AI work, you need a review point. Where AI work produces something that looks deterministic but isn't (like a generated number), you need to be careful. Where deterministic work could be mistaken for AI work, you might be overcomplicating it.
       </p>
     </div>
 
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>Map your steps</h2>
+      <h2>When AI is involved, what kind?</h2>
 
       <p>
-        Below are the workflow steps you defined earlier. For each one, choose an automation level and (if level 1 or above) select the AI paradigm that fits. The combination of level and paradigm will determine the risks and boundaries in the next step.
+        Not all AI is the same. Different approaches have fundamentally different capabilities, limitations and risk profiles. This matters because it determines what can go wrong and what controls you need.
       </p>
 
-      <AutomationMapper client:load />
+      <p>
+        These are different technologies, not different uses of the same tool. An LLM can be asked to "follow rules" but that is not the same as a rules engine. A rules engine is deterministic: given the same input, it always produces the same output. An LLM following instructions is probabilistic: it might get it right most of the time but it can hallucinate, misinterpret or drift. <a href={`${base}resources/#ai-paradigms`}>Read more about the differences</a>.
+      </p>
+
+      <details class="paradigm-overview">
+        <summary>Follow set rules</summary>
+        <div class="paradigm-detail">
+          <p><strong>What it is:</strong> Deterministic logic. If X then Y. Spreadsheet formulas, workflow automation, business rules engines. Not really AI, but often the right answer.</p>
+          <p><strong>Use when:</strong> The logic is clear and stable. Routing, validation, formatting, calculations.</p>
+          <p><strong>Risks:</strong> Rigid. Breaks on edge cases. But predictable and auditable.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Find answers in existing documents (RAG)</summary>
+        <div class="paradigm-detail">
+          <p><strong>What it is:</strong> An AI that <a href="https://snorkel.ai/blog/which-is-better-retrieval-augmentation-rag-or-fine-tuning-both/">retrieves information from a knowledge base</a> before generating a response. Grounds output in actual sources.</p>
+          <p><strong>Use when:</strong> People need to find and synthesise information from internal documents, support tickets, policies.</p>
+          <p><strong>Risks:</strong> Source quality determines output quality. Access control is critical: who should see what. <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">Citation does not guarantee correctness</a>.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Draft, summarise or explain (LLM as copilot)</summary>
+        <div class="paradigm-detail">
+          <p><strong>What it is:</strong> A language model that supports a human. It drafts, summarises, explains or suggests. The human makes the final call.</p>
+          <p><strong>Use when:</strong> Text-heavy work where a person is needed but the first draft or summary could be automated.</p>
+          <p><strong>Risks:</strong> <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">Hallucination</a> (plausible but wrong output). <a href="https://ai-analytics.wharton.upenn.edu/generative-ai-labs/research-and-technical-reports/tech-report-prompt-engineering-is-complicated-and-contingent">Prompt sensitivity</a>. Inconsistency across runs. The model's <a href="https://promptrevolution.poltextlab.com/understanding-knowledge-cut-offs-in-genai-models/">knowledge has a cut-off date</a> and <a href="https://www.coursera.org/articles/context-window">a limited context window</a>.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Classify, score or predict (Machine learning)</summary>
+        <div class="paradigm-detail">
+          <p><strong>What it is:</strong> Trained models that learn patterns from historical data. Classification, scoring, anomaly detection, forecasting.</p>
+          <p><strong>Use when:</strong> You have structured data and need pattern recognition at scale. Lead scoring, spam filtering, demand forecasting.</p>
+          <p><strong>Risks:</strong> <a href="https://www.nature.com/articles/s41586-024-07856-5">Bias in training data</a>. Data drift over time. Decisions can be hard to explain.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Take actions across multiple steps (LLM as agent)</summary>
+        <div class="paradigm-detail">
+          <p><strong>What it is:</strong> An LLM that acts autonomously: calling tools, making API requests, executing multi-step workflows. The human sets the goal, the AI figures out the steps.</p>
+          <p><strong>Use when:</strong> Multi-step tasks with clear success criteria where the steps are routine but the orchestration is complex.</p>
+          <p><strong>Risks:</strong> Highest risk paradigm. Loss of control, scope creep, compounding errors across steps. Needs strong boundaries and monitoring.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Combine calculations with generated text (Hybrid)</summary>
+        <div class="paradigm-detail">
+          <p><strong>What it is:</strong> A system where the critical logic is deterministic (rules, calculations) and AI handles the language-rich parts (narrative, summaries, signals). Think financial reporting: the numbers are calculated, the commentary is generated.</p>
+          <p><strong>Use when:</strong> Accuracy matters for some parts and fluency matters for others. The boundary between them must be enforced.</p>
+          <p><strong>Risks:</strong> Architectural complexity. If the boundary between deterministic and generative is not enforced, AI-generated numbers can look like calculated ones.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Design your intervention</h2>
+
+      <p>
+        Below are the workflow steps you defined earlier. For each step, break down the work: what part is human, what part is deterministic and what part could involve AI. If AI is involved, pick the approach that fits.
+      </p>
+
+      <p>
+        Not every step needs to change. Some steps are already fine as they are. The goal is to identify the 2-4 steps where an intervention would make the biggest difference and design what that intervention looks like.
+      </p>
+
+      <InterventionDesigner client:load />
     </div>
 
   </div>
@@ -169,63 +157,63 @@ const base = import.meta.env.BASE_URL;
     font-size: 15px;
   }
 
-  .levels-table {
-    margin: 1.5rem 0;
-    overflow-x: auto;
-  }
-
-  .levels-table table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .levels-table th,
-  .levels-table td {
-    padding: 0.625rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-  }
-
-  .levels-table th {
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  .levels-table td:first-child {
-    font-weight: 700;
-    color: var(--purple);
-    width: 3rem;
-  }
-
-  .levels-table td:nth-child(2) {
-    font-weight: 600;
-  }
-
-  .levels-table td:nth-child(3) {
-    color: var(--text-light);
-  }
-
-  .paradigms {
+  .work-types {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     margin: 1.5rem 0;
   }
 
-  .paradigm-item {
+  .work-type {
     border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--bg-card);
+    padding: 1.25rem;
   }
 
-  .paradigm-item summary {
+  .work-type-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .work-type-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(104, 48, 196, 0.08);
+    color: var(--purple);
+    flex-shrink: 0;
+  }
+
+  .work-type strong {
+    font-size: 15px;
+  }
+
+  .work-type p {
+    font-size: 14px;
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  .paradigm-overview {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    margin-bottom: 0.5rem;
+  }
+
+  .paradigm-overview summary {
     padding: 0.875rem 1.25rem;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
     list-style: none;
     display: flex;
@@ -233,18 +221,18 @@ const base = import.meta.env.BASE_URL;
     justify-content: space-between;
   }
 
-  .paradigm-item summary::after {
+  .paradigm-overview summary::after {
     content: '+';
     font-size: 1.25rem;
     color: var(--text-muted);
     font-weight: 400;
   }
 
-  .paradigm-item[open] summary::after {
+  .paradigm-overview[open] summary::after {
     content: '\2212';
   }
 
-  .paradigm-item summary::-webkit-details-marker {
+  .paradigm-overview summary::-webkit-details-marker {
     display: none;
   }
 

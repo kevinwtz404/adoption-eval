@@ -12,6 +12,22 @@ interface Props {
 
 const { title, step, prev, next } = Astro.props;
 const base = import.meta.env.BASE_URL;
+
+const stepLabels: Record<string, string> = {
+  '1-discover': 'Discover',
+  '2-select': 'Select',
+  '3-qualify': 'Qualify',
+  '4-map': 'Map',
+  '5-bound': 'Bound',
+  '6-pilot': 'Pilot',
+  '7-evaluate': 'Evaluate',
+};
+
+function getNextLabel(href: string | undefined): string {
+  if (!href) return '';
+  const slug = href.replace(base, '').replace(/\/$/, '');
+  return stepLabels[slug] || 'Next';
+}
 ---
 
 <!DOCTYPE html>
@@ -20,7 +36,7 @@ const base = import.meta.env.BASE_URL;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title} — adoption-eval</title>
-  <link rel="icon" href={`${base}favicon.ico`} />
+  <link rel="icon" type="image/png" href={`${base}favicon.png`} />
 </head>
 <body>
   <StepNav currentStep={step ?? 0} base={base} />
@@ -47,6 +63,12 @@ const base = import.meta.env.BASE_URL;
       <slot />
     </div>
   </main>
+
+  {next && (
+    <div class="bottom-nav">
+      <a href={next} class="bottom-nav-link">Next: {getNextLabel(next)} →</a>
+    </div>
+  )}
 
   <footer class="site-footer">
     <div class="max-w-4xl mx-auto px-6">
