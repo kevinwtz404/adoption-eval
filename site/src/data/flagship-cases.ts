@@ -64,6 +64,7 @@ Access control must respect existing document permissions. Not everyone should b
       stopCriteria: 'System surfaces confidential documents to the wrong person. More than 30% of answers are factually wrong. Users stop using it within the first week.',
       timeline: '3 weeks. Midpoint review after week 2. Final evaluation in week 4.',
       owner: 'Ops lead. Has authority to pause the pilot and restrict document access.',
+      metrics: { time: 'Time to find an answer drops by 50%', cost: 'LLM API costs stay under budget for the test period', quality: '80% of answers include correct source citations', risk: 'No confidential documents surfaced to wrong users', adoption: 'Users ask at least 5 questions per week', control: 'All answers traceable to source documents' },
     },
     redesignData: {
       components: [
@@ -117,6 +118,7 @@ Once approved, the outreach is sent via the existing email or messaging tool. Th
       stopCriteria: 'Enrichment data is consistently wrong or outdated. Outreach drafts require more editing than writing from scratch. Rep loses trust in the tool.',
       timeline: '2 weeks. Quick check after week 1. Full evaluation after week 2.',
       owner: 'Sales team lead. Reviews enrichment quality daily during the pilot.',
+      metrics: { time: 'Research time per lead drops from 15 minutes to under 2 minutes', cost: 'API costs per lead stay reasonable at volume', quality: 'Outreach personalisation rated equal or better by the rep', risk: 'No incorrect company information in outreach', adoption: 'Rep uses the tool for every lead, not just some', control: 'All enrichment sources logged and verifiable' },
     },
     redesignData: {
       components: [
@@ -171,6 +173,7 @@ Approved versions are published to each channel via the existing publishing tool
       stopCriteria: 'Generated versions consistently miss brand voice. Copywriter spends more time editing than they would writing from scratch. Content lead rejects more than 30% of generated versions.',
       timeline: '3 weeks, covering 2 campaign cycles. Midpoint review after the first campaign.',
       owner: 'Content lead. Reviews all generated versions and has authority to revert to manual process.',
+      metrics: { time: 'Time from master copy to all channel versions drops by 60%', cost: 'LLM costs per campaign are acceptable', quality: 'Generated versions need only minor edits, brand consistency improves', risk: 'No brand-unsafe content published', adoption: 'Copywriter prefers reviewing generated versions over writing from scratch', control: 'All versions tracked with lineage from master copy' },
     },
     redesignData: {
       components: [
@@ -240,6 +243,7 @@ The pilot hypothesis: given that the numbers are already computed, can AI draft 
       stopCriteria: 'AI-generated commentary misrepresents what the numbers mean. Generated numbers appear that look like calculations. Confidential data is exposed. Finance team does not trust the output.',
       timeline: '4 weeks covering one full reporting cycle. Midpoint check after the data is pulled and reconciled (before AI steps run).',
       owner: 'Finance team lead. Reviews all AI-generated output before it enters the report.',
+      metrics: { time: 'Commentary drafting drops from 2 days to half a day', cost: 'LLM costs per reporting cycle are justified by time savings', quality: 'AI-drafted commentary needs only minor edits, no fabricated numbers', risk: 'No AI-generated numbers appear in the report', adoption: 'Finance team trusts the output enough to use it as a starting point', control: 'All AI output labelled as draft, all numbers traceable to source systems' },
     },
     redesignData: {
       components: [
