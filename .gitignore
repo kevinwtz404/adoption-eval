@@ -7,7 +7,7 @@ site/.astro/
 site/.vscode/
 .astro/
 .claude/
+docs/
 .DS_Store
 .env
 site/.env
-docs/project-brief.md
