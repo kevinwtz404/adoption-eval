@@ -25,7 +25,7 @@ export interface AppState {
   } | null;
   selectedCase: string | null;
   mappings: Record<string, { level: number; paradigm: string | null }> | null;
-  designs: Record<string, { humanWork: string; deterministicWork: string; aiWork: string; aiParadigm: string | null; notes: string; isCandidate: boolean }> | null;
+  designs: Record<string, { isCandidate: boolean; description: string; notes: string }> | null;
   boundaries: Record<string, Array<{ id: string; text: string; category: string; checked: boolean; notes: string }>> | null;
 }
 

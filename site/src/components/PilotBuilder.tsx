@@ -50,10 +50,7 @@ export default function PilotBuilder() {
       candidateSteps.forEach((s: any) => {
         const d = designs[s.id];
         md += `\n### ${s.name}\n`;
-        if (d.humanWork) md += `- **Stays with people:** ${d.humanWork}\n`;
-        if (d.deterministicWork) md += `- **Deterministic/rules:** ${d.deterministicWork}\n`;
-        if (d.aiWork) md += `- **AI involvement:** ${d.aiWork}\n`;
-        if (d.aiParadigm) md += `- **AI approach:** ${d.aiParadigm}\n`;
+        if (d.description) md += `- **Intervention:** ${d.description}\n`;
         if (d.notes) md += `- **Notes:** ${d.notes}\n`;
       });
     }
@@ -150,7 +147,7 @@ export default function PilotBuilder() {
               return (
                 <div key={s.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid #f5f5f5', fontSize: '13px' }}>
                   <span style={{ fontWeight: 600 }}>{s.name}</span>
-                  {d?.aiWork && <span style={{ color: '#666' }}> — {d.aiWork}</span>}
+                  {d?.description && <span style={{ color: '#666' }}> — {d.description}</span>}
                 </div>
               );
             })}

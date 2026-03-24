@@ -3,12 +3,9 @@ import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 
 interface StepDesign {
-  humanWork: string;
-  deterministicWork: string;
-  aiWork: string;
-  aiParadigm: string | null;
-  notes: string;
   isCandidate: boolean;
+  description: string;
+  notes: string;
 }
 
 interface WorkflowStep {
@@ -60,49 +57,16 @@ export default function BoundaryDesigner() {
     const items: BoundaryItem[] = [];
     let id = 0;
 
-    // Always add these for any AI step
-    if (design.aiWork) {
-      items.push({ id: `${step.id}-${id++}`, text: 'AI output must be reviewed by a human before it is used externally', category: 'approval', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Define what happens when the AI output is wrong or rejected', category: 'fallback', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Log all AI inputs and outputs for traceability', category: 'monitoring', checked: false, notes: '' });
-    }
-
-    if (design.humanWork) {
-      items.push({ id: `${step.id}-${id++}`, text: `Human checkpoint confirmed: ${design.humanWork}`, category: 'human', checked: false, notes: '' });
-    }
-
-    // Paradigm-specific boundaries
-    if (design.aiParadigm === 'rag') {
-      items.push({ id: `${step.id}-${id++}`, text: 'Access control: verify that retrieval respects existing document permissions', category: 'privacy', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Source quality: confirm indexed documents are current and accurate', category: 'quality', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Citations: require source references in all generated answers', category: 'quality', checked: false, notes: '' });
-    }
-
-    if (design.aiParadigm === 'llm-copilot' || design.aiParadigm === 'llm-agent') {
-      items.push({ id: `${step.id}-${id++}`, text: 'Assess whether a cloud model is acceptable or a local model is needed for data privacy', category: 'privacy', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Evaluate model size: does this step need a frontier model or would a smaller model work?', category: 'cost', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Test for hallucination: verify outputs against known-good examples before going live', category: 'quality', checked: false, notes: '' });
-    }
-
-    if (design.aiParadigm === 'llm-agent') {
-      items.push({ id: `${step.id}-${id++}`, text: 'Define disallowed actions: what the agent must never do', category: 'safety', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Set scope limits: restrict which tools and APIs the agent can call', category: 'safety', checked: false, notes: '' });
-    }
-
-    if (design.aiParadigm === 'ml') {
-      items.push({ id: `${step.id}-${id++}`, text: 'Test for bias in training data and model outputs', category: 'quality', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Plan for retraining: how often and with what data', category: 'monitoring', checked: false, notes: '' });
-    }
-
-    if (design.aiParadigm === 'hybrid') {
-      items.push({ id: `${step.id}-${id++}`, text: 'Enforce the boundary between deterministic and generative: AI must not generate numbers that should be calculated', category: 'safety', checked: false, notes: '' });
-    }
-
-    // Cost and scale
-    if (design.aiWork) {
-      items.push({ id: `${step.id}-${id++}`, text: 'Estimate cost at pilot scale and at full scale', category: 'cost', checked: false, notes: '' });
-      items.push({ id: `${step.id}-${id++}`, text: 'Define acceptable latency for this step', category: 'cost', checked: false, notes: '' });
-    }
+    // Standard boundaries for any step being changed
+    items.push({ id: `${step.id}-${id++}`, text: 'AI output must be reviewed by a human before it is used externally', category: 'approval', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Define what happens when the AI output is wrong or rejected', category: 'fallback', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Log all inputs and outputs for traceability', category: 'monitoring', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Assess whether a cloud model is acceptable or a local model is needed for data privacy', category: 'privacy', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Evaluate model size: does this step need a frontier model or would a smaller model work?', category: 'cost', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Test outputs against known-good examples before going live', category: 'quality', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Estimate cost at pilot scale and at full scale', category: 'cost', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Define what the system must never do (disallowed actions)', category: 'safety', checked: false, notes: '' });
+    items.push({ id: `${step.id}-${id++}`, text: 'Confirm who is accountable for the output of this step', category: 'human', checked: false, notes: '' });
 
     return items;
   }
@@ -187,7 +151,7 @@ export default function BoundaryDesigner() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <div>
                   <div style={{ fontWeight: 600, fontSize: '14px' }}>{step.name}</div>
-                  {design?.aiWork && <div style={{ fontSize: '12px', color: '#666', marginTop: '0.125rem' }}>AI work: {design.aiWork}</div>}
+                  {design?.description && <div style={{ fontSize: '15px', color: '#666', marginTop: '0.125rem', lineHeight: '1.75' }}>{design.description}</div>}
                 </div>
                 <span style={{ fontSize: '12px', color: '#999' }}>{stepChecked}/{items.length}</span>
               </div>
