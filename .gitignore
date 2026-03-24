@@ -10,3 +10,4 @@ site/.vscode/
 .DS_Store
 .env
 site/.env
+docs/project-brief.md
