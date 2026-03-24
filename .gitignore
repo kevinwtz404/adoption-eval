@@ -11,3 +11,4 @@ docs/
 .DS_Store
 .env
 site/.env
+supabase/.temp/

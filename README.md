@@ -48,7 +48,7 @@ node bin/adoption-eval.js run --input examples/cli/support-triage-workflow.examp
 | Layer | Location | What it does |
 |-------|----------|-------------|
 | **Web app** | `site/` | Astro + Preact static site. Interactive components for each step. All state in localStorage |
-| **AI backend** | `hf-space/` | Hugging Face Space (Gradio + Python) proxying to Google Gemini API. Generates redesign proposals for custom workflows and pilot overviews. Rate limited, token-authenticated |
+| **AI backend** | `supabase/functions/` | Supabase Edge Function proxying to Google Gemini API. Generates redesign proposals for custom workflows and pilot overviews. Rate limited (10/IP per 10 min, 500/day global), CORS protected, usage logged |
 | **CLI** | `src/` + `bin/` | TypeScript. Runs qualification scoring, opportunity mapping and readiness evaluation from the command line |
 | **Schema** | `schemas/` | JSON Schema defining the workflow input contract. Used by the CLI for validation |
 
@@ -65,9 +65,9 @@ adoption-eval/
 │       ├── data/           # Flagship cases, localStorage store, Gemini client
 │       ├── layouts/        # BaseLayout with nav, sidebar, footer
 │       └── styles/         # Global CSS
-├── hf-space/               # Hugging Face Space (Gemini proxy)
-│   ├── app.py              # Gradio app with rate limiting and token auth
-│   └── requirements.txt
+├── supabase/
+│   └── functions/
+│       └── ai-analyse/     # Edge function: Gemini proxy with rate limiting and usage logging
 ├── src/                    # CLI TypeScript source
 │   ├── lib/                # Core logic (scoring, mapping, validation)
 │   ├── commands/           # CLI command handlers
