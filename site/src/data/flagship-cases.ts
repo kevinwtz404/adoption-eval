@@ -138,15 +138,13 @@ Once approved, the outreach is sent via the existing email or messaging tool. Th
     userDescription: 'Our copywriter creates the master narrative for each campaign. That part is great. But then they spend days rewriting it for LinkedIn, email, the website and social media. Each version is slightly different in tone and length but it is basically the same message. I want the channel versions generated automatically so the copywriter reviews them instead of writing each one from scratch. Images need resizing for each platform which is just mechanical. Then I want the content lead to see everything in one place, approve it and publish. The creative work and final approval must stay with people.',
     redesign: `The copywriter creates the master narrative and key messages. This is the creative work and it does not change.
 
-From the master copy, two things happen in parallel. An LLM generates channel-specific text versions: LinkedIn (professional tone, medium length), email (conversational, with CTA), website (scannable), social (short, punchy). At the same time, deterministic tools resize images to exact platform specifications.
+From the master copy, two things happen in parallel. An LLM generates channel-specific text versions: LinkedIn (professional tone, medium length), email (conversational, with CTA), website (scannable), social (short, punchy). The copywriter reviews and approves each generated version, editing for brand voice and nuance. At the same time, deterministic tools reformat images and visual assets to exact platform specifications. A creative reviewer checks that the reformatted visuals still work for each channel.
 
-The copywriter reviews the generated text versions, editing for brand voice, nuance and anything the LLM got wrong. Their role shifts from manual rewriting to creative review.
-
-Once text and images are ready, a campaign summary tool assembles everything into a single overview: all channel versions, all assets, ready for review.
+Once both tracks are done, an LLM assembles a campaign summary from the approved text and formatted assets, pulling everything into a single readable overview using structured input.
 
 The content lead reviews the complete campaign package in one place and approves it. This replaces the current process of chasing versions through Slack and email.
 
-Approved versions are published to each channel and the system logs what went where and when.`,
+Approved versions are published to each channel via the existing publishing tools and the system logs what went where and when.`,
     redesignData: {
       components: [
         { name: 'Master copy created', type: 'human', description: 'Copywriter creates master narrative and key messages', risks: [], considerations: ['This is the creative work and stays fully human'] },
