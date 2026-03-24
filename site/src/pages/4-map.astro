@@ -57,99 +57,14 @@ const base = import.meta.env.BASE_URL;
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>Each component has strengths and weaknesses</h2>
-
-      <p>
-        There is no single "AI" that does everything. Each component is good at specific things and bad at others. Knowing this helps you design a system that plays to each component's strengths while compensating for its weaknesses.
-      </p>
-
-      <details class="paradigm-overview">
-        <summary>Language model (LLM)</summary>
-        <div class="paradigm-detail">
-          <p><strong>Good at:</strong> Understanding natural language, generating text, summarising, drafting, explaining, brainstorming, adapting tone and style.</p>
-          <p><strong>Bad at:</strong> Maths, facts, consistency. <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">Hallucination is a fundamental property</a>, not a bug to be fixed. The output is probabilistic: same input can give different outputs. <a href="https://promptrevolution.poltextlab.com/understanding-knowledge-cut-offs-in-genai-models/">Knowledge has a cut-off date</a>. <a href="https://www.coursera.org/articles/context-window">Limited context window</a>.</p>
-          <p><strong>Use it for:</strong> Drafting, summarisation, tone adaptation, explanation, triage support. Always with review for anything that matters.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Deterministic tools (APIs, calculations, rules)</summary>
-        <div class="paradigm-detail">
-          <p><strong>Good at:</strong> Exact results. Same input, same output, every time. Database queries, calculations, format conversions, routing, validation.</p>
-          <p><strong>Bad at:</strong> Anything that requires understanding context, nuance or natural language. Rigid: breaks when rules change or edge cases appear.</p>
-          <p><strong>Use it for:</strong> Any part of the workflow where accuracy matters more than flexibility. Financial calculations, data transformations, system integrations.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Retrieval (RAG)</summary>
-        <div class="paradigm-detail">
-          <p><strong>Why it exists:</strong> LLMs have <a href="https://www.coursera.org/articles/context-window">limited context windows</a>. You cannot feed them your entire document library. RAG solves this by converting your documents into vectors (numerical representations) stored in a database. When a user asks a question, the system searches the vector database for relevant chunks, then passes those chunks to the LLM as context. The LLM generates a response <a href="https://snorkel.ai/blog/which-is-better-retrieval-augmentation-rag-or-fine-tuning-both/">grounded in your actual sources</a> rather than relying on its training data.</p>
-          <p><strong>Good at:</strong> Finding and synthesising information across large document collections. Providing answers with citations. Keeping responses grounded in your own data.</p>
-          <p><strong>Bad at:</strong> Only as good as what has been indexed. If the source documents are wrong, outdated or incomplete, the answers will be too. How you split documents into chunks (chunking strategy) affects quality significantly. Access control is critical: the retrieval system can surface documents the user should not see if permissions are not enforced.</p>
-          <p><strong>Use it for:</strong> Internal knowledge retrieval, question answering over documents, support triage, anything where the answer should come from your own data rather than the model's training data.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Machine learning (classification, scoring, prediction)</summary>
-        <div class="paradigm-detail">
-          <p><strong>Good at:</strong> Pattern recognition at scale. Classifying, scoring, predicting from structured data. Consistent once trained.</p>
-          <p><strong>Bad at:</strong> <a href="https://www.nature.com/articles/s41586-024-07856-5">Bias inherited from training data</a>. Data drift over time makes models less accurate. Decisions can be hard to explain.</p>
-          <p><strong>Use it for:</strong> Lead scoring, spam filtering, anomaly detection, demand forecasting. Anything where you have good historical data and need consistent pattern matching.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Human checkpoints</summary>
-        <div class="paradigm-detail">
-          <p><strong>Good at:</strong> Judgement, accountability, context, relationships, catching errors that automated systems miss. The only component that can be held responsible.</p>
-          <p><strong>Bad at:</strong> Speed, scale, consistency over high volume. Expensive. Does not scale the way technology does.</p>
-          <p><strong>Use it for:</strong> Approval gates, quality review, strategic decisions, anything customer-facing or legally binding, anything where getting it wrong has real consequences.</p>
-        </div>
-      </details>
-
-      <p>
-        <a href={`${base}resources/#ai-paradigms`}>Read more about components and their risk profiles</a>
-      </p>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="mb-10">
-      <h2>How they connect matters</h2>
-
-      <p>
-        The components above are building blocks. The value (and the risk) is in how you connect them. A retrieval system that finds the right document but feeds it to an LLM that hallucinates the summary is worse than no system at all. A calculator that produces the right number but gets wrapped in an LLM narrative that misrepresents it is dangerous.
-      </p>
-
-      <p>
-        The connections between components are where most things go wrong:
-      </p>
-
-      <ul>
-        <li>What gets passed from one component to the next?</li>
-        <li>Who decides which tool to call and when?</li>
-        <li>What happens when a component fails or returns something unexpected?</li>
-        <li>Where does a human get to intervene before the output goes anywhere?</li>
-      </ul>
-
-      <p>
-        These questions are what the next step (Boundaries) will help you work through in detail. For now, the goal is to identify what components your workflow needs.
-      </p>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="mb-10">
       <h2>Design your intervention</h2>
 
       <p>
-        Most workflow steps involve more than one of these components working together. A step might need a retrieval layer to find information, a language model to summarise it and a human checkpoint to review the result before it goes anywhere. The goal here is to think through that mix for each step in your workflow.
+        Below is your current workflow alongside a space to describe what you want to change. You do not need to know the technical solution. Just describe the outcome you are after. For the built-in scenarios, we have pre-filled a proposed solution. For your own workflows, you can generate one or write your own.
       </p>
 
       <p>
-        Below are the workflow steps you defined earlier. For each one, mark whether it is a candidate for change. If it is, describe what you want to happen differently. You do not need to know the technical details. Just describe what you want in plain language. The AI analysis tool can help you figure out which components fit and what the risks are.
+        The next step (Boundaries) will stress-test this design: what could go wrong with each component, what data privacy concerns exist, what costs to expect and where humans need to stay in the loop.
       </p>
 
       <InterventionDesigner client:load />
@@ -222,54 +137,6 @@ const base = import.meta.env.BASE_URL;
     color: var(--text-muted);
     text-align: center;
     font-style: italic;
-  }
-
-  .paradigm-overview {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-card);
-    margin-bottom: 0.5rem;
-  }
-
-  .paradigm-overview summary {
-    padding: 0.875rem 1.25rem;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .paradigm-overview summary::after {
-    content: '+';
-    font-size: 1.25rem;
-    color: var(--text-muted);
-    font-weight: 400;
-  }
-
-  .paradigm-overview[open] summary::after {
-    content: '\2212';
-  }
-
-  .paradigm-overview summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .paradigm-detail {
-    padding: 0 1.25rem 1.25rem;
-    border-top: 1px solid var(--border);
-    padding-top: 1rem;
-  }
-
-  .paradigm-detail p {
-    font-size: 15px;
-    line-height: 1.75;
-  }
-
-  .paradigm-detail p + p {
-    margin-top: 1.25em;
   }
 
   @media (max-width: 768px) {
