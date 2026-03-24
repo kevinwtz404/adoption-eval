@@ -390,6 +390,18 @@ input[type="range"] {
   accent-color: var(--purple);
 }
 
+/* Focus outline: muted purple instead of default blue */
+*:focus-visible {
+  outline: 2px solid var(--purple-light);
+  outline-offset: 2px;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--purple-light);
+  outline-offset: 0;
+  border-color: var(--purple-light);
+}
+
 /* Tags for action items */
 .tag {
   display: inline-flex;
