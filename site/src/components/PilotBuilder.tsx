@@ -88,7 +88,9 @@ List the specific questions they still need to answer before building this. Focu
 A short numbered list of what they need to do. Not a timeline. Just the sequence. Keep it to 5-7 steps.
 
 ## What success could look like
-For each of the six evaluation dimensions (Time, Cost, Quality, Risk, Adoption, Control), give a realistic target range for this specific workflow. Be honest about which dimensions matter most and which matter less. Consider what error rates are acceptable given the context (e.g. a factual error in cold outreach is tolerable, a wrong number in a financial report is not). Keep each to one sentence.`;
+For each of the six evaluation dimensions (Time, Cost, Quality, Risk, Adoption, Control), give a realistic target range for this specific workflow. Be honest about which dimensions matter most and which matter less. Consider what error rates are acceptable given the context (e.g. a factual error in cold outreach is tolerable, a wrong number in a financial report is not). Keep each to one sentence.
+
+IMPORTANT: Only produce these four sections. Do not add any additional sections like Analysis, Approach, Risks or Alternatives. Keep the total response concise.`;
 
   try {
     const submitResponse = await fetch(HF_SPACE_URL, {
@@ -116,6 +118,7 @@ For each of the six evaluation dimensions (Time, Cost, Quality, Risk, Adoption, 
 export default function PilotBuilder() {
   const [state, setState] = useState<any>(null);
   const [painPoint, setPainPoint] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [plan, setPlan] = useState<PilotPlan>({ scope: '', successCriteria: '', stopCriteria: '', timeline: '', owner: '' });
   const [activeTab, setActiveTab] = useState('scope');
   const [overview, setOverview] = useState('');
@@ -126,7 +129,10 @@ export default function PilotBuilder() {
     setState(s);
     if (s.selectedCase) {
       const flagship = flagshipCases.find(c => c.id === s.selectedCase);
-      if (flagship) setPainPoint(flagship.painPoint);
+      if (flagship) {
+        setPainPoint(flagship.painPoint);
+        setDisplayName(flagship.title);
+      }
     }
     if ((s as any).pilotPlan) setPlan((s as any).pilotPlan);
     if ((s as any).pilotOverview) setOverview((s as any).pilotOverview);
@@ -159,7 +165,7 @@ export default function PilotBuilder() {
   async function handleGenerate() {
     setGenerating(true);
     const result = await generateOverview({
-      workflowName: workflow.name,
+      workflowName: (displayName || workflow.name),
       painPoint,
       redesign,
       scope: plan.scope,
@@ -176,7 +182,7 @@ export default function PilotBuilder() {
   }
 
   function buildMarkdownRoadmap(): string {
-    let md = `# Pilot Plan: ${workflow.name}\n\n`;
+    let md = `# Pilot Plan: ${(displayName || workflow.name)}\n\n`;
     md += `## Pain point\n${painPoint || 'Custom workflow'}\n\n`;
     md += `## Current workflow\n`;
     (workflow.steps || []).forEach((s: any, i: number) => {
@@ -195,7 +201,6 @@ export default function PilotBuilder() {
     if (plan.stopCriteria) md += `### Stop criteria\n${plan.stopCriteria}\n\n`;
     if (plan.timeline) md += `### Timeline\n${plan.timeline}\n\n`;
     if (plan.owner) md += `### Owner\n${plan.owner}\n\n`;
-    if (overview) md += `## Generated overview\n${overview}\n\n`;
     md += `## Evaluation framework\n\nAfter the pilot, evaluate across these six dimensions:\n\n`;
     md += `| Dimension | What to measure | Baseline (before) | Result (after) | Direction |\n`;
     md += `|---|---|---|---|---|\n`;
@@ -219,7 +224,7 @@ export default function PilotBuilder() {
     brief += `4. Answer the open questions listed below based on the implementation options\n`;
     brief += `5. Produce a concrete implementation plan for the chosen option\n\n`;
     brief += `---\n\n`;
-    brief += `## Workflow\n**${workflow.name}**\n\n${painPoint || ''}\n\n`;
+    brief += `## Workflow\n**${(displayName || workflow.name)}**\n\n${painPoint || ''}\n\n`;
     brief += `### Current steps\n`;
     (workflow.steps || []).forEach((s: any, i: number) => {
       brief += `${i + 1}. ${s.name}${s.owner ? ` (${s.owner})` : ''}${s.pain ? ` — ${s.pain}` : ''}\n`;
@@ -246,9 +251,6 @@ export default function PilotBuilder() {
     if (plan.stopCriteria) brief += `- **Stop criteria:** ${plan.stopCriteria}\n`;
     if (plan.timeline) brief += `- **Timeline:** ${plan.timeline}\n`;
     if (plan.owner) brief += `- **Owner:** ${plan.owner}\n`;
-    if (overview) {
-      brief += `\n## Analysis\n${overview}\n`;
-    }
     return brief;
   }
 
@@ -264,7 +266,7 @@ export default function PilotBuilder() {
     <div>
       {/* Overview */}
       <div style={{ padding: '1.25rem', border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fafafa', marginBottom: '1.5rem' }}>
-        <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '0.25rem' }}>{workflow.name}</div>
+        <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '0.25rem' }}>{(displayName || workflow.name)}</div>
         <div style={{ fontSize: '15px', color: '#999' }}>{planComplete} of 5 pilot details filled</div>
       </div>
 
@@ -324,11 +326,11 @@ export default function PilotBuilder() {
 
           {/* Downloads */}
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' as const, marginBottom: '0.75rem' }}>
-            <button onClick={() => download(buildMarkdownRoadmap(), `pilot-roadmap-${workflow.name}.md`, 'text/markdown')}
+            <button onClick={() => download(buildMarkdownRoadmap(), `pilot-roadmap-${(displayName || workflow.name)}.md`, 'text/markdown')}
               style={{ padding: '0.5rem 1.25rem', borderRadius: '6px', fontSize: '15px', fontFamily: 'inherit', fontWeight: 600, cursor: 'pointer', background: '#6830C4', color: '#fff', border: 'none' }}>
               Download roadmap (.md)
             </button>
-            <button onClick={() => download(buildBrief(), `build-brief-${workflow.name}.md`, 'text/markdown')}
+            <button onClick={() => download(buildBrief(), `build-brief-${(displayName || workflow.name)}.md`, 'text/markdown')}
               style={{ padding: '0.5rem 1.25rem', borderRadius: '6px', fontSize: '15px', fontFamily: 'inherit', fontWeight: 600, cursor: 'pointer', background: '#fff', color: '#6830C4', border: '1px solid #6830C4' }}>
               Download build brief (.md)
             </button>
