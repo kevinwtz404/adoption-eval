@@ -87,16 +87,16 @@ Access control must respect existing document permissions. Not everyone should b
     buyer: 'CRO / Sales leadership',
     context: 'Revenue',
     painPoint: 'Sales teams use 3-4 different tools that all partially enrich lead data. Reps manually copy information between platforms, re-enter the same data in multiple places and spend hours each week on CRM hygiene instead of selling. Enrichment tools overlap but none gives a complete picture. Forecast confidence drops because records are stale or contradictory.',
-    discoveryMethod: 'Champion workshops with RevOps and sales managers. Tech stack audit revealed three overlapping enrichment tools with manual integration between them. Workplace shadowing showed AEs spending 30-40 minutes per lead on copy-paste enrichment cycles. Pipeline review flagged stale fields and data conflicts between tools.',
+    discoveryMethod: 'Champion workshops with RevOps and sales managers. Tech stack audit revealed three overlapping enrichment tools with manual integration between them. Workplace shadowing showed account executives spending 30-40 minutes per lead on copy-paste enrichment cycles. Pipeline review flagged stale fields and data conflicts between tools.',
     whyAI: 'AI can help consolidate and normalise data across fragmented sources and surface hygiene problems automatically. But the question is where human judgement must stay: outreach decisions, relationship context, pricing and forecast sign-off all require people. The challenge is finding the right boundary between automated data management and human decision-making.',
-    userDescription: 'When a new lead comes in, I want it automatically researched and enriched instead of an SDR spending 20 minutes per lead on LinkedIn and Google. The enriched data should go into the CRM and the other tools we use without anyone having to enter it three times. I want leads scored consistently against our ICP criteria instead of every SDR doing it differently. When a lead is handed to an AE, there should be a proper summary not just a Slack message. And I want the CRM hygiene checked continuously instead of someone doing it manually every week. But outreach, pricing and forecast decisions must stay with people.',
+    userDescription: 'When a new lead comes in, I want it automatically researched and enriched instead of an sales rep spending 20 minutes per lead on LinkedIn and Google. The enriched data should go into the CRM and the other tools we use without anyone having to enter it three times. I want leads scored consistently against our ICP criteria instead of every sales rep doing it differently. When a lead is handed to an AE, there should be a proper summary not just a Slack message. And I want the CRM hygiene checked continuously instead of someone doing it manually every week. But outreach, pricing and forecast decisions must stay with people.',
     redesign: `When a new lead arrives, the system automatically enriches it by pulling from multiple sources (LinkedIn, company website, news, existing CRM data) and consolidating everything into a single, complete profile. This uses API calls for structured data and an LLM to summarise unstructured findings like recent news or social posts.
 
 The enriched data is written once to all systems (CRM and the two other tools) via API calls. Format differences are handled by deterministic transformation rules so data is consistent everywhere.
 
-Lead qualification against ICP criteria is applied consistently using rules-based scoring. Every lead gets scored the same way, removing the inconsistency of each SDR applying criteria differently.
+Lead qualification against ICP criteria is applied consistently using rules-based scoring. Every lead gets scored the same way, removing the inconsistency of each sales rep applying criteria differently.
 
-The handoff from SDR to AE is a structured summary generated automatically from the enriched data and qualification notes. This replaces informal Slack messages with a consistent, searchable format that includes everything the AE needs.
+The handoff from sales rep to account executiveis a structured summary generated automatically from the enriched data and qualification notes. This replaces informal Slack messages with a consistent, searchable format that includes everything the account executiveneeds.
 
 CRM hygiene runs continuously in the background: flagging stale fields, detecting data conflicts between tools and surfacing records that need attention. This replaces the weekly manual check.
 
@@ -105,31 +105,29 @@ The sales manager reviews pipeline with higher confidence because the underlying
       components: [
         { name: 'New lead arrives', type: 'deterministic', description: 'Lead enters the system from marketing or inbound', risks: [], considerations: ['Trigger for the enrichment pipeline'] },
         { name: 'Lead enrichment', type: 'tool', description: 'Pull structured data from LinkedIn, company website, news and CRM via APIs', risks: ['API rate limits', 'Outdated external data'], considerations: ['Which sources to trust', 'How to handle conflicting data'] },
-        { name: 'Profile summary', type: 'llm', description: 'Summarise unstructured findings into the lead profile', risks: ['Hallucination in summaries', 'Outdated information'], considerations: ['A small model may be sufficient'] },
-        { name: 'Data sync', type: 'deterministic', description: 'Write enriched data to all systems with format transformation', risks: ['Sync failures leaving systems out of date'], considerations: ['Idempotent writes to handle retries'] },
         { name: 'ICP scoring', type: 'deterministic', description: 'Apply qualification criteria consistently via rules', risks: ['Rules may not capture edge cases'], considerations: ['Regular review of scoring criteria'] },
-        { name: 'SDR reviews', type: 'human', description: 'SDR reviews enriched profile before any outreach', risks: ['Bottleneck if volume is high'], considerations: ['What needs review vs what can proceed automatically'] },
-        { name: 'Handoff summary', type: 'llm', description: 'Generate structured handoff summary for AE from enriched data', risks: ['May miss context the SDR knows'], considerations: ['SDR can edit before sending'] },
-        { name: 'Hygiene monitoring', type: 'tool', description: 'Continuously flag stale fields, conflicts and missing data', risks: ['Alert fatigue if too many flags'], considerations: ['Prioritise flags by severity'] },
+        { name: 'Sales rep reviews', type: 'human', description: 'Sales rep reviews enriched profile and score before outreach', risks: ['Bottleneck if volume is high'], considerations: ['What needs review vs what can proceed automatically'] },
+        { name: 'Handoff summary', type: 'llm', description: 'Generate structured summary for account executive from enriched data and rep notes', risks: ['May miss context the sales rep knows'], considerations: ['Sales rep can edit before sending'] },
+        { name: 'Account executive', type: 'human', description: 'Account executive receives the lead with full context and takes over', risks: [], considerations: [] },
       ],
       boundaries: ['No autonomous outbound communication', 'No deal-stage changes without owner confirmation', 'All enrichment sources logged for traceability'],
       confidentiality: ['No non-consented personal data use', 'Consider whether lead data can be sent to cloud enrichment APIs', 'GDPR/privacy compliance for EU leads', 'Evaluate local processing for personal data enrichment'],
       costFactors: ['Enrichment API costs per lead', 'LLM summarisation costs at scale', 'A smaller model works for basic summarisation'],
-      humanCheckpoints: ['SDR reviews enriched profile before outreach', 'Sales manager signs off on forecasts', 'Pricing and discount decisions stay fully human'],
+      humanCheckpoints: ['sales rep reviews enriched profile before outreach', 'Sales manager signs off on forecasts', 'Pricing and discount decisions stay fully human'],
     },
     workflow: {
       name: 'crm-data-chaos',
       steps: [
         { id: 's1', name: 'New lead arrives from marketing or inbound', owner: 'system / marketing', pain: 'Lead data is minimal, often just name and email' },
-        { id: 's2', name: 'SDR manually researches the company using LinkedIn, website and news', owner: 'SDR', pain: 'Takes 15-20 minutes per lead, mostly copy-paste' },
-        { id: 's3', name: 'SDR enters enriched data into CRM and two other tools', owner: 'SDR', pain: 'Same data entered in 3 places, formats differ between tools' },
-        { id: 's4', name: 'SDR qualifies the lead against ideal customer criteria', owner: 'SDR', pain: 'Criteria applied inconsistently across the team' },
-        { id: 's5', name: 'Lead is handed off to an account executive with a summary', owner: 'SDR / AE', pain: 'Summary is informal (Slack message or email), context gets lost' },
-        { id: 's6', name: 'AE updates CRM with deal progress over weeks/months', owner: 'AE', pain: 'Updates are sporadic, fields go stale, data conflicts with enrichment tools' },
+        { id: 's2', name: 'sales rep manually researches the company using LinkedIn, website and news', owner: 'sales rep', pain: 'Takes 15-20 minutes per lead, mostly copy-paste' },
+        { id: 's3', name: 'sales rep enters enriched data into CRM and two other tools', owner: 'sales rep', pain: 'Same data entered in 3 places, formats differ between tools' },
+        { id: 's4', name: 'sales rep qualifies the lead against ideal customer criteria', owner: 'sales rep', pain: 'Criteria applied inconsistently across the team' },
+        { id: 's5', name: 'Lead is handed off to an account executive with a summary', owner: 'sales rep / account executive', pain: 'Summary is informal (Slack message or email), context gets lost' },
+        { id: 's6', name: 'Account executive updates CRM with deal progress over weeks/months', owner: 'account executive', pain: 'Updates are sporadic, fields go stale, data conflicts with enrichment tools' },
         { id: 's7', name: 'RevOps manually checks CRM hygiene weekly', owner: 'RevOps', pain: 'Time-consuming, reactive, always behind' },
         { id: 's8', name: 'Sales manager reviews pipeline for forecast', owner: 'Sales manager', pain: 'Low confidence in data, spends time verifying instead of coaching' },
       ],
-      actors: ['SDR', 'AE', 'sales manager', 'RevOps', 'marketing'],
+      actors: ['sales rep', 'account executive', 'sales manager', 'RevOps', 'marketing'],
       data_assets: ['CRM records', 'enrichment tool data', 'LinkedIn data', 'email threads', 'pipeline metrics'],
       success_metrics: ['time_per_lead_enrichment', 'field_completeness', 'data_consistency_across_tools', 'forecast_accuracy'],
       qualification: { business_impact: 5, frequency: 5, baseline_measurability: 4, data_readiness: 4, boundary_clarity: 4, pilotability: 4 },
