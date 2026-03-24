@@ -175,7 +175,7 @@ export default function InterventionDesigner() {
 
         {/* The solution text */}
         {/* Flow diagram */}
-        {components.length > 0 && (components.length <= 5 || components.some((c: any) => c.name?.startsWith('_parallel'))) && (() => {
+        {components.length > 0 && (() => {
           // Parse components into sections: linear steps and parallel groups
           const sections: Array<{ type: 'step'; comp: any } | { type: 'parallel'; top: any[]; bottom: any[] }> = [];
           let i = 0;
