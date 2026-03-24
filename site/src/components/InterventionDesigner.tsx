@@ -175,49 +175,105 @@ export default function InterventionDesigner() {
 
         {/* The solution text */}
         {/* Flow diagram */}
-        {components.length > 0 && (
-          <div style={{
-            marginBottom: '1.25rem',
-            padding: '1.25rem',
-            border: '1px solid #e0e0e0',
-            borderRadius: '8px',
-            background: '#fff',
-            overflowX: 'auto' as const,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', minWidth: 'max-content' }}>
-              {components.map((comp, i) => {
-                const isHuman = comp.type === 'human';
-                const colors = isHuman
-                  ? { bg: '#f0fdf4', border: '#22c55e' }
-                  : { bg: '#faf5ff', border: '#6830C4' };
+        {components.length > 0 && (() => {
+          // Parse components into sections: linear steps and parallel groups
+          const sections: Array<{ type: 'step'; comp: any } | { type: 'parallel'; top: any[]; bottom: any[] }> = [];
+          let i = 0;
+          while (i < components.length) {
+            const comp = components[i];
+            if (comp.name === '_parallel_start') {
+              const top: any[] = [];
+              const bottom: any[] = [];
+              i++;
+              while (i < components.length && components[i].name !== '_parallel_end') {
+                if ((components[i] as any)._track === 'bottom') bottom.push(components[i]);
+                else top.push(components[i]);
+                i++;
+              }
+              sections.push({ type: 'parallel', top, bottom });
+              i++; // skip _parallel_end
+            } else {
+              sections.push({ type: 'step', comp });
+              i++;
+            }
+          }
 
-                return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <div style={{
-                      padding: '0.375rem 0.5rem',
-                      border: `1.5px solid ${colors.border}`,
-                      borderRadius: '6px',
-                      background: colors.bg,
-                      textAlign: 'center' as const,
-                      minWidth: '4rem',
-                      maxWidth: '7rem',
-                    }}>
-                      <div style={{ fontSize: '9px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.0625rem' }}>
-                        {comp.type}
+          function renderBox(comp: any) {
+            const isHuman = comp.type === 'human';
+            const colors = isHuman
+              ? { bg: '#f0fdf4', border: '#22c55e' }
+              : { bg: '#faf5ff', border: '#6830C4' };
+            return (
+              <div style={{
+                padding: '0.375rem 0.5rem',
+                border: `1.5px solid ${colors.border}`,
+                borderRadius: '6px',
+                background: colors.bg,
+                textAlign: 'center' as const,
+                minWidth: '4rem',
+                maxWidth: '7rem',
+              }}>
+                <div style={{ fontSize: '9px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.0625rem' }}>
+                  {comp.type}
+                </div>
+                <div style={{ fontSize: '11px', fontWeight: 600, lineHeight: '1.3' }}>
+                  {comp.name}
+                </div>
+              </div>
+            );
+          }
+
+          const arrow = <div style={{ fontSize: '15px', color: '#999', padding: '0 0.125rem', fontWeight: 700 }}>&rarr;</div>;
+
+          return (
+            <div style={{
+              marginBottom: '1.25rem',
+              padding: '1.25rem',
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px',
+              background: '#fff',
+              overflowX: 'auto' as const,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', minWidth: 'max-content' }}>
+                {sections.map((section, si) => (
+                  <div key={si} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    {si > 0 && arrow}
+                    {section.type === 'step' ? (
+                      renderBox(section.comp)
+                    ) : (
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column' as const,
+                        gap: '0.375rem',
+                        padding: '0.375rem',
+                        border: '1px dashed #e0e0e0',
+                        borderRadius: '6px',
+                        background: '#fafafa',
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          {section.top.map((comp: any, ti: number) => (
+                            <div key={ti} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                              {ti > 0 && arrow}
+                              {renderBox(comp)}
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          {section.bottom.map((comp: any, bi: number) => (
+                            <div key={bi} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                              {bi > 0 && arrow}
+                              {renderBox(comp)}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div style={{ fontSize: '11px', fontWeight: 600, lineHeight: '1.3' }}>
-                        {comp.name}
-                      </div>
-                    </div>
-                    {i < components.length - 1 && (
-                      <div style={{ fontSize: '15px', color: '#999', padding: '0 0.125rem', fontWeight: 700 }}>&rarr;</div>
                     )}
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {redesign && (
           <div>

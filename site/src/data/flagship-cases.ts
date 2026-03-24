@@ -150,9 +150,11 @@ Publishing is tracked automatically: what was published where, when and which ve
     redesignData: {
       components: [
         { name: 'Master copy created', type: 'human', description: 'Copywriter creates master narrative and key messages', risks: [], considerations: ['This is the creative work and stays fully human'] },
-        { name: 'Channel adaptation', type: 'llm', description: 'Generate channel-specific versions (LinkedIn, email, web, social) from master copy', risks: ['Tone drift from brand voice', 'Inconsistency between channels'], considerations: ['Prompt with brand guidelines', 'A smaller model may work for straightforward adaptations'] },
-        { name: 'Copywriter review', type: 'human', description: 'Copywriter reviews generated versions for tone and accuracy', risks: ['Review fatigue with many channels'], considerations: ['Batch review interface'] },
-        { name: 'Image resizing', type: 'deterministic', description: 'Resize visual assets to exact platform specs', risks: ['Template changes when platforms update'], considerations: ['Figma auto-layout or scripted templates'] },
+        { name: '_parallel_start', type: 'deterministic', description: '', risks: [], considerations: [] },
+        { name: 'Channel adaptation', type: 'llm', description: 'Generate channel-specific text versions from master copy', risks: ['Tone drift from brand voice'], considerations: ['Prompt with brand guidelines'], _track: 'top' },
+        { name: 'Copywriter review', type: 'human', description: 'Review generated versions for tone and accuracy', risks: ['Review fatigue'], considerations: ['Batch review interface'], _track: 'top' },
+        { name: 'Image resizing', type: 'deterministic', description: 'Resize visual assets to exact platform specs', risks: ['Template changes when platforms update'], considerations: ['Figma auto-layout or scripted templates'], _track: 'bottom' },
+        { name: '_parallel_end', type: 'deterministic', description: '', risks: [], considerations: [] },
         { name: 'Content lead approval', type: 'human', description: 'Content lead approves all versions in one interface', risks: ['Bottleneck if slow'], considerations: ['Parallel approval for independent channels'] },
         { name: 'Version tracking', type: 'deterministic', description: 'Track all versions, naming, campaign association and publish history', risks: ['Gets out of date if steps are bypassed'], considerations: ['Automated tagging at creation, log on publish'] },
       ],
