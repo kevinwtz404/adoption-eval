@@ -42,6 +42,22 @@ const TAB_CONTENT: Record<string, { explanation: string; placeholder: string }> 
   },
 };
 
+function renderMarkdown(md: string): string {
+  return md
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 style="font-size:1.375rem;font-weight:600;margin:1.25em 0 0.5em;">$1</h2>')
+    .replace(/^\*\*(.+?)\*\*/gm, '<strong>$1</strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^\*   /gm, '<li>')
+    .replace(/^\d+\.\s+/gm, '<li>')
+    .replace(/<li>(.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul style="padding-left:1.5rem;margin:0.5em 0;">${match}</ul>`)
+    .replace(/\n\n/g, '</p><p style="margin-top:1.25em;">')
+    .replace(/\n/g, ' ')
+    .replace(/^/, '<p>')
+    .replace(/$/, '</p>');
+}
+
 // Gemini call for generating the pilot overview
 async function generateOverview(allData: any): Promise<string> {
   const HF_SPACE_URL = 'https://cantcomeupwithaname-adoption-eval-api.hf.space/gradio_api/call/predict';
@@ -60,19 +76,19 @@ Owner: ${allData.owner}
 Boundary decisions: ${JSON.stringify(allData.boundaryDecisions)}
 Components: ${JSON.stringify(allData.components)}
 
-Based on all of this, produce a response with these exact sections. Use UK English, no em dashes.
+Produce a concise response with these exact four sections. Keep it short and practical. Use UK English, no em dashes. Do not assume specific tools, vendors or platforms. Do not name specific products. Keep questions open so the user can fill in what they actually use. Be realistic about technical feasibility.
 
-## What is decided
-Summarise in 3-5 bullet points what they have already determined.
+## Pilot summary
+2-3 sentences summarising what this pilot is testing, the approach and the key constraint. Do not repeat everything they said. Just the essence.
 
-## What is still open
-List specific questions they still need to answer before they can build this. Include practical things like: which specific systems or tools do they currently use? What is the budget for API calls or infrastructure? Who will review outputs daily during the pilot? What data sources need to be connected? Be specific to their workflow.
-
-## Implementation overview
-One paragraph summarising the three broad approaches they could take: build it themselves, use a mix of custom and off-the-shelf tools, or use an existing product. Do not go into detail. Just enough to frame the options.
+## Open questions
+List the specific questions they still need to answer before building this. Focus on practical things: which systems they use, budget, who reviews daily, what data sources to connect, what tools to evaluate. Be specific to their workflow.
 
 ## Steps to get started
-A numbered list of the things they need to do before the pilot can run. Not a timeline. Just the sequence. Include answering the open questions above.`;
+A short numbered list of what they need to do. Not a timeline. Just the sequence. Keep it to 5-7 steps.
+
+## What success could look like
+For each of the six evaluation dimensions (Time, Cost, Quality, Risk, Adoption, Control), give a realistic target range for this specific workflow. Be honest about which dimensions matter most and which matter less. Consider what error rates are acceptable given the context (e.g. a factual error in cold outreach is tolerable, a wrong number in a financial report is not). Keep each to one sentence.`;
 
   try {
     const submitResponse = await fetch(HF_SPACE_URL, {
@@ -301,9 +317,10 @@ export default function PilotBuilder() {
       {/* Generated overview */}
       {overview && (
         <div>
-          <div style={{ border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fff', padding: '1.25rem', marginBottom: '1.5rem', fontSize: '15px', lineHeight: '1.75', whiteSpace: 'pre-wrap' as const }}>
-            {overview}
-          </div>
+          <div
+            style={{ border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fff', padding: '1.25rem', marginBottom: '1.5rem', fontSize: '15px', lineHeight: '1.75' }}
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(overview) }}
+          />
 
           {/* Downloads */}
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' as const, marginBottom: '0.75rem' }}>
@@ -326,7 +343,7 @@ export default function PilotBuilder() {
 
           <div style={{ marginTop: '1rem' }}>
             <button onClick={() => { setOverview(''); saveState({ pilotOverview: null } as any); }}
-              style={{ fontSize: '15px', color: '#999', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline' }}>
+              style={{ padding: '0.5rem 1.25rem', borderRadius: '6px', fontSize: '15px', fontFamily: 'inherit', fontWeight: 600, cursor: 'pointer', background: '#fff', color: '#6830C4', border: '1px solid #6830C4' }}>
               Regenerate
             </button>
           </div>
