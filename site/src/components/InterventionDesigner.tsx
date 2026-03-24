@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 import { flagshipCases } from '../data/flagship-cases';
-import { analyseWorkflow } from '../data/gemini';
+import { analyseWorkflow, type RedesignResult } from '../data/gemini';
 
 interface WorkflowStep {
   id: string;
@@ -95,17 +95,20 @@ export default function InterventionDesigner() {
               <button
                 onClick={async () => {
                   setGenerating(true);
-                  const suggestions = await analyseWorkflow(workflowName, painPoint, steps);
-                  // Convert per-step suggestions into a flowing redesign
-                  const candidateSteps = Object.entries(suggestions)
-                    .filter(([_, s]) => s.isCandidate)
-                    .map(([id, s]) => {
-                      const step = steps.find(st => st.id === id);
-                      return step ? `${step.name}: ${s.description}` : s.description;
-                    });
-                  const generated = candidateSteps.join('\n\n');
-                  setRedesign(generated);
-                  saveState({ redesign: generated } as any);
+                  const result = await analyseWorkflow(workflowName, painPoint, steps);
+                  if (result) {
+                    setRedesign(result.narrative);
+                    saveState({
+                      redesign: result.narrative,
+                      redesignData: {
+                        components: result.components,
+                        boundaries: result.boundaries,
+                        confidentiality: result.confidentiality,
+                        costFactors: result.costFactors,
+                        humanCheckpoints: result.humanCheckpoints,
+                      },
+                    } as any);
+                  }
                   setGenerating(false);
                 }}
                 disabled={generating}

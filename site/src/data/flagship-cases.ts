@@ -8,6 +8,13 @@ export interface FlagshipCase {
   discoveryMethod: string;
   whyAI: string;
   redesign: string;
+  redesignData: {
+    components: Array<{ name: string; type: string; description: string; risks: string[]; considerations: string[] }>;
+    boundaries: string[];
+    confidentiality: string[];
+    costFactors: string[];
+    humanCheckpoints: string[];
+  };
   workflow: {
     name: string;
     steps: Array<{ id: string; name: string; owner?: string; pain?: string }>;
@@ -44,6 +51,20 @@ Every answer (whether from the system or a person) is captured and becomes searc
 A weekly alignment summary is generated automatically from recent decisions, document changes and ownership updates. The ops lead reviews and edits the summary before sharing it, replacing or shortening the weekly sync meeting.
 
 Access control must respect existing document permissions. Not everyone should be able to look up everything. The system must only surface documents the person asking is allowed to see.`,
+    redesignData: {
+      components: [
+        { name: 'Document indexing', type: 'rag', description: 'Index all internal sources (docs, wikis, decision logs, Slack, notes) into a vector database', risks: ['Stale sources produce stale answers', 'Indexing errors can miss documents'], considerations: ['Chunking strategy affects answer quality', 'How often to re-index', 'Which sources to include'] },
+        { name: 'Question answering', type: 'llm', description: 'Generate answers from retrieved documents with citations', risks: ['Hallucination: plausible but wrong answers', 'Citation present does not guarantee correct interpretation'], considerations: ['Model size vs cost trade-off', 'Confidence scoring to decide when to escalate'] },
+        { name: 'Access control', type: 'tool', description: 'Enforce document permissions before retrieval', risks: ['Permission mapping errors could expose confidential information'], considerations: ['Must mirror existing permission structure', 'Need to handle documents with mixed access levels'] },
+        { name: 'Answer capture', type: 'deterministic', description: 'Store every answer for future retrieval', risks: ['Outdated answers persisting'], considerations: ['Expiry or review cycle for stored answers'] },
+        { name: 'Weekly summary generation', type: 'llm', description: 'Draft alignment summary from recent changes', risks: ['May miss important context', 'Could misrepresent decisions'], considerations: ['Ops lead must review before sharing'] },
+        { name: 'Ops lead review', type: 'human', description: 'Review generated answers and summaries before they become authoritative', risks: ['Review fatigue if volume is high'], considerations: ['Define what requires review vs what can go directly'] },
+      ],
+      boundaries: ['AI output must be reviewed before being treated as authoritative', 'Escalate to a person when confidence is low', 'Log all queries and answers for traceability'],
+      confidentiality: ['Document permissions must be enforced at retrieval time', 'Salary, HR and legal documents must be excluded or access-controlled', 'Consider a local model if internal documents contain sensitive client data', 'Evaluate whether queries and answers can be sent to a cloud API'],
+      costFactors: ['LLM calls per question add up with high usage', 'A smaller model may work for straightforward retrieval questions', 'Vector database hosting and re-indexing costs'],
+      humanCheckpoints: ['Ops lead reviews weekly summary before distribution', 'Low-confidence answers escalate to a person', 'Source-of-truth documents cannot be edited by the system'],
+    },
     workflow: {
       name: 'finding-internal-answers',
       steps: [
@@ -80,6 +101,20 @@ The handoff from SDR to AE is a structured summary generated automatically from 
 CRM hygiene runs continuously in the background: flagging stale fields, detecting data conflicts between tools and surfacing records that need attention. This replaces the weekly manual check.
 
 The sales manager reviews pipeline with higher confidence because the underlying data is more complete and current. Outreach, relationship decisions, pricing and forecast sign-off all stay fully with people.`,
+    redesignData: {
+      components: [
+        { name: 'Lead enrichment', type: 'tool', description: 'Pull structured data from multiple sources via APIs and consolidate', risks: ['API rate limits', 'Outdated external data'], considerations: ['Which sources to trust', 'How to handle conflicting data between sources'] },
+        { name: 'Unstructured summarisation', type: 'llm', description: 'Summarise unstructured findings (news, social posts) into the lead profile', risks: ['Hallucination in summaries', 'Outdated information'], considerations: ['A small model may be sufficient for summarisation'] },
+        { name: 'Data sync', type: 'deterministic', description: 'Write enriched data to all systems with format transformation', risks: ['Sync failures leaving systems out of date'], considerations: ['Idempotent writes to handle retries'] },
+        { name: 'ICP scoring', type: 'deterministic', description: 'Apply qualification criteria consistently via rules', risks: ['Rules may not capture edge cases'], considerations: ['Regular review of scoring criteria'] },
+        { name: 'Hygiene monitoring', type: 'tool', description: 'Continuously flag stale fields, conflicts and missing data', risks: ['Alert fatigue if too many flags'], considerations: ['Prioritise flags by severity'] },
+        { name: 'Human decisions', type: 'human', description: 'Outreach, pricing, forecast sign-off stay with people', risks: ['Bottleneck if too much needs human input'], considerations: ['Clear handoff criteria'] },
+      ],
+      boundaries: ['No autonomous outbound communication', 'No deal-stage changes without owner confirmation', 'All enrichment sources logged for traceability'],
+      confidentiality: ['No non-consented personal data use', 'Consider whether lead data can be sent to cloud enrichment APIs', 'GDPR/privacy compliance for EU leads', 'Evaluate local processing for personal data enrichment'],
+      costFactors: ['Enrichment API costs per lead', 'LLM summarisation costs at scale', 'A smaller model works for basic summarisation'],
+      humanCheckpoints: ['SDR reviews enriched profile before outreach', 'Sales manager signs off on forecasts', 'Pricing and discount decisions stay fully human'],
+    },
     workflow: {
       name: 'crm-data-chaos',
       steps: [
@@ -118,6 +153,20 @@ Visual assets are handled separately. Deterministic tools (like Figma auto-layou
 All versions (text and visual) are visible in one approval interface. The content lead reviews everything in one place and approves each version, replacing the current informal Slack and email review process.
 
 Publishing is tracked automatically: what was published where, when and which version. This is deterministic logging, no AI needed.`,
+    redesignData: {
+      components: [
+        { name: 'Channel adaptation', type: 'llm', description: 'Generate channel-specific versions from master copy following documented guidelines', risks: ['Tone drift from brand voice', 'Inconsistency between channels', 'Cultural or context errors'], considerations: ['Prompt engineering with brand guidelines', 'A smaller model may handle straightforward adaptations'] },
+        { name: 'Image resizing', type: 'deterministic', description: 'Resize and reformat visual assets to exact platform specs', risks: ['Template changes when platforms update specs'], considerations: ['Figma auto-layout, scripted templates or similar tools'] },
+        { name: 'Asset registry', type: 'deterministic', description: 'Track asset versions, naming and campaign association', risks: ['Registry gets out of date if manual steps are skipped'], considerations: ['Automated tagging at creation time'] },
+        { name: 'Approval workflow', type: 'tool', description: 'Structured approval interface replacing informal review', risks: ['Bottleneck if approval is slow'], considerations: ['Parallel approval for independent channels'] },
+        { name: 'Publish tracking', type: 'deterministic', description: 'Log what was published where and when', risks: ['Missing entries if publishing bypasses the system'], considerations: ['Integrate with publishing tools'] },
+        { name: 'Content lead review', type: 'human', description: 'Review all generated versions before publishing', risks: ['Review fatigue with many channels'], considerations: ['Batch review interface, not one-by-one'] },
+      ],
+      boundaries: ['No publishing without human approval', 'No unlicensed visual assets', 'No brand-unsafe or legally sensitive claims without review'],
+      confidentiality: ['Campaign briefs may contain unreleased product information', 'Consider whether draft content can be processed by a cloud LLM', 'Client campaign data may require a local model'],
+      costFactors: ['LLM cost per channel adaptation (multiply by number of campaigns)', 'A smaller fine-tuned model may produce more consistent brand voice cheaper', 'Deterministic tools (Figma, templates) have fixed licensing costs'],
+      humanCheckpoints: ['Content lead approves all channel versions', 'Creative strategist reviews master narrative', 'Legal review for sensitive claims'],
+    },
     workflow: {
       name: 'campaign-adaptation-overload',
       steps: [
@@ -159,6 +208,21 @@ The slide pack is assembled from templates. Layout and formatting are rules-base
 The CFO reviews the assembled pack. Nothing leaves the system until they approve it. After approval, distribution is automated: the right people get the right format.
 
 The actual maths must never be generated by an LLM. An LLM producing financial projections is a risk, not a feature. Every number must trace back to a named source system and query.`,
+    redesignData: {
+      components: [
+        { name: 'Data pulls', type: 'tool', description: 'Automated API calls to ERP, CRM and billing', risks: ['API changes breaking the pipeline', 'Incomplete data if a system is down'], considerations: ['Error handling and retry logic', 'Data validation after each pull'] },
+        { name: 'Data reconciliation', type: 'deterministic', description: 'Rules-based reconciliation with conflict flagging', risks: ['Rules may not cover new edge cases'], considerations: ['Human review queue for flagged conflicts'] },
+        { name: 'Forecast calculations', type: 'deterministic', description: 'Spreadsheet or dedicated tool for all maths', risks: ['Formula errors (existing risk, not new)'], considerations: ['Must remain deterministic, never LLM-generated'] },
+        { name: 'Narrative generation', type: 'llm', description: 'Draft variance commentary and board narrative from computed numbers', risks: ['Hallucination: LLM could misrepresent what the numbers mean', 'Could generate numbers that look calculated but are not'], considerations: ['Clear labelling of AI-generated text', 'Numbers must come from deterministic calculations only'] },
+        { name: 'Signal scanning', type: 'rag', description: 'Scan deal notes, transcripts and updates for qualitative signals', risks: ['Signals are pattern matches, not facts', 'Sensitive information in transcripts'], considerations: ['Flag as signals not facts', 'Access control on transcript data'] },
+        { name: 'Report assembly', type: 'deterministic', description: 'Template-based slide pack assembly', risks: ['Template changes when board requirements change'], considerations: ['Separate content from layout'] },
+        { name: 'CFO approval', type: 'human', description: 'Nothing leaves the system without CFO sign-off', risks: ['Bottleneck if CFO is unavailable'], considerations: ['Delegate authority for routine reports'] },
+      ],
+      boundaries: ['No LLM-generated financial calculations', 'No modification of source financial records', 'No external disclosure without human sign-off', 'All numbers must trace to a named source system', 'Narrative must be labelled as AI-generated draft'],
+      confidentiality: ['Financial projections are highly confidential', 'Deal notes and call transcripts contain sensitive client information', 'A local model is strongly recommended for signal scanning', 'Evaluate whether any financial data can leave the organisation', 'Board materials must not be processed by external APIs'],
+      costFactors: ['LLM calls for narrative and signal scanning per reporting cycle', 'API integration costs for connecting ERP, CRM and billing', 'A smaller model may handle routine variance commentary', 'Deterministic components (reconciliation, assembly) are effectively free at scale'],
+      humanCheckpoints: ['CFO approves final report before distribution', 'FP&A analyst reviews data reconciliation conflicts', 'Finance director reviews AI-generated narrative for accuracy'],
+    },
     workflow: {
       name: 'the-reporting-cycle-problem',
       steps: [

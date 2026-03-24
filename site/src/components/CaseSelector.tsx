@@ -25,6 +25,7 @@ export default function CaseSelector() {
       workflow: c.workflow,
       qualification: c.workflow.qualification,
       redesign: c.redesign || '',
+      redesignData: c.redesignData || null,
     } as any);
   }
 

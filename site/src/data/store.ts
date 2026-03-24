@@ -26,6 +26,13 @@ export interface AppState {
   selectedCase: string | null;
   mappings: Record<string, { level: number; paradigm: string | null }> | null;
   redesign: string | null;
+  redesignData: {
+    components: Array<{ name: string; type: string; description: string; risks: string[]; considerations: string[] }>;
+    boundaries: string[];
+    confidentiality: string[];
+    costFactors: string[];
+    humanCheckpoints: string[];
+  } | null;
   designs: Record<string, { isCandidate: boolean; description: string; notes: string }> | null;
   boundaries: Record<string, Array<{ id: string; text: string; category: string; checked: boolean; notes: string }>> | null;
 }
@@ -35,6 +42,7 @@ const defaultState: AppState = {
   qualification: null,
   selectedCase: null,
   redesign: null,
+  redesignData: null,
   mappings: null,
   designs: null,
   boundaries: null,
