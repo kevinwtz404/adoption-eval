@@ -115,22 +115,16 @@ export default function EvaluationMatrix() {
         const qualityDeclined = dimensions.find(d => d.id === 'quality')?.direction === 'declined';
 
         let verdict = '';
-        let verdictColor = '';
         if (riskDeclined || controlDeclined) {
           verdict = 'Risk or control declined. This needs to be addressed before scaling.';
-          verdictColor = '#991b1b';
         } else if (qualityDeclined) {
           verdict = 'Quality declined. Faster or cheaper is not enough if the output is worse.';
-          verdictColor = '#991b1b';
         } else if (improved >= 3 && declined === 0) {
           verdict = 'Strong result. Multiple dimensions improved with no declines.';
-          verdictColor = '#166534';
         } else if (improved >= 2 && declined <= 1) {
           verdict = 'Mixed but promising. Some improvements, minor concerns. Consider revising and running another iteration.';
-          verdictColor = '#854d0e';
         } else {
           verdict = 'Weak result. Consider whether this intervention fits the workflow or needs a different approach.';
-          verdictColor = '#991b1b';
         }
 
         return (
@@ -141,7 +135,7 @@ export default function EvaluationMatrix() {
               <span>{neutral} neutral</span>
               <span>{declined} declined</span>
             </div>
-            <div style={{ padding: '0.75rem', borderLeft: `3px solid ${verdictColor}`, background: '#fff', borderRadius: '0 6px 6px 0', fontSize: '15px', lineHeight: '1.75', color: verdictColor }}>
+            <div style={{ padding: '0.75rem', borderLeft: '3px solid #e0e0e0', background: '#fff', borderRadius: '0 6px 6px 0', fontSize: '15px', lineHeight: '1.75' }}>
               {verdict}
             </div>
           </div>

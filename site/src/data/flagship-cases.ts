@@ -16,6 +16,7 @@ export interface FlagshipCase {
     timeline: string;
     owner: string;
   };
+  boundaryDefaults: Record<string, { choice: string; detail: string }>;
   redesignData: {
     components: Array<{ name: string; type: string; description: string; risks: string[]; considerations: string[] }>;
     boundaries: string[];
@@ -65,6 +66,18 @@ Access control must respect existing document permissions. Not everyone should b
       timeline: '3 weeks. Midpoint review after week 2. Final evaluation in week 4.',
       owner: 'Ops lead. Has authority to pause the pilot and restrict document access.',
       metrics: { time: 'Time to find an answer drops by 50%', cost: 'LLM API costs stay under budget for the test period', quality: '80% of answers include correct source citations', risk: 'No confidential documents surfaced to wrong users', adoption: 'Users ask at least 5 questions per week', control: 'All answers traceable to source documents' },
+    },
+    boundaryDefaults: {
+      'review-text': { choice: 'yes', detail: '' },
+      'numbers-deterministic': { choice: 'yes', detail: '' },
+      'verify-retrieved': { choice: 'yes', detail: '' },
+      'data-local': { choice: 'partly', detail: 'Depends on document sensitivity. Some internal docs may contain client data.' },
+      'access-permissions': { choice: 'yes', detail: '' },
+      'model-size': { choice: 'yes', detail: '' },
+      'scale-cost': { choice: 'partly', detail: 'Estimate per-question cost but do not let it block the pilot.' },
+      'approval-gate': { choice: 'partly', detail: 'Low-confidence answers escalate to a person. High-confidence go direct.' },
+      'fallback': { choice: 'yes', detail: '' },
+      'transparency': { choice: 'yes', detail: '' },
     },
     redesignData: {
       components: [
@@ -120,6 +133,18 @@ Once approved, the outreach is sent via the existing email or messaging tool. Th
       owner: 'Sales team lead. Reviews enrichment quality daily during the pilot.',
       metrics: { time: 'Research time per lead drops from 15 minutes to under 2 minutes', cost: 'API costs per lead stay reasonable at volume', quality: 'Outreach personalisation rated equal or better by the rep', risk: 'No incorrect company information in outreach', adoption: 'Rep uses the tool for every lead, not just some', control: 'All enrichment sources logged and verifiable' },
     },
+    boundaryDefaults: {
+      'review-text': { choice: 'yes', detail: '' },
+      'numbers-deterministic': { choice: 'no', detail: '' },
+      'verify-retrieved': { choice: 'yes', detail: '' },
+      'data-local': { choice: 'partly', detail: 'Lead data is not highly sensitive but depends on jurisdiction.' },
+      'access-permissions': { choice: 'no', detail: '' },
+      'model-size': { choice: 'yes', detail: '' },
+      'scale-cost': { choice: 'partly', detail: 'Per-lead costs matter at volume.' },
+      'approval-gate': { choice: 'yes', detail: '' },
+      'fallback': { choice: 'yes', detail: '' },
+      'transparency': { choice: 'partly', detail: 'Internal team knows. Customer does not need to.' },
+    },
     redesignData: {
       components: [
         { name: 'New lead arrives', type: 'deterministic', description: 'Lead enters the system from marketing or inbound', risks: [], considerations: ['Trigger for the pipeline'] },
@@ -174,6 +199,18 @@ Approved versions are published to each channel via the existing publishing tool
       timeline: '3 weeks, covering 2 campaign cycles. Midpoint review after the first campaign.',
       owner: 'Content lead. Reviews all generated versions and has authority to revert to manual process.',
       metrics: { time: 'Time from master copy to all channel versions drops by 60%', cost: 'LLM costs per campaign are acceptable', quality: 'Generated versions need only minor edits, brand consistency improves', risk: 'No brand-unsafe content published', adoption: 'Copywriter prefers reviewing generated versions over writing from scratch', control: 'All versions tracked with lineage from master copy' },
+    },
+    boundaryDefaults: {
+      'review-text': { choice: 'yes', detail: '' },
+      'numbers-deterministic': { choice: 'no', detail: '' },
+      'verify-retrieved': { choice: 'no', detail: '' },
+      'data-local': { choice: 'partly', detail: 'Campaign briefs may contain unreleased product information.' },
+      'access-permissions': { choice: 'no', detail: '' },
+      'model-size': { choice: 'yes', detail: '' },
+      'scale-cost': { choice: 'yes', detail: '' },
+      'approval-gate': { choice: 'yes', detail: '' },
+      'fallback': { choice: 'yes', detail: '' },
+      'transparency': { choice: 'partly', detail: 'Internal team knows AI is involved. External audience does not need to.' },
     },
     redesignData: {
       components: [
@@ -244,6 +281,18 @@ The pilot hypothesis: given that the numbers are already computed, can AI draft 
       timeline: '4 weeks covering one full reporting cycle. Midpoint check after the data is pulled and reconciled (before AI steps run).',
       owner: 'Finance team lead. Reviews all AI-generated output before it enters the report.',
       metrics: { time: 'Commentary drafting drops from 2 days to half a day', cost: 'LLM costs per reporting cycle are justified by time savings', quality: 'AI-drafted commentary needs only minor edits, no fabricated numbers', risk: 'No AI-generated numbers appear in the report', adoption: 'Finance team trusts the output enough to use it as a starting point', control: 'All AI output labelled as draft, all numbers traceable to source systems' },
+    },
+    boundaryDefaults: {
+      'review-text': { choice: 'yes', detail: '' },
+      'numbers-deterministic': { choice: 'yes', detail: '' },
+      'verify-retrieved': { choice: 'yes', detail: '' },
+      'data-local': { choice: 'yes', detail: '' },
+      'access-permissions': { choice: 'yes', detail: '' },
+      'model-size': { choice: 'partly', detail: 'Commentary may need a capable model. Signal scanning could use a smaller one.' },
+      'scale-cost': { choice: 'yes', detail: '' },
+      'approval-gate': { choice: 'yes', detail: '' },
+      'fallback': { choice: 'yes', detail: '' },
+      'transparency': { choice: 'yes', detail: '' },
     },
     redesignData: {
       components: [

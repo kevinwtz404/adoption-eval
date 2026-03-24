@@ -27,6 +27,7 @@ export default function CaseSelector() {
       redesign: c.redesign || '',
       redesignData: c.redesignData || null,
       pilotPlan: c.pilotPlan || null,
+      boundaryDefaults: c.boundaryDefaults || null,
     } as any);
   }
 

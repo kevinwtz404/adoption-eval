@@ -141,7 +141,14 @@ export default function BoundaryDesigner() {
     if (saved && saved.length > 0 && saved[0].pilotImplication) {
       setDecisions(saved);
     } else {
-      const fresh = DECISIONS.map(d => ({ ...d }));
+      // Check for flagship boundary defaults
+      const defaults = (state as any).boundaryDefaults;
+      const fresh = DECISIONS.map(d => {
+        if (defaults && defaults[d.id]) {
+          return { ...d, choice: defaults[d.id].choice, detail: defaults[d.id].detail };
+        }
+        return { ...d };
+      });
       setDecisions(fresh);
       saveState({ boundaryDecisions: fresh } as any);
     }

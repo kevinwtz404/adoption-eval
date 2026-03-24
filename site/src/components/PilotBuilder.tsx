@@ -90,7 +90,10 @@ A short numbered list of what they need to do. Not a timeline. Just the sequence
 ## What success could look like
 For each of the six evaluation dimensions (Time, Cost, Quality, Risk, Adoption, Control), give a realistic target range for this specific workflow. Be honest about which dimensions matter most and which matter less. Consider what error rates are acceptable given the context (e.g. a factual error in cold outreach is tolerable, a wrong number in a financial report is not). Keep each to one sentence.
 
-IMPORTANT: Only produce these four sections. Do not add any additional sections like Analysis, Approach, Risks or Alternatives. Keep the total response concise.`;
+## Analysis
+A short analysis covering: recommended approach (one sentence), what stays with people (one sentence), key risks (2-3 bullet points), boundaries and controls (2-3 bullet points), simpler alternatives to consider before building with AI (2-3 bullet points).
+
+IMPORTANT: Only produce these five sections. Keep the total response concise.`;
 
   try {
     const submitResponse = await fetch(HF_SPACE_URL, {
@@ -201,16 +204,15 @@ export default function PilotBuilder() {
     if (plan.stopCriteria) md += `### Stop criteria\n${plan.stopCriteria}\n\n`;
     if (plan.timeline) md += `### Timeline\n${plan.timeline}\n\n`;
     if (plan.owner) md += `### Owner\n${plan.owner}\n\n`;
-    md += `## Evaluation framework\n\nAfter the pilot, evaluate across these six dimensions:\n\n`;
-    md += `| Dimension | What to measure | Baseline (before) | Result (after) | Direction |\n`;
-    md += `|---|---|---|---|---|\n`;
-    md += `| Time | Did the workflow get faster? Measure end-to-end cycle time. | | | |\n`;
-    md += `| Cost | What did the pilot cost vs what did it save? | | | |\n`;
-    md += `| Quality | Is the output better or worse? Accuracy, consistency, error rate. | | | |\n`;
-    md += `| Risk | Did operational risk increase or decrease? Boundary violations? | | | |\n`;
-    md += `| Adoption | Did the team use it? Trust it? Work around it? | | | |\n`;
-    md += `| Control | Can you trace what the system did? Can you audit it? | | | |\n\n`;
-    md += `**Do not treat time savings alone as success.** A pilot is only strong when improvements in time and cost do not degrade risk, control or quality.\n`;
+    md += `## Evaluation framework\n\n`;
+    md += `After the pilot, evaluate across these six dimensions. Not all will be equally important for every pilot. The key rule: do not treat time savings alone as success. A pilot is only strong when improvements in time and cost do not degrade risk, control or quality.\n\n`;
+    md += `### Time\nDid the workflow get faster? Measure cycle time end-to-end, not just the automated steps.\n\n`;
+    md += `### Cost\nWhat did the pilot cost to run (API calls, tools, setup time) vs what did it save?\n\n`;
+    md += `### Quality\nIs the output better or worse? Measure accuracy, consistency and error rate. Ask the people who use the output.\n\n`;
+    md += `### Risk\nDid the pilot increase or decrease operational risk? Were there any boundary violations, near-misses or unexpected behaviours?\n\n`;
+    md += `### Adoption\nDid the team actually use it? Was there friction? Did people trust it, work around it or ignore it?\n\n`;
+    md += `### Control\nCan you trace what the system did and why? Can you audit it? Do you trust the boundaries held?\n\n`;
+    md += `### Decision\nAfter measuring, choose one:\n- **Scale**: expand to more of the workflow, more teams or more volume\n- **Revise**: adjust boundaries, components or scope and run another iteration\n- **Stop**: document what you learned and move on. This is a valid outcome.\n\n`;
     return md;
   }
 
@@ -251,6 +253,18 @@ export default function PilotBuilder() {
     if (plan.stopCriteria) brief += `- **Stop criteria:** ${plan.stopCriteria}\n`;
     if (plan.timeline) brief += `- **Timeline:** ${plan.timeline}\n`;
     if (plan.owner) brief += `- **Owner:** ${plan.owner}\n`;
+    if (overview) {
+      brief += `\n## Pilot overview (generated)\n${overview}\n`;
+    }
+    brief += `\n## Evaluation framework\n\n`;
+    brief += `After the pilot, evaluate across six dimensions. The key rule: do not treat time savings alone as success.\n\n`;
+    brief += `- **Time**: Did the workflow get faster? Measure end-to-end cycle time.\n`;
+    brief += `- **Cost**: What did the pilot cost vs what did it save?\n`;
+    brief += `- **Quality**: Is the output better or worse? Accuracy, consistency, error rate.\n`;
+    brief += `- **Risk**: Did operational risk increase or decrease? Any boundary violations?\n`;
+    brief += `- **Adoption**: Did the team use it and trust it?\n`;
+    brief += `- **Control**: Can you trace and audit what the system did?\n\n`;
+    brief += `Decision after evaluation: **Scale** (expand), **Revise** (adjust and iterate) or **Stop** (document learnings and move on).\n`;
     return brief;
   }
 
@@ -339,9 +353,12 @@ export default function PilotBuilder() {
               Copy build brief
             </button>
           </div>
-          <p style={{ fontSize: '15px', color: '#999', lineHeight: '1.75' }}>
-            The roadmap includes an evaluation framework with the six dimensions from the Evaluate page. The build brief is designed to be uploaded to an AI assistant to get specific implementation options and vendor recommendations.
-          </p>
+          <div style={{ marginTop: '1rem', padding: '1rem 1.25rem', border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fafafa', fontSize: '15px', lineHeight: '1.75', color: '#666' }}>
+            <div style={{ fontWeight: 600, color: '#333', marginBottom: '0.5rem' }}>How to use these files</div>
+            <p><strong>Roadmap (.md)</strong> is a self-contained document you can share with your team, leadership or stakeholders. It includes the workflow, redesign, boundary decisions, pilot plan and evaluation framework. Open it in any text editor, Notion, Confluence or preview it on GitHub.</p>
+            <p><strong>Build brief (.md)</strong> is designed to be uploaded to an AI assistant (Claude, ChatGPT or similar). It contains everything the assistant needs to research specific tools, propose implementation options and produce a concrete build plan. Upload the file, tell the assistant to read it and ask it to suggest three options: build from scratch, hybrid and off-the-shelf.</p>
+            <p>Both files are in Markdown format. You can edit them in any text editor and they render nicely in most documentation tools.</p>
+          </div>
 
           <div style={{ marginTop: '1rem' }}>
             <button onClick={() => { setOverview(''); saveState({ pilotOverview: null } as any); }}
