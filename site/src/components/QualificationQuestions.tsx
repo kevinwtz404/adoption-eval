@@ -15,7 +15,7 @@ interface Criterion {
 
 const CRITERIA: Criterion[] = [
   {
-    key: 'business_impact', label: '1. Does it matter enough?', gate: false,
+    key: 'business_impact', label: 'Impact: Does it matter enough?', gate: false,
     question: 'How much business impact would improving this workflow have? Think about time saved, cost reduced, quality improved or risk lowered.',
     anchors: [
       'Marginal impact. Nice to fix but nobody would notice if it stayed the same.',
@@ -24,22 +24,22 @@ const CRITERIA: Criterion[] = [
       'Significant impact. Directly affects revenue, cost, compliance or customer experience.',
       'Critical impact. Leadership is actively asking for improvement in this area.',
     ],
-    resourceLabel: 'How do I assess this?', resourceHref: 'resources/#business-impact',
+    resourceLabel: '', resourceHref: '',
   },
   {
-    key: 'frequency', label: '2. Does it happen often enough?', gate: false,
-    question: 'How frequently does this workflow run? Automation has more impact on high-frequency processes because the gains multiply.',
+    key: 'frequency', label: 'Time: How much time does it eat?', gate: false,
+    question: 'How much total time does this workflow consume? A process that runs often and takes real effort each time is where automation gains multiply fastest.',
     anchors: [
-      'Rarely. A few times a year at most.',
-      'Occasionally. Monthly or less.',
-      'Regularly. Weekly.',
-      'Frequently. Multiple times per week.',
-      'Constantly. Daily or multiple times per day.',
+      'Minimal. Happens a few times a year and is quick each time — a few hours total per year.',
+      'Modest. Runs monthly or takes a while each time — someone loses a day or two a month to it.',
+      'Noticeable. Runs weekly or multiple times a month — it is a regular chunk of someone\'s job.',
+      'Substantial. Runs several times a week and takes real effort each time — it shapes someone\'s whole role.',
+      'Dominant. Runs daily or continuously — multiple people spend most of their time on this.',
     ],
-    resourceLabel: 'How do I assess this?', resourceHref: 'resources/#frequency',
+    resourceLabel: 'Process selection checklist', resourceHref: 'https://www.processmaker.com/blog/select-business-processes-for-automation-a-comprehensive-checklist/',
   },
   {
-    key: 'baseline_measurability', label: '3. Can you measure how it works today?', gate: true,
+    key: 'baseline_measurability', label: 'Baseline: Can you measure how it works today?', gate: true,
     question: 'Do you have a way to measure current performance? Without a baseline, you cannot tell whether a pilot actually improved anything. If you score below 3, consider deferring until you can establish a baseline.',
     anchors: [
       'No measurement at all. Nobody tracks how long this takes or how often it goes wrong.',
@@ -51,7 +51,7 @@ const CRITERIA: Criterion[] = [
     resourceLabel: 'How do I establish a baseline?', resourceHref: 'resources/#baseline-measurability',
   },
   {
-    key: 'data_readiness', label: '4. Is the data in good enough shape?', gate: false,
+    key: 'data_readiness', label: 'Data: Is the data in good enough shape?', gate: false,
     question: 'How mature is the data that feeds this workflow? Poor data means any automation will amplify the mess, not fix it.',
     anchors: [
       'Not ready. Nobody has mapped out what data this workflow needs or where it lives.',
@@ -63,28 +63,28 @@ const CRITERIA: Criterion[] = [
     resourceLabel: 'Gartner\'s data readiness checklist', resourceHref: 'https://www.gartner.com/technology/media-products/reprints/nice/1-2MQGL3GC.html',
   },
   {
-    key: 'boundary_clarity', label: '5. Is it clear what should stay with people?', gate: true,
-    question: 'Can you clearly identify which parts of this workflow require human judgement, accountability or approval? If you score below 3, the boundaries are too unclear to scope a safe pilot.',
+    key: 'boundary_clarity', label: 'Boundaries: Is it clear what should stay with people?', gate: true,
+    question: 'Do you know which parts of this workflow need a person and which parts don\'t? Without clear boundaries you cannot scope what to automate. If you score below 3, work this out before piloting.',
     anchors: [
-      'No idea. It is unclear where human judgement is needed vs where automation could work.',
-      'Rough sense. You could guess but people would disagree.',
-      'Main boundaries identifiable. You can point to the key human decision points even if details are fuzzy.',
-      'Boundaries are clear. Most people involved would agree on what stays human.',
-      'Obvious. It is immediately clear which parts need people and which do not.',
+      'Unexamined. Nobody has broken this workflow into steps or asked which ones need human judgement.',
+      'Partially mapped. You have a rough list of steps but have not agreed on which ones involve decisions, exceptions or sign-offs that need a person.',
+      'Key boundaries identified. You can point to the main decision points and approval steps, even if edge cases are still fuzzy.',
+      'Agreed and documented. The team agrees on which steps need a person, which could be automated, and what happens when something unexpected comes up.',
+      'Tested in practice. You have already run parts of this workflow with reduced human involvement and know where people actually need to step in.',
     ],
-    resourceLabel: 'How do I figure out the boundaries?', resourceHref: 'resources/#boundary-clarity',
+    resourceLabel: 'HBR: Collaborative Intelligence', resourceHref: 'https://hbr.org/2018/07/collaborative-intelligence-humans-and-ai-are-joining-forces',
   },
   {
-    key: 'pilotability', label: '6. Can you test this in 2-4 weeks?', gate: false,
-    question: 'Can you run a small pilot on a slice of this workflow within 2-4 weeks? If the scope is too large, the dependencies too complex or the approvals too slow, it is harder to learn quickly.',
+    key: 'pilotability', label: 'Pilot: Can you test this in a few weeks?', gate: false,
+    question: 'Could you test this with a small group on a slice of the workflow within a few weeks? The easier it is to isolate a piece and measure the result, the faster you learn.',
     anchors: [
-      'Very difficult. Would need months of setup, multiple approvals or significant infrastructure.',
-      'Challenging. Possible but would require significant effort to scope down.',
-      'Feasible. You could carve out a meaningful slice to test within a month.',
-      'Straightforward. A small pilot could be set up within 2 weeks.',
-      'Easy. You could start a pilot this week with minimal setup.',
+      'No clear slice. The workflow is too tangled to isolate a part — you would have to change everything at once or nothing.',
+      'Slice exists but blocked. You can see a piece to test but you would need access, approvals or dependencies that are hard to get.',
+      'Testable with effort. You could isolate a slice and a small group to test with, though it would take some setup and coordination.',
+      'Ready to scope. There is an obvious slice, you have the access you need, and a small group willing to try it.',
+      'Ready to go. You have a defined slice, a team, a way to compare before and after, and could start within days.',
     ],
-    resourceLabel: 'How do I scope a pilot?', resourceHref: 'resources/#pilotability',
+    resourceLabel: 'The Lean Startup principles', resourceHref: 'https://theleanstartup.com/principles',
   },
 ];
 
@@ -175,7 +175,7 @@ export default function QualificationQuestions() {
                   )}
                 </div>
 
-                <a href={c.resourceHref} style={{ fontSize: '13px', color: '#6830C4' }}>{c.resourceLabel}</a>
+                {c.resourceLabel && <a href={c.resourceHref} style={{ fontSize: '13px', color: '#6830C4' }}>{c.resourceLabel}</a>}
               </div>
             )}
           </div>

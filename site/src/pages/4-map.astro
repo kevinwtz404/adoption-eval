@@ -38,13 +38,13 @@ const base = import.meta.env.BASE_URL;
             </div>
             <div class="diagram-component">
               <div class="comp-icon">RAG</div>
-              <div class="comp-desc">Retrieval. Looks up information in your documents before the LLM generates a response. Only as good as what is indexed.</div>
+              <div class="comp-desc">Retrieval. LLMs have limited context windows, so you store documents as vectors in a database. The LLM queries it to find relevant information before generating a response.</div>
             </div>
             <div class="diagram-component">
               <div class="comp-icon">ML</div>
               <div class="comp-desc">Trained models. Classification, scoring, prediction from data. Good at patterns, blind to context.</div>
             </div>
-            <div class="diagram-component human">
+            <div class="diagram-component">
               <div class="comp-icon">Human</div>
               <div class="comp-desc">Human checkpoints. Review, approve, redirect. Catches what AI misses. Slow but accountable.</div>
             </div>
@@ -84,8 +84,9 @@ const base = import.meta.env.BASE_URL;
       <details class="paradigm-overview">
         <summary>Retrieval (RAG)</summary>
         <div class="paradigm-detail">
-          <p><strong>Good at:</strong> <a href="https://snorkel.ai/blog/which-is-better-retrieval-augmentation-rag-or-fine-tuning-both/">Grounding LLM responses in actual sources</a>. Finding relevant information across large document collections. Providing citations.</p>
-          <p><strong>Bad at:</strong> Only as good as what has been indexed. If the source documents are wrong, outdated or incomplete, the answers will be too. Access control is critical: the retrieval system can surface documents the user should not see if permissions are not enforced.</p>
+          <p><strong>Why it exists:</strong> LLMs have <a href="https://www.coursera.org/articles/context-window">limited context windows</a>. You cannot feed them your entire document library. RAG solves this by converting your documents into vectors (numerical representations) stored in a database. When a user asks a question, the system searches the vector database for relevant chunks, then passes those chunks to the LLM as context. The LLM generates a response <a href="https://snorkel.ai/blog/which-is-better-retrieval-augmentation-rag-or-fine-tuning-both/">grounded in your actual sources</a> rather than relying on its training data.</p>
+          <p><strong>Good at:</strong> Finding and synthesising information across large document collections. Providing answers with citations. Keeping responses grounded in your own data.</p>
+          <p><strong>Bad at:</strong> Only as good as what has been indexed. If the source documents are wrong, outdated or incomplete, the answers will be too. How you split documents into chunks (chunking strategy) affects quality significantly. Access control is critical: the retrieval system can surface documents the user should not see if permissions are not enforced.</p>
           <p><strong>Use it for:</strong> Internal knowledge retrieval, question answering over documents, support triage, anything where the answer should come from your own data rather than the model's training data.</p>
         </div>
       </details>
@@ -144,7 +145,11 @@ const base = import.meta.env.BASE_URL;
       <h2>Design your intervention</h2>
 
       <p>
-        Below are the workflow steps you defined earlier. For each step, describe what you want to change. You do not need to know the technical details. Just describe what you want to happen differently. Our AI analysis tool will help you figure out which components fit and what the risks are.
+        Most workflow steps involve more than one of these components working together. A step might need a retrieval layer to find information, a language model to summarise it and a human checkpoint to review the result before it goes anywhere. The goal here is to think through that mix for each step in your workflow.
+      </p>
+
+      <p>
+        Below are the workflow steps you defined earlier. For each one, mark whether it is a candidate for change. If it is, describe what you want to happen differently. You do not need to know the technical details. Just describe what you want in plain language. The AI analysis tool can help you figure out which components fit and what the risks are.
       </p>
 
       <InterventionDesigner client:load />
@@ -199,11 +204,6 @@ const base = import.meta.env.BASE_URL;
     background: #fafafa;
   }
 
-  .diagram-component.human {
-    border-color: var(--purple);
-    background: rgba(104, 48, 196, 0.04);
-  }
-
   .comp-icon {
     font-size: 12px;
     font-weight: 700;
@@ -234,7 +234,7 @@ const base = import.meta.env.BASE_URL;
   .paradigm-overview summary {
     padding: 0.875rem 1.25rem;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
     list-style: none;
     display: flex;
@@ -264,12 +264,12 @@ const base = import.meta.env.BASE_URL;
   }
 
   .paradigm-detail p {
-    font-size: 14px;
-    line-height: 1.7;
+    font-size: 15px;
+    line-height: 1.75;
   }
 
   .paradigm-detail p + p {
-    margin-top: 0.75em;
+    margin-top: 1.25em;
   }
 
   @media (max-width: 768px) {

@@ -11,7 +11,6 @@ export default function CaseSelector() {
   const [customName, setCustomName] = useState('');
   const [customPain, setCustomPain] = useState('');
   const [customSteps, setCustomSteps] = useState([{ id: 's1', name: '', owner: '' }]);
-  const [customActors, setCustomActors] = useState('');
 
   useEffect(() => {
     const state = loadState();
@@ -52,7 +51,7 @@ export default function CaseSelector() {
     const workflow = {
       name: customName.trim(),
       steps: customSteps.filter(s => s.name.trim()).map((s, i) => ({ id: s.id || `s${i+1}`, name: s.name.trim(), owner: s.owner.trim() || undefined })),
-      actors: customActors.split(',').map(a => a.trim()).filter(Boolean),
+      actors: [...new Set(customSteps.map(s => s.owner.trim()).filter(Boolean))],
       data_assets: [],
       success_metrics: [],
     };
@@ -255,7 +254,7 @@ export default function CaseSelector() {
 
             <div style={{ marginBottom: '1.25rem' }}>
               <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.25rem', fontSize: '13px' }}>What are the steps today?</label>
-              <p style={{ fontSize: '12px', color: '#999', marginBottom: '0.375rem' }}>List each step as it currently happens. Include who does it. These should be the real steps, not ideal ones.</p>
+              <p style={{ fontSize: '12px', color: '#999', marginBottom: '0.375rem' }}>Describe the steps as they happen today, not how you want them to work. Include who does each step. The roles will be used later in the guide.</p>
               {customSteps.map((step, i) => (
                 <div key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', alignItems: 'center' }}>
                   <span style={{ color: '#999', fontSize: '12px', minWidth: '1.5em' }}>{i + 1}</span>
@@ -283,18 +282,6 @@ export default function CaseSelector() {
                 onClick={addStep}
                 style={{ fontSize: '13px', color: '#6830C4', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}
               >+ Add step</button>
-            </div>
-
-            <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.25rem', fontSize: '13px' }}>Who is involved?</label>
-              <p style={{ fontSize: '12px', color: '#999', marginBottom: '0.375rem' }}>List the roles or teams that touch this workflow, separated by commas</p>
-              <input
-                type="text"
-                value={customActors}
-                placeholder="e.g. analyst, manager, sales rep, ops lead"
-                onInput={(e) => setCustomActors((e.target as HTMLInputElement).value)}
-                style={{ width: '100%', padding: '0.5rem', border: '1px solid #e0e0e0', borderRadius: '6px', fontFamily: 'inherit', fontSize: '14px' }}
-              />
             </div>
 
             <button

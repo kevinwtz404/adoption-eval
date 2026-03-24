@@ -14,18 +14,18 @@ const base = import.meta.env.BASE_URL;
     </div>
 
     <div class="mb-10">
-      <h2>What this step is really about</h2>
+      <h2>Six questions to check readiness</h2>
 
       <p>
-        This is not about whether the workflow is important. You already know it is painful. This is about whether you can actually run a useful pilot on it right now. Can you measure it? Is the data accessible? Do you know what should stay with people? Can you scope a test that fits in 2-4 weeks?
+        This is not about whether the workflow is important. You already know it is painful. This is about whether you can run a useful pilot on it right now. Can you measure it? Is the data accessible? Do you know what should stay with people? Can you scope a test that fits in 2-4 weeks?
       </p>
 
       <p>
-        If the answer to most of these is yes, you have a good candidate for a pilot. If not, that does not mean the workflow is unimportant. It means you should either address the gaps first or pick a different workflow to start with. The goal is to learn as much as possible from your first pilot, and that is much easier when the conditions are right.
+        If the answer to most of these is yes, you have a good candidate. If not, it means you should address the gaps first or pick a different workflow to start with. The goal is to learn as much as possible from your first pilot, and that is easier when the conditions are right.
       </p>
 
       <p>
-        Click on each question below to understand what it means, see how the scoring works and set your score. Two questions are gates: if they score below 3, the workflow is not ready to pilot yet.
+        Click on each question to see what it means and what each score looks like. Two questions are gates: if they fall below 3, the workflow is not ready yet.
       </p>
 
       <QualificationQuestions client:load />
@@ -41,6 +41,10 @@ const base = import.meta.env.BASE_URL;
       </p>
 
       <QualificationForm client:load />
+
+      <p style="margin-top: 1.5rem; font-size: 14px; color: var(--text-light);">
+        If your workflow qualifies, the next step is designing the intervention: what components you need, how they connect and where people stay in the loop.
+      </p>
     </div>
 
   </div>

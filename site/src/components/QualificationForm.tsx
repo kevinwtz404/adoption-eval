@@ -6,12 +6,12 @@ import type { QualificationScores, QualificationResult } from '../../../src/type
 import { flagshipCases } from '../data/flagship-cases';
 
 const CRITERIA: Array<{ key: string; label: string; gate: boolean }> = [
-  { key: 'business_impact', label: 'Does it matter enough?', gate: false },
-  { key: 'frequency', label: 'Does it happen often enough?', gate: false },
-  { key: 'baseline_measurability', label: 'Can you measure how it works today?', gate: true },
-  { key: 'data_readiness', label: 'Is the data in good enough shape?', gate: false },
-  { key: 'boundary_clarity', label: 'Is it clear what should stay with people?', gate: true },
-  { key: 'pilotability', label: 'Can you test this in 2-4 weeks?', gate: false },
+  { key: 'business_impact', label: 'Impact: Does it matter enough?', gate: false },
+  { key: 'frequency', label: 'Time: How much time does it eat?', gate: false },
+  { key: 'baseline_measurability', label: 'Baseline: Can you measure how it works today?', gate: true },
+  { key: 'data_readiness', label: 'Data: Is the data in good enough shape?', gate: false },
+  { key: 'boundary_clarity', label: 'Boundaries: Is it clear what should stay with people?', gate: true },
+  { key: 'pilotability', label: 'Pilot: Can you test this in a few weeks?', gate: false },
 ];
 
 const GATE_KEYS = ['boundary_clarity', 'baseline_measurability'];
@@ -28,8 +28,8 @@ const decisionLabels: Record<string, string> = {
   defer: 'Defer',
 };
 
-function buildFeedback(scores: QualificationScores, result: QualificationResult): Array<{ text: string; href?: string }> {
-  const feedback: Array<{ text: string; href?: string }> = [];
+function buildFeedback(scores: QualificationScores, result: QualificationResult): Array<{ text: string }> {
+  const feedback: Array<{ text: string }> = [];
   const s = scores as Record<string, number | undefined>;
 
   if (result.decision === 'proceed') {
@@ -38,19 +38,19 @@ function buildFeedback(scores: QualificationScores, result: QualificationResult)
   }
 
   if ((s.baseline_measurability ?? 3) < 3) {
-    feedback.push({ text: 'You cannot measure how this works today. Without a baseline, you will not know if a pilot improved anything. Consider tracking the process manually for 1-2 weeks first.', href: 'resources/#baseline-measurability' });
+    feedback.push({ text: 'You cannot measure how this works today. Without a baseline, you will not know if a pilot improved anything. Consider tracking the process manually for 1-2 weeks first.' });
   }
   if ((s.boundary_clarity ?? 3) < 3) {
-    feedback.push({ text: 'It is not clear what should stay with people. Unclear boundaries make it hard to scope a safe pilot. Work through the mapping step to clarify this.', href: 'resources/#boundary-clarity' });
+    feedback.push({ text: 'It is not clear what should stay with people. Unclear boundaries make it hard to scope a safe pilot. Work through the mapping step to clarify this.' });
   }
 
   const weakAreas = CRITERIA.filter(c => !c.gate).filter(c => (s[c.key] ?? 3) < 3).sort((a, b) => ((s[a.key] ?? 3) as number) - ((s[b.key] ?? 3) as number));
   for (const weak of weakAreas) {
     const val = s[weak.key] ?? 3;
-    if (weak.key === 'business_impact') feedback.push({ text: `Business impact scored ${(val as number).toFixed(1)}. If improving this workflow would not meaningfully affect time, cost or quality, consider prioritising a different one.`, href: 'resources/#business-impact' });
-    else if (weak.key === 'frequency') feedback.push({ text: `This workflow runs infrequently (scored ${(val as number).toFixed(1)}). Automation gains multiply with frequency.`, href: 'resources/#frequency' });
-    else if (weak.key === 'data_readiness') feedback.push({ text: `Data readiness scored ${(val as number).toFixed(1)}. Poor data quality means automation will amplify the mess. Consider a data cleanup pass before piloting.`, href: 'resources/#data-readiness' });
-    else if (weak.key === 'pilotability') feedback.push({ text: `Pilotability scored ${(val as number).toFixed(1)}. This workflow may be hard to test in a small, time-boxed way. Look for a smaller slice you could isolate.`, href: 'resources/#pilotability' });
+    if (weak.key === 'business_impact') feedback.push({ text: `Business impact scored ${(val as number).toFixed(1)}. If improving this workflow would not meaningfully affect time, cost or quality, consider prioritising a different one.` });
+    else if (weak.key === 'frequency') feedback.push({ text: `Total time consumed scored ${(val as number).toFixed(1)}. If this workflow does not eat much time overall, the gains from automating it will be small.` });
+    else if (weak.key === 'data_readiness') feedback.push({ text: `Data readiness scored ${(val as number).toFixed(1)}. Poor data quality means automation will amplify the mess. Consider a data cleanup pass before piloting.` });
+    else if (weak.key === 'pilotability') feedback.push({ text: `Pilotability scored ${(val as number).toFixed(1)}. This workflow may be hard to test in a small, time-boxed way. Look for a smaller slice you could isolate.` });
   }
 
   if (feedback.length === 0) feedback.push({ text: 'Scores are moderate across the board. This is workable but be deliberate about which conditions need to be met before starting a pilot.' });
@@ -130,6 +130,7 @@ export default function QualificationForm() {
         </div>
       )}
 
+      {/* Top row: sliders + overall score box */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
 
         {/* Left: Sliders */}
@@ -161,7 +162,7 @@ export default function QualificationForm() {
           })}
         </div>
 
-        {/* Right: Results */}
+        {/* Right: Overall score + bar chart */}
         <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1.5rem' }}>
           <div style={{ fontSize: '3rem', fontWeight: 800, color: '#4a1f8a', textAlign: 'center' as const, marginBottom: '0.25rem' }}>
             {result.weighted_score.toFixed(1)}
@@ -170,7 +171,6 @@ export default function QualificationForm() {
             Overall score (out of 5)
           </div>
 
-          {/* Bar chart */}
           {CRITERIA.map(({ key, label }) => {
             const value = (scores as Record<string, number | undefined>)[key] ?? 3;
             const pct = ((value as number) / 5) * 100;
@@ -186,39 +186,42 @@ export default function QualificationForm() {
               </div>
             );
           })}
-
-          {/* Gates */}
-          <div style={{ marginTop: '1.25rem', padding: '0.75rem 1rem', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>Gate status</div>
-            {GATE_KEYS.map((key) => {
-              const criterion = CRITERIA.find(c => c.key === key);
-              const value = (scores as Record<string, number | undefined>)[key] ?? 0;
-              const passed = (value as number) >= 3;
-              return (
-                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.25rem 0', fontSize: '12px' }}>
-                  <span style={{ color: '#666' }}>{criterion?.label}</span>
-                  <span style={{ fontWeight: 700, color: passed ? '#16a34a' : '#dc2626' }}>{passed ? '\u2713 Pass' : '\u2717 Fail'}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Decision */}
-          <div style={{ display: 'block', padding: '0.625rem 1rem', borderRadius: '100px', background: dc.bg, color: dc.fg, fontSize: '15px', fontWeight: 700, textAlign: 'center' as const, marginTop: '1.25rem' }}>
-            {decisionLabels[result.decision]}
-          </div>
-
-          {/* Feedback */}
-          <div style={{ marginTop: '1rem' }}>
-            {buildFeedback(scores, result).map((item, i) => (
-              <div key={i} style={{ fontSize: '12px', color: '#374151', lineHeight: '1.6', padding: '0.5rem 0.75rem', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px', marginBottom: '0.5rem' }}>
-                {item.text}
-                {item.href && <span> <a href={item.href} style={{ color: '#6830C4', fontSize: '11px' }}>Learn more</a></span>}
-              </div>
-            ))}
-          </div>
         </div>
 
+      </div>
+
+      {/* Bottom: full-width gate status + decision + feedback */}
+      <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1.5rem', marginTop: '1.5rem' }}>
+
+        {/* Gates */}
+        <div style={{ padding: '0.75rem 1rem', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>Gate status</div>
+          {GATE_KEYS.map((key) => {
+            const criterion = CRITERIA.find(c => c.key === key);
+            const value = (scores as Record<string, number | undefined>)[key] ?? 0;
+            const passed = (value as number) >= 3;
+            return (
+              <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.25rem 0', fontSize: '12px' }}>
+                <span style={{ color: '#666' }}>{criterion?.label}</span>
+                <span style={{ fontWeight: 700, color: passed ? '#16a34a' : '#dc2626' }}>{passed ? '\u2713 Pass' : '\u2717 Fail'}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Decision */}
+        <div style={{ display: 'block', padding: '0.625rem 1rem', borderRadius: '100px', background: dc.bg, color: dc.fg, fontSize: '15px', fontWeight: 700, textAlign: 'center' as const, marginTop: '1.25rem' }}>
+          {decisionLabels[result.decision]}
+        </div>
+
+        {/* Feedback */}
+        <div style={{ marginTop: '1rem' }}>
+          {buildFeedback(scores, result).map((item, i) => (
+            <div key={i} style={{ fontSize: '12px', color: '#374151', lineHeight: '1.6', padding: '0.5rem 0.75rem', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px', marginBottom: '0.5rem' }}>
+              {item.text}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

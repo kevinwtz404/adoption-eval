@@ -23,22 +23,7 @@ const base = import.meta.env.BASE_URL;
 
     <div class="divider"></div>
 
-    <!-- Why it's hard -->
-    <div class="mb-10">
-      <h2>Why most AI adoption efforts stall</h2>
-
-      <p>
-        Most organisations try one of two things. They buy a tool and hope people figure it out. Or they commission a maturity assessment that produces a report nobody acts on. Both start from the wrong end.
-      </p>
-
-      <p>
-        The tool-first approach skips the question of whether AI is even the right intervention. The assessment-first approach gives you a score but no concrete next step. What's missing is the middle: a practical way to look at your actual work, decide where automation makes sense, set boundaries and test it.
-      </p>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- What's actually inside an AI system -->
+    <!-- AI is not one thing -->
     <div class="mb-10">
       <h2>AI is not one thing</h2>
 
@@ -51,31 +36,16 @@ const base = import.meta.env.BASE_URL;
       </p>
 
       <p>
-        This guide helps you figure out that combination for your own workflow. Not "should we use AI?" but "what components do we need, how do they connect and where do we need people in the loop?"
-      </p>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- What this does differently -->
-    <div class="mb-10">
-      <h2>What this guide does differently</h2>
-
-      <p>
-        This guide starts with your work, not with AI capabilities. You pick a real workflow, break it into steps and ask practical questions about each one. When you bring AI into a workflow, you are mixing two different worlds. One is human: messy, contextual, full of judgement calls and informal coordination. The other is technical: fast, consistent, but rigid and blind to context it was not given.
-      </p>
-
-      <p>
-        The hard part is not the technology. It is figuring out where these two worlds overlap productively and where they do not. That is why this guide maps your workflow step by step. You identify what components you need, where the boundaries are, what could go wrong and how to test it safely.
-      </p>
-
-      <p>
-        It will not sell you on AI. Some of the workflows you look at might not need it at all. Instead, it gives you a structured way to find real opportunities, design the right combination of tools and checks, and build a pilot you can actually learn from.
+        That is why adopting AI is not just a technology decision. Work is done by people, in context, with informal knowledge and judgement. Technology is fast and consistent but blind to all of that. Getting this right means looking at both sides and figuring out where they fit together. This guide helps you do that.
       </p>
 
       <p>
         You do not need to be technical. You do not need to know which model to use. You just need a workflow you are curious about.
       </p>
+
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <a href={`${base}1-discover/`} class="cta-link">Start the guide &rarr;</a>
+      </div>
     </div>
 
     <div class="divider"></div>
@@ -95,33 +65,40 @@ const base = import.meta.env.BASE_URL;
         <div class="guide-step">
           <span class="guide-num">2</span>
           <div>
-            <p class="step-title">Is this opportunity worth pursuing?</p>
-            <p class="step-desc">Score it against practical criteria. Some ideas sound great but aren't ready for a pilot.</p>
+            <p class="step-title">Pick a workflow</p>
+            <p class="step-desc">Choose one of four built-in scenarios or describe your own. Start with the pain, not the solution.</p>
           </div>
         </div>
         <div class="guide-step">
           <span class="guide-num">3</span>
+          <div>
+            <p class="step-title">Is it ready to pilot?</p>
+            <p class="step-desc">Score it against practical criteria. Some ideas sound great but are not ready for a test yet.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="guide-num">4</span>
           <div>
             <p class="step-title">What components do you need?</p>
             <p class="step-desc">Map the ingredients: what needs a language model, what needs deterministic logic, what needs retrieval, where do humans stay in the loop.</p>
           </div>
         </div>
         <div class="guide-step">
-          <span class="guide-num">4</span>
+          <span class="guide-num">5</span>
           <div>
             <p class="step-title">What could go wrong?</p>
             <p class="step-desc">Each component has specific failure modes. Put checks in place: what the system cannot do, where humans must approve, what happens when something fails.</p>
           </div>
         </div>
         <div class="guide-step">
-          <span class="guide-num">5</span>
+          <span class="guide-num">6</span>
           <div>
             <p class="step-title">Build the pilot plan</p>
             <p class="step-desc">Assemble everything into a roadmap and a build brief you can hand to a developer or an AI assistant.</p>
           </div>
         </div>
         <div class="guide-step">
-          <span class="guide-num">6</span>
+          <span class="guide-num">7</span>
           <div>
             <p class="step-title">Did it work?</p>
             <p class="step-desc">Measure what changed. Faster is not enough if you lost control. Then decide: scale, revise or stop.</p>
