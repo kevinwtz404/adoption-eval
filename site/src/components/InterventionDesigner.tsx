@@ -210,8 +210,7 @@ export default function InterventionDesigner() {
                 borderRadius: '6px',
                 background: colors.bg,
                 textAlign: 'center' as const,
-                minWidth: '4rem',
-                maxWidth: '7rem',
+                width: '6.5rem',
               }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.0625rem' }}>
                   {comp.type}
