@@ -117,8 +117,7 @@ Once approved, the outreach is sent via the existing email or messaging tool. Th
         { id: 's1', name: 'New lead arrives from marketing or inbound', owner: 'system / marketing', pain: 'Lead data is minimal, often just name and email' },
         { id: 's2', name: 'Sales rep manually researches the company using LinkedIn, website and news', owner: 'sales rep', pain: 'Takes 15-20 minutes per lead, mostly copy-paste' },
         { id: 's3', name: 'Sales rep writes a personalised outreach message', owner: 'sales rep', pain: 'Time-consuming, often ends up generic because of time pressure' },
-        { id: 's4', name: 'Sales rep sends the outreach', owner: 'sales rep', pain: 'Manual process, no consistency across the team' },
-        { id: 's5', name: 'Sales rep logs the outreach in the CRM', owner: 'sales rep', pain: 'Often forgotten or incomplete' },
+        { id: 's4', name: 'Sales rep sends the outreach and logs it in the CRM', owner: 'sales rep', pain: 'Manual process, logging often forgotten or incomplete' },
       ],
       actors: ['sales rep', 'marketing'],
       data_assets: ['CRM records', 'LinkedIn data', 'company websites', 'email threads'],
@@ -166,17 +165,13 @@ Approved versions are published to each channel via the existing publishing tool
     workflow: {
       name: 'campaign-adaptation-overload',
       steps: [
-        { id: 's1', name: 'Campaign brief is written by the content lead', owner: 'content lead', pain: 'Briefs vary in quality and completeness' },
-        { id: 's2', name: 'Copywriter creates the master narrative and key messages', owner: 'copywriter', pain: 'This is the creative work; usually done well' },
-        { id: 's3', name: 'Copywriter manually adapts the narrative for LinkedIn', owner: 'copywriter', pain: 'Rewriting the same idea in a different format' },
-        { id: 's4', name: 'Copywriter manually adapts for email newsletter', owner: 'copywriter', pain: 'Another rewrite, different tone and length constraints' },
-        { id: 's5', name: 'Copywriter or designer adapts for website', owner: 'copywriter / designer', pain: 'Yet another format, often needs visual assets too' },
-        { id: 's6', name: 'Social media manager adapts for X and other platforms', owner: 'social media manager', pain: 'Shortest format, but needs to capture the same message' },
-        { id: 's7', name: 'Designer creates or sources visual assets for each channel', owner: 'designer', pain: 'Assets named inconsistently, hard to track which belong to which version' },
-        { id: 's8', name: 'Content lead reviews all versions informally (Slack, email)', owner: 'content lead', pain: 'Review is ad hoc, things slip through' },
-        { id: 's9', name: 'Approved versions published separately to each channel', owner: 'various', pain: 'No single view of what was published where and when' },
+        { id: 's1', name: 'Copywriter creates the master narrative and key messages', owner: 'copywriter', pain: 'This is the creative work and usually done well' },
+        { id: 's2', name: 'Copywriter manually rewrites the narrative for each channel (LinkedIn, email, website, social)', owner: 'copywriter', pain: 'Same message rewritten 4-5 times with different tone and length' },
+        { id: 's3', name: 'Designer creates or resizes visual assets for each channel', owner: 'designer', pain: 'Assets named inconsistently, hard to track versions' },
+        { id: 's4', name: 'Content lead reviews all versions through Slack and email', owner: 'content lead', pain: 'Review is ad hoc, versions get lost, things slip through' },
+        { id: 's5', name: 'Versions published separately to each channel', owner: 'various', pain: 'No single view of what was published where' },
       ],
-      actors: ['content lead', 'copywriter', 'designer', 'social media manager'],
+      actors: ['content lead', 'copywriter', 'designer'],
       data_assets: ['campaign briefs', 'brand guidelines', 'asset library', 'channel specs', 'published content log'],
       success_metrics: ['time_brief_to_publish', 'consistency_across_channels', 'approval_round_count', 'asset_reuse_rate'],
       qualification: { business_impact: 4, frequency: 4, baseline_measurability: 4, data_readiness: 3, boundary_clarity: 4, pilotability: 5 },
@@ -188,57 +183,60 @@ Approved versions are published to each channel via the existing publishing tool
     subtitle: 'Finance teams spend days assembling reports instead of analysing them',
     buyer: 'CFO / FP&A',
     context: 'Finance',
-    painPoint: 'FP&A teams spend the majority of their reporting cycle on assembly, not analysis. They pull data from 5+ systems, reconcile formats in spreadsheets, build slide packs and write commentary. By the time numbers reach the CFO, the team has spent a week on logistics. Meanwhile, qualitative signals (deal risk, market shifts, operational issues) live in CRM notes and Slack threads, completely disconnected from the financial view.',
-    discoveryMethod: 'Structured interviews with FP&A leads revealed 60-70% of reporting time spent on data assembly and formatting. Process walkthrough of the month-end close showed manual data pulls from CRM, ERP and billing systems reconciled in spreadsheets. Executive feedback consistently flagged two problems: forecasts arrived late and lacked qualitative context.',
-    whyAI: 'AI could help with narrative generation (drafting variance commentary from computed numbers), signal surfacing (scanning deal notes and team updates for risk signals) and report assembly. But the actual maths must stay deterministic: forecasting calculations, margin computation and revenue recognition cannot be generated by an LLM. An LLM producing financial projections is a risk, not a feature.',
-    userDescription: 'Our FP&A team spends most of the reporting cycle pulling data from 5 systems and reconciling it in spreadsheets. I want the data pulls and reconciliation automated so the team can focus on analysis instead of assembly. The forecast calculations and margin analysis must stay exactly as they are, no AI touching the numbers. But I want the variance commentary and board narrative drafted automatically from the computed numbers so analysts are not spending 2 days writing descriptions of numbers they already calculated. I also want the system to pick up on signals from deal notes and team updates that the spreadsheet misses, like a champion leaving or a competitor being mentioned. The CFO must approve everything before it goes anywhere. And all the financial data is confidential so it cannot go to an external API.',
-    redesign: `When the period closes, data collection starts automatically. The system pulls actuals from the ERP, pipeline data from the CRM and billing data from the billing platform via API calls. Each pull is deterministic: same query, same result. Format differences between systems are reconciled automatically using transformation rules.
+    painPoint: 'Finance teams spend most of the reporting cycle on assembly, not analysis. They pull data from multiple systems, reconcile it in spreadsheets, calculate variances, write commentary describing what the numbers mean and chase down qualitative context from CRM notes and team updates. By the time the report reaches the CFO, the team has spent a week on logistics and has little time left for actual insight.',
+    discoveryMethod: 'Interviews with finance leads revealed 60-70% of reporting time spent on assembly and formatting. Process walkthrough of the month-end close showed manual data pulls reconciled in spreadsheets. The CFO consistently flagged two problems: reports arrived late and lacked qualitative context about what was actually happening in the pipeline.',
+    whyAI: 'AI fits in two specific places: drafting variance commentary from computed numbers, and surfacing qualitative signals from unstructured sources like CRM notes and team updates. Everything else in the pipeline (data pulls, reconciliation, calculations, report formatting) is better solved with integration tooling, rules-based automation and templates. The maths must stay deterministic. An LLM generating financial projections is a risk, not a feature.',
+    userDescription: 'Our finance team spends most of the reporting cycle pulling data, reconciling it and writing commentary. The numbers are already calculated in spreadsheets and they are fine. What takes forever is writing the variance commentary (describing why the numbers moved) and chasing down qualitative context from CRM notes and Slack threads. I want the commentary drafted automatically from the computed numbers and I want the system to surface signals the team would otherwise miss or spend hours finding. The actual maths must not be touched. The CFO must approve everything. And the financial data is confidential so it should not leave our systems.',
+    redesign: `The full reporting pipeline has 8 steps. The AI pilot targets steps 4 and 5 only. Everything else stays as it is or improves through non-AI automation.
 
-Reconciliation happens through deterministic rules rather than manually in a spreadsheet. Where data conflicts exist between systems, the conflicts are flagged for human review rather than requiring someone to check everything.
+1. Data collection: pull numbers from CRM, ERP and billing via APIs. This is an integration problem, not an AI problem. Deterministic tooling.
 
-Forecast calculations and margin analysis stay exactly as they are: deterministic, rules-based, done in spreadsheets or a dedicated tool. No AI touches the numbers.
+2. Reconciliation: match records across systems and fix discrepancies. Rules-based automation. You want deterministic matching, not probabilistic.
 
-An LLM drafts the variance commentary and board narrative from the computed numbers. The numbers come from the deterministic calculations, the LLM only generates the text around them. It also scans deal notes, call transcripts and team updates to surface qualitative signals that the spreadsheet does not capture ("champion left the company", "competitor mentioned three times this month"). These are flagged as signals, not facts.
+3. Variance calculation: compute actuals vs budget, margins, KPIs. Spreadsheets or SQL. Maths stays deterministic. Non-negotiable.
 
-The slide pack is assembled from templates. Layout and formatting are rules-based. The generated narrative is inserted into the right sections.
+4. Variance commentary (AI pilot): take the computed deltas (revenue missed by 8%, costs up 3%) and draft narrative explanations. The LLM generates first-draft commentary from structured numbers plus qualitative context. It connects the dots: "revenue missed because three enterprise deals slipped, per CRM stage changes and account executive notes from weeks 2 and 3."
 
-The CFO reviews the assembled pack. Nothing leaves the system until they approve it. After approval, distribution is automated: the right people get the right format.
+5. Qualitative signal surfacing (AI pilot): scan CRM notes, deal updates, Slack threads and team updates. Surface signals that explain why the numbers moved: a champion left, a competitor was mentioned repeatedly, a key renewal is at risk. These are flagged as signals, not facts.
 
-The actual maths must never be generated by an LLM. An LLM producing financial projections is a risk, not a feature. Every number must trace back to a named source system and query.`,
+6. Analyst interpretation: the analyst decides what matters, what to escalate and what story to tell. This is the actual value of the finance team. AI surfaces inputs, the analyst decides framing and priority.
+
+7. Report assembly: build the slide deck from templates. Formatting problem, not an AI problem. Could be automated in a later phase.
+
+8. CFO review and approval: the CFO reviews, asks questions, approves. If steps 4 and 5 are better, this cycle gets shorter because there are fewer "but why?" follow-ups.
+
+The pilot hypothesis: given that the numbers are already computed, can AI draft useful commentary and surface signals the team would have missed or taken hours to find?`,
     redesignData: {
       components: [
-        { name: 'Period closes', type: 'deterministic', description: 'Trigger: reporting cycle begins automatically', risks: [], considerations: ['Scheduled or event-driven trigger'] },
-        { name: 'Data pulls', type: 'tool', description: 'Pull actuals, pipeline and billing data via APIs', risks: ['API changes breaking the pipeline', 'Incomplete data if a system is down'], considerations: ['Error handling and retry logic', 'Data validation after each pull'] },
-        { name: 'Reconciliation', type: 'deterministic', description: 'Rules-based reconciliation, flag conflicts for review', risks: ['Rules may not cover new edge cases'], considerations: ['Human review queue for flagged conflicts'] },
-        { name: 'Analyst reviews conflicts', type: 'human', description: 'FP&A analyst reviews flagged data conflicts', risks: ['Delays if many conflicts'], considerations: ['Prioritise by materiality'] },
-        { name: 'Forecast calculations', type: 'deterministic', description: 'All maths stays in spreadsheets or dedicated tools', risks: ['Formula errors (existing risk)'], considerations: ['Never LLM-generated'] },
-        { name: 'Signal scanning', type: 'rag', description: 'Scan deal notes and team updates for qualitative signals', risks: ['Signals are pattern matches, not facts', 'Sensitive information'], considerations: ['Flag as signals not facts', 'Local model recommended'] },
-        { name: 'Narrative drafting', type: 'llm', description: 'Draft variance commentary from computed numbers', risks: ['Could misrepresent what numbers mean', 'Could generate numbers that look calculated'], considerations: ['Label as AI draft', 'Numbers only from deterministic sources'] },
-        { name: 'Report assembly', type: 'deterministic', description: 'Template-based slide pack', risks: [], considerations: ['Separate content from layout'] },
-        { name: 'CFO approval', type: 'human', description: 'Nothing leaves without CFO sign-off', risks: ['Bottleneck if unavailable'], considerations: ['Delegate authority for routine reports'] },
+        { name: 'Data collection', type: 'tool', description: 'Pull numbers from CRM, ERP and billing via APIs', risks: ['API changes', 'Incomplete data'], considerations: ['Integration tooling, not AI'] },
+        { name: 'Reconciliation', type: 'deterministic', description: 'Rules-based matching across systems', risks: ['Edge cases'], considerations: ['Deterministic, not probabilistic'] },
+        { name: 'Variance calculations', type: 'deterministic', description: 'All maths in spreadsheets or SQL', risks: [], considerations: ['Never LLM-generated'] },
+        { name: 'Commentary drafting', type: 'llm', description: 'Draft variance explanations from computed deltas and qualitative context', risks: ['Could misrepresent what numbers mean', 'Could generate numbers that look calculated'], considerations: ['Label as AI draft', 'Numbers only from deterministic sources', 'Local model recommended'] },
+        { name: 'Signal surfacing', type: 'rag', description: 'Scan CRM notes, deal updates, Slack threads for signals that explain why numbers moved', risks: ['Signals are pattern matches, not facts', 'Sensitive client information in sources'], considerations: ['Flag as signals not facts', 'Local model strongly recommended', 'Access control on source data'] },
+        { name: 'Analyst review', type: 'human', description: 'Analyst decides what matters, what to escalate and what story to tell', risks: [], considerations: ['AI surfaces inputs, analyst decides framing'] },
+        { name: 'Report assembly', type: 'deterministic', description: 'Template-based slide pack', risks: [], considerations: ['Formatting, not intelligence'] },
+        { name: 'CFO approval', type: 'human', description: 'Nothing leaves without sign-off', risks: ['Bottleneck if unavailable'], considerations: ['Delegate for routine reports'] },
       ],
-      boundaries: ['No LLM-generated financial calculations', 'No modification of source financial records', 'No external disclosure without human sign-off', 'All numbers must trace to a named source system', 'Narrative must be labelled as AI-generated draft'],
-      confidentiality: ['Financial projections are highly confidential', 'Deal notes and call transcripts contain sensitive client information', 'A local model is strongly recommended for signal scanning', 'Evaluate whether any financial data can leave the organisation', 'Board materials must not be processed by external APIs'],
-      costFactors: ['LLM calls for narrative and signal scanning per reporting cycle', 'API integration costs for connecting ERP, CRM and billing', 'A smaller model may handle routine variance commentary', 'Deterministic components (reconciliation, assembly) are effectively free at scale'],
-      humanCheckpoints: ['CFO approves final report before distribution', 'FP&A analyst reviews data reconciliation conflicts', 'Finance director reviews AI-generated narrative for accuracy'],
+      boundaries: ['No LLM-generated financial calculations ever', 'No modification of source financial records', 'No external disclosure without CFO sign-off', 'All numbers must trace to a named source system and query', 'AI-generated commentary must be labelled as draft', 'Signals must be flagged as pattern matches not facts'],
+      confidentiality: ['Financial projections are highly confidential and must not leave the organisation', 'Deal notes and CRM data contain sensitive client information', 'A local model is strongly recommended for both commentary and signal scanning', 'Board materials must not be processed by external APIs', 'Evaluate whether any data can be sent to a cloud service at all'],
+      costFactors: ['LLM calls for commentary and signal scanning per reporting cycle (monthly or quarterly)', 'A smaller local model may handle routine variance commentary', 'API integration costs for data pulls are one-time setup', 'Deterministic components (reconciliation, calculations, assembly) are effectively free at scale'],
+      humanCheckpoints: ['Analyst reviews and edits AI-generated commentary before it enters the report', 'Analyst decides which signals matter and how to frame them', 'CFO approves final report before distribution'],
     },
     workflow: {
       name: 'the-reporting-cycle-problem',
       steps: [
-        { id: 's1', name: 'Period closes and finance team begins data collection', owner: 'FP&A analyst', pain: 'Manual trigger, no automation' },
-        { id: 's2', name: 'Pull actuals from ERP system', owner: 'FP&A analyst', pain: 'Export to CSV, manual cleanup required' },
-        { id: 's3', name: 'Pull pipeline data from CRM', owner: 'FP&A analyst', pain: 'Different format, needs reconciliation with ERP data' },
-        { id: 's4', name: 'Pull billing data from billing platform', owner: 'FP&A analyst', pain: 'Third system, third format' },
-        { id: 's5', name: 'Reconcile all data sources in a spreadsheet', owner: 'FP&A analyst', pain: 'This takes 1-2 days, error-prone, formula-heavy' },
-        { id: 's6', name: 'Run forecast calculations and margin analysis', owner: 'FP&A analyst', pain: 'Done in spreadsheets, formulas are complex but deterministic' },
-        { id: 's7', name: 'Write variance commentary and board narrative', owner: 'FP&A analyst / finance director', pain: 'Takes another 1-2 days, mostly describing numbers that are already computed' },
-        { id: 's8', name: 'Build slide pack for CFO and board', owner: 'FP&A analyst', pain: 'Formatting and layout, low-value work' },
-        { id: 's9', name: 'CFO reviews, requests changes, approves', owner: 'CFO', pain: 'Often asks "but what is actually happening in the pipeline?" because the report lacks qualitative context' },
-        { id: 's10', name: 'Final report distributed', owner: 'finance director', pain: 'By now, the data is already a week old' },
+        { id: 's1', name: 'Pull data from CRM, ERP and billing systems', owner: 'finance analyst', pain: 'Multiple systems, different formats, manual exports' },
+        { id: 's2', name: 'Reconcile data across systems in a spreadsheet', owner: 'finance analyst', pain: 'Takes 1-2 days, error-prone' },
+        { id: 's3', name: 'Calculate variances, margins and KPIs', owner: 'finance analyst', pain: 'Complex but deterministic, done in spreadsheets' },
+        { id: 's4', name: 'Write variance commentary explaining why numbers moved', owner: 'finance analyst', pain: 'Takes 1-2 days, mostly describing numbers already computed' },
+        { id: 's5', name: 'Chase down qualitative context from CRM notes, Slack, team updates', owner: 'finance analyst', pain: 'Most manual and ad-hoc step, signals scattered everywhere' },
+        { id: 's6', name: 'Decide what matters and frame the story', owner: 'finance analyst', pain: 'The actual analytical work, but barely any time left for it' },
+        { id: 's7', name: 'Build slide pack for CFO and board', owner: 'finance analyst', pain: 'Formatting and layout' },
+        { id: 's8', name: 'CFO reviews, asks questions, approves', owner: 'CFO', pain: 'Often asks "what is actually happening?" because the report lacks context' },
       ],
-      actors: ['FP&A analyst', 'finance director', 'CFO'],
-      data_assets: ['ERP actuals', 'CRM pipeline', 'billing data', 'deal notes', 'call transcripts', 'team updates'],
-      success_metrics: ['reporting_cycle_days', 'analyst_time_on_assembly_vs_analysis', 'forecast_accuracy', 'qualitative_signal_coverage'],
+      actors: ['finance analyst', 'CFO'],
+      data_assets: ['ERP actuals', 'CRM pipeline', 'billing data', 'deal notes', 'team updates'],
+      success_metrics: ['reporting_cycle_days', 'time_on_commentary_vs_analysis', 'signal_coverage', 'cfo_follow_up_questions'],
       qualification: { business_impact: 5, frequency: 4, baseline_measurability: 5, data_readiness: 4, boundary_clarity: 5, pilotability: 3 },
     },
   },
