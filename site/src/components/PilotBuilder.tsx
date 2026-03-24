@@ -3,6 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 import { flagshipCases } from '../data/flagship-cases';
 import { callAI } from '../data/api';
+import LoadingDots from './LoadingDots';
 
 interface PilotPlan {
   scope: string;
@@ -301,7 +302,7 @@ export default function PilotBuilder() {
               background: '#6830C4', color: '#fff', border: 'none',
               opacity: (planComplete < 3 || generating) ? 0.4 : 1,
             }}>
-            {generating ? 'Generating...' : 'Generate pilot plan'}
+            {generating ? <LoadingDots text="Generating" /> : 'Generate pilot plan'}
           </button>
           {planComplete < 3 && <p style={{ fontSize: '15px', color: '#999', marginTop: '0.5rem' }}>Fill in at least 3 of 5 sections first.</p>}
         </div>

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 import { flagshipCases } from '../data/flagship-cases';
 import { analyseWorkflow, type RedesignResult } from '../data/gemini';
+import LoadingDots from './LoadingDots';
 
 interface WorkflowStep {
   id: string;
@@ -165,7 +166,7 @@ export default function InterventionDesigner() {
                 opacity: (generating || !userDescription.trim()) ? 0.4 : 1,
               }}
             >
-              {generating ? 'Generating solution...' : 'Generate a solution'}
+              {generating ? <LoadingDots text="Generating solution" /> : 'Generate a solution'}
             </button>
             {!userDescription.trim() && (
               <p style={{ fontSize: '15px', color: '#999', marginTop: '0.75rem' }}>Describe what you want above first.</p>

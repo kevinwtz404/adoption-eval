@@ -138,8 +138,8 @@ li {
 }
 
 .step-link:hover { color: var(--purple); background: rgba(155, 107, 212, 0.08); text-decoration: none; }
-.step-link.active { color: var(--purple); background: rgba(155, 107, 212, 0.12); font-weight: 600; }
-.step-link.completed { color: var(--success); }
+.step-link.active { color: var(--purple); background: rgba(155, 107, 212, 0.08); font-weight: 600; }
+.step-link.completed { color: var(--purple-light); }
 
 .step-dot {
   width: 24px;
@@ -155,8 +155,8 @@ li {
   flex-shrink: 0;
 }
 
-.step-link.active .step-dot { background: var(--purple); color: white; }
-.step-link.completed .step-dot { background: var(--success); color: white; }
+.step-link.active .step-dot { background: transparent; color: var(--purple); border: 2px solid var(--purple); }
+.step-link.completed .step-dot { background: var(--purple-light); color: white; }
 
 .step-connector {
   width: 24px;
