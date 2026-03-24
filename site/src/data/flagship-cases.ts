@@ -156,7 +156,7 @@ Approved versions are published to each channel and the system logs what went wh
         { name: 'Content formatting', type: 'deterministic', description: 'Resize and reformat visual assets to exact platform specs', risks: ['Template changes when platforms update'], considerations: ['Figma auto-layout or scripted templates'], _track: 'bottom' },
         { name: 'Creative review', type: 'human', description: 'Checks that resized images still suit each channel', risks: ['Missed issues if reviewing too many at once'], considerations: ['Visual comparison tool'], _track: 'bottom' },
         { name: '_parallel_end', type: 'deterministic', description: '', risks: [], considerations: [] },
-        { name: 'Campaign summary', type: 'tool', description: 'Assemble all channel versions and assets into a single campaign overview', risks: ['Missing versions if process is bypassed'], considerations: ['Automated assembly from registry'] },
+        { name: 'Campaign summary', type: 'llm', description: 'Assemble all channel versions and assets into a readable campaign overview with structured input from the approved text and formatted images', risks: ['Could misrepresent what was approved', 'Missing versions if process is bypassed'], considerations: ['Summary should reference not rewrite the approved content'] },
         { name: 'Lead approval', type: 'human', description: 'Content lead reviews the complete campaign package and approves', risks: ['Bottleneck if slow'], considerations: ['Single view of everything'] },
         { name: 'Publishing', type: 'tool', description: 'Publish approved versions to each channel and log what went where', risks: ['Integration failures with platforms'], considerations: ['Use existing publishing tools'] },
       ],
