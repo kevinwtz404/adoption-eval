@@ -75,7 +75,35 @@ function getNextLabel(href: string | undefined): string {
   <footer class="site-footer">
     <div class="max-w-4xl mx-auto px-6">
       adoption-eval &middot; kevin witzenberger
+      &middot; <button class="privacy-link" onclick="document.getElementById('privacy-modal').showModal()">Data &amp; Privacy</button>
     </div>
   </footer>
+
+  <dialog id="privacy-modal" class="modal">
+    <div class="modal-box max-w-lg">
+      <h3 class="text-lg font-bold mb-3" style="color: var(--purple);">Data &amp; Privacy</h3>
+
+      <p class="mb-3">This tool is a research prototype. It does not collect personal data, use cookies, or require sign-in.</p>
+
+      <h4 class="font-semibold mb-1">What stays in your browser</h4>
+      <p class="mb-3">Everything you enter is saved in your browser's local storage. Nothing is sent to a server unless you explicitly request AI analysis.</p>
+
+      <h4 class="font-semibold mb-1">AI analysis</h4>
+      <p class="mb-3">When you use the AI features, your workflow description is sent to Google Gemini via a proxy. Prompts and responses are not logged — only your IP address is recorded for rate limiting.</p>
+
+      <h4 class="font-semibold mb-1">Analytics</h4>
+      <p class="mb-3">Page views are tracked with <a href="https://www.goatcounter.com" target="_blank" rel="noopener">GoatCounter</a>, a privacy-friendly analytics tool. No personal data is collected.</p>
+
+      <h4 class="font-semibold mb-1">Important</h4>
+      <p><strong>Do not enter personal or identifying information.</strong> This tool is designed for describing work processes, not people. Treat all text fields as public.</p>
+
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn btn-sm">Close</button>
+        </form>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop"><button>close</button></form>
+  </dialog>
 </body>
 </html>

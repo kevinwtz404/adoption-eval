@@ -358,6 +358,22 @@ li {
   font-size: 0.8125rem;
 }
 
+/* Privacy link in footer */
+.privacy-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.privacy-link:hover {
+  color: var(--purple);
+}
+
 /* Toggle (for interactive components) */
 .toggle-switch {
   position: relative;
