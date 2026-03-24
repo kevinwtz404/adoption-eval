@@ -8,13 +8,28 @@ const base = import.meta.env.BASE_URL;
 
     <div class="mb-10">
       <h1>Resources</h1>
-      <p class="subtitle">Practical guidance for assessing each aspect of pilot readiness.</p>
+      <p class="subtitle">Deeper guidance on each qualification criterion and the AI paradigms used in this guide.</p>
     </div>
 
     <!-- Business Impact -->
     <div class="mb-10" id="business-impact">
       <h2>Assessing business impact</h2>
-      <p>TODO: How to evaluate whether improving this workflow would have meaningful business impact. Frameworks for estimating time saved, cost reduced, quality improved or risk lowered. How to distinguish "nice to have" from "critical."</p>
+
+      <p>
+        Not everything that is painful is worth fixing with AI. The question is whether improving this workflow would have a meaningful effect on the business. "Meaningful" means one of four things: it saves significant time, it reduces cost, it improves quality or it lowers risk.
+      </p>
+
+      <p>
+        Start by asking: if this workflow ran perfectly tomorrow, what would actually change? If the answer is "people would be slightly less annoyed" that is a low-impact workflow. If the answer is "we would close deals faster" or "we would catch compliance issues before they escalate" that is high impact.
+      </p>
+
+      <p>
+        A practical way to estimate impact is to multiply frequency by cost per occurrence. A workflow that runs 50 times a week and wastes 30 minutes each time is 25 hours a week. That is worth investigating. A workflow that runs twice a month and takes an extra 10 minutes is probably not.
+      </p>
+
+      <p>
+        Be honest about whether the pain is concentrated or diffuse. If one person is frustrated, it might not be a business problem. If an entire team is blocked by the same bottleneck, it is.
+      </p>
     </div>
 
     <div class="divider"></div>
@@ -22,7 +37,22 @@ const base = import.meta.env.BASE_URL;
     <!-- Frequency -->
     <div class="mb-10" id="frequency">
       <h2>Assessing workflow frequency</h2>
-      <p>TODO: How to measure how often a workflow runs. Why frequency matters for automation ROI. How to account for workflows that are infrequent but high-impact vs frequent but low-stakes.</p>
+
+      <p>
+        Frequency matters because automation has setup costs. If a workflow runs once a quarter, the investment in tooling, testing and maintenance may not be worth it. If it runs daily, even small improvements compound.
+      </p>
+
+      <p>
+        But frequency alone is not the whole story. A monthly board report that takes a week to assemble is infrequent but high-impact. A daily notification email that takes 30 seconds is frequent but trivial. You need both frequency and per-occurrence cost to judge properly.
+      </p>
+
+      <p>
+        Watch out for hidden frequency. A workflow might officially run weekly but actually involve dozens of micro-tasks spread across the week: chasing data, formatting, checking, following up. The real frequency is often higher than it looks.
+      </p>
+
+      <p>
+        If a workflow is infrequent but scores high on every other criterion, it can still be worth piloting. Just know that your evaluation data will take longer to collect.
+      </p>
     </div>
 
     <div class="divider"></div>
@@ -30,7 +60,29 @@ const base = import.meta.env.BASE_URL;
     <!-- Baseline Measurability -->
     <div class="mb-10" id="baseline-measurability">
       <h2>Establishing a baseline</h2>
-      <p>TODO: How to measure current performance when no metrics exist. Practical approaches: manual time tracking for 2 weeks, pulling data from existing tools, asking the team to estimate cycle times. What "good enough" measurement looks like for a pilot. How to set up a baseline quickly without a big data project.</p>
+
+      <p>
+        You cannot evaluate a pilot without knowing what "before" looked like. The baseline does not need to be perfect. It needs to be good enough that you can tell whether things got better, worse or stayed the same.
+      </p>
+
+      <p>
+        If you have existing metrics (cycle time, error rate, throughput), use them. If you do not, here are practical ways to create a baseline quickly:
+      </p>
+
+      <ul>
+        <li><strong>Manual time tracking:</strong> Ask the team to log how long each run takes for two weeks. Use a simple spreadsheet, not a new tool</li>
+        <li><strong>Tool data:</strong> Pull timestamps from the systems they already use. Most project management, CRM and ticketing tools have built-in reporting</li>
+        <li><strong>Team estimates:</strong> If nothing else works, ask the three people who do the work most often to estimate. Take the average. It will be rough but it is better than nothing</li>
+        <li><strong>Sampling:</strong> You do not need to measure every instance. Measure 10-20 and extrapolate</li>
+      </ul>
+
+      <p>
+        The baseline is a gate in this guide because without one, your pilot evaluation is just opinion. "It felt faster" is not evidence. "Cycle time went from 5 days to 2.5 days" is.
+      </p>
+
+      <p>
+        Do not let perfect measurement block you. Two weeks of manual tracking is enough for most pilots. You can refine the measurement during the pilot itself.
+      </p>
     </div>
 
     <div class="divider"></div>
@@ -38,7 +90,26 @@ const base = import.meta.env.BASE_URL;
     <!-- Data Readiness -->
     <div class="mb-10" id="data-readiness">
       <h2>Assessing data readiness</h2>
-      <p>TODO: What "good enough" data looks like for a pilot. Key questions to ask: Are the fields populated? Is it structured or unstructured? Can you access it programmatically? Are there privacy or compliance constraints? What to do when data quality is poor. The difference between "data is messy" and "data does not exist."</p>
+
+      <p>
+        Every AI system needs data. The question is whether the data you have is good enough for a pilot. Not perfect, good enough.
+      </p>
+
+      <p>
+        Ask these questions about the data involved in your workflow:
+      </p>
+
+      <ul>
+        <li><strong>Does it exist?</strong> "Data is messy" and "data does not exist" are fundamentally different problems. Messy data can be cleaned. Missing data means you need to create it first, which is a separate project</li>
+        <li><strong>Is it accessible?</strong> Can you get to it programmatically (via an API or export) or is it locked in someone's inbox? Data that requires manual extraction every time is a bottleneck</li>
+        <li><strong>Is it structured or unstructured?</strong> Structured data (spreadsheets, databases, CRM fields) is easier to work with. Unstructured data (documents, emails, Slack messages) needs retrieval and parsing, which adds complexity</li>
+        <li><strong>Is it current?</strong> Stale data produces stale results. If your source documents have not been updated in two years, a RAG system will give two-year-old answers</li>
+        <li><strong>Are there privacy or compliance constraints?</strong> Personal data, financial records and health information come with legal requirements. Know what the rules are before you build anything</li>
+      </ul>
+
+      <p>
+        For a pilot, you do not need all the data. You need enough of the right data to test the intervention on a small slice of the workflow. If your full dataset is 10,000 documents, a pilot might only need 500. Start small.
+      </p>
     </div>
 
     <div class="divider"></div>
@@ -46,7 +117,30 @@ const base = import.meta.env.BASE_URL;
     <!-- Boundary Clarity -->
     <div class="mb-10" id="boundary-clarity">
       <h2>Figuring out what should stay with people</h2>
-      <p>TODO: How to identify which parts of a workflow require human judgement, accountability or approval. Common patterns: customer-facing decisions, financial sign-off, legal or compliance review, creative judgement. The automation levels framework (link to Map page). Why unclear boundaries are a signal to defer, not push through.</p>
+
+      <p>
+        This is the other gate in the qualification step and for good reason. If you cannot clearly say what should stay with people, you are not ready to build anything yet.
+      </p>
+
+      <p>
+        Some things should stay with people because they require judgement that AI cannot reliably provide. Others should stay with people because of accountability: when something goes wrong, a person needs to be responsible. These are different reasons and they lead to different boundaries.
+      </p>
+
+      <p>
+        Common patterns where human involvement is non-negotiable:
+      </p>
+
+      <ul>
+        <li><strong>Customer-facing decisions:</strong> Anything that directly affects a customer (pricing, service changes, communications) should have a human in the loop. The cost of getting it wrong is too high</li>
+        <li><strong>Financial sign-off:</strong> Numbers that go into reports, invoices or contracts need human verification. An LLM should not be generating financial figures</li>
+        <li><strong>Legal and compliance:</strong> If there are regulatory requirements, a person needs to confirm the output meets them. AI can draft but cannot approve</li>
+        <li><strong>Creative direction:</strong> AI can adapt and generate but the strategic and creative decisions (brand voice, messaging strategy, what to communicate) should come from people</li>
+        <li><strong>Hiring and people decisions:</strong> Any decision that affects someone's employment, performance review or career progression needs human accountability</li>
+      </ul>
+
+      <p>
+        If you are struggling to draw these lines, that is the signal. It means you need more clarity about the workflow before you try to change it. Go back to discovery, talk to the people who do the work and map where judgement actually happens. It is often not where you think.
+      </p>
     </div>
 
     <div class="divider"></div>
@@ -54,7 +148,36 @@ const base = import.meta.env.BASE_URL;
     <!-- Pilotability -->
     <div class="mb-10" id="pilotability">
       <h2>Scoping a pilot</h2>
-      <p>TODO: How to carve out a testable slice of a workflow. What makes a pilot scope too big or too small. How to handle dependencies and approvals. Setting up success criteria before you start. The 2-4 week rule of thumb and when to break it.</p>
+
+      <p>
+        A pilot is not "turn it on and see what happens." It is a structured test with a defined scope, a timeline and criteria for success and failure decided before you start.
+      </p>
+
+      <p>
+        The goal is to learn, not to deploy. You want the smallest meaningful slice of the workflow that will tell you whether the intervention works. One team, one process, one cycle. If the pilot goes wrong, the blast radius should be small.
+      </p>
+
+      <p>
+        Good pilot scope looks like:
+      </p>
+
+      <ul>
+        <li><strong>Bounded:</strong> A specific team, a specific data set, a specific time period. Not "roll it out to everyone and see"</li>
+        <li><strong>Measurable:</strong> You can tell whether it worked using the baseline you established. Numbers, not feelings</li>
+        <li><strong>Reversible:</strong> If it goes wrong, you can go back to the old way immediately. No bridges burned</li>
+        <li><strong>Time-boxed:</strong> 2-4 weeks for most pilots. Shorter and you do not have enough data. Longer and you lose momentum. Build in a midpoint check-in so you can adjust or stop halfway through</li>
+      </ul>
+
+      <p>
+        Common mistakes in scoping:
+      </p>
+
+      <ul>
+        <li><strong>Too big:</strong> Trying to test the entire workflow at once. Pick the part where you expect the biggest improvement and test that</li>
+        <li><strong>Too vague:</strong> "We will try AI for a few weeks and see if people like it." That is not a pilot, that is a hope</li>
+        <li><strong>No stop criteria:</strong> Decide now what would cause you to stop early. If you wait until problems appear, you will rationalise them</li>
+        <li><strong>No owner:</strong> One person owns the pilot. Not a committee. They run it, collect data, report results and have authority to stop it</li>
+      </ul>
     </div>
 
     <div class="divider"></div>
@@ -67,35 +190,155 @@ const base = import.meta.env.BASE_URL;
         These are fundamentally different technologies. An LLM can be asked to "follow rules" but that is not the same as a rules engine. A rules engine is deterministic: given the same input, it always produces the same output. An LLM following instructions is probabilistic: it might follow them correctly most of the time but it can hallucinate, misinterpret or drift. The choice of paradigm determines your risk profile, your boundary requirements and your testing strategy.
       </p>
 
-      <p>TODO: For each paradigm below, add detailed sections covering:</p>
-      <ul>
-        <li>What it actually is (technically, in plain language)</li>
-        <li>What it is NOT (common misconceptions)</li>
-        <li>When to use it (concrete examples)</li>
-        <li>When not to use it</li>
-        <li>Risk profile and what can go wrong</li>
-        <li>What boundaries you need</li>
-        <li>How to test it before going live</li>
-        <li>Real-world examples (good and bad)</li>
-      </ul>
+      <details class="resource-section">
+        <summary>Rules and automation</summary>
+        <div class="resource-detail">
+          <p>
+            Deterministic logic. If X then Y. No model, no learning, no uncertainty. This includes spreadsheet formulas, workflow automation tools (Zapier, Make, Power Automate), business rules engines and scripts.
+          </p>
 
-      <h3 id="paradigm-rules">Rules and automation</h3>
-      <p>TODO: Deterministic logic. If X then Y. No model, no learning, no uncertainty. Spreadsheet formulas, workflow automation tools, business rules engines. Why this is the safest option for high autonomy. When people think they need AI but actually need rules. The difference between an LLM following instructions and a rules engine.</p>
+          <p>
+            Rules-based automation is the safest option for high-autonomy tasks because it is predictable. The same input always produces the same output. You can test every path. You can prove it works.
+          </p>
 
-      <h3 id="paradigm-ml">Machine learning (classification and prediction)</h3>
-      <p>TODO: Trained models that learn patterns from historical data. How they work at a high level. Bias, data drift, retraining requirements. The black-box problem. When ML is the right choice vs when rules or LLMs are better. Examples: lead scoring, spam filtering, demand forecasting.</p>
+          <p>
+            <strong>When to use it:</strong> Anything where correctness matters more than flexibility. Data validation, routing, calculations, formatting, notifications, permission checks. If the logic can be written as a decision tree, it should be.
+          </p>
 
-      <h3 id="paradigm-llm-copilot">LLM as copilot</h3>
-      <p>TODO: A language model that supports a human. The human drives, AI assists. Drafting, summarisation, explanation, brainstorming. Why the human-in-the-loop makes this lower risk. Hallucination is still a problem but the human catches it. When copilot mode is enough vs when you need more autonomy.</p>
+          <p>
+            <strong>When not to use it:</strong> When the input is ambiguous, unstructured or requires interpretation. A rules engine cannot read a customer email and figure out what they want. It needs structured input.
+          </p>
 
-      <h3 id="paradigm-llm-agent">LLM as agent</h3>
-      <p>TODO: An LLM that takes actions autonomously. The human sets the goal, AI figures out the steps. Tool calling, API access, multi-step workflows. Why this is significantly higher risk than copilot mode. Compounding errors. Scope creep. The importance of strong boundaries and monitoring. When agent mode is justified vs when it is unnecessary risk.</p>
+          <p>
+            <strong>Common mistake:</strong> People often think they need AI when they actually need better rules. If you can describe the decision logic in words without any "it depends on context" caveats, you probably need automation, not AI.
+          </p>
+        </div>
+      </details>
 
-      <h3 id="paradigm-rag">RAG (retrieval-augmented generation)</h3>
-      <p>TODO: An LLM that retrieves information from a knowledge base before generating a response. How it differs from a plain LLM (grounded in actual sources). The critical importance of source quality and access control. Chunking strategies and how they affect output quality. Why citation does not guarantee correctness. When RAG is the right choice for knowledge retrieval.</p>
+      <details class="resource-section">
+        <summary>Machine learning (classification and prediction)</summary>
+        <div class="resource-detail">
+          <p>
+            Trained models that learn patterns from historical data. You give the model thousands of examples ("these emails are spam, these are not") and it learns to classify new inputs. This also covers prediction (demand forecasting, lead scoring, churn prediction) and anomaly detection.
+          </p>
 
-      <h3 id="paradigm-hybrid">Hybrid (deterministic core + AI layer)</h3>
-      <p>TODO: Systems where the critical logic is deterministic and AI handles the language-rich parts. The CFO reporting example: calculations are rules-based, narrative is LLM-generated. Why boundary enforcement between the two layers is architectural, not just policy. When hybrid is worth the complexity.</p>
+          <p>
+            ML models are good at finding patterns humans cannot see in large datasets. But they are only as good as the data they were trained on. If the training data is biased, the model will be biased. If the world changes and the data becomes stale, the model drifts.
+          </p>
+
+          <p>
+            <strong>When to use it:</strong> When you have enough labelled historical data and the patterns are stable. Lead scoring, spam filtering, document classification, demand forecasting. Tasks where a wrong answer is inconvenient but not catastrophic.
+          </p>
+
+          <p>
+            <strong>When not to use it:</strong> When you do not have enough training data, when the patterns change frequently, or when you need to explain why the model made a specific decision. ML models are often black boxes.
+          </p>
+
+          <p>
+            <strong>Key risks:</strong> <a href="https://www.nature.com/articles/s41586-024-07856-5">Bias in training data</a> reproduces bias in outputs. Data drift means the model gets worse over time unless retrained. And the black-box problem makes it hard to audit decisions, which is a problem for regulated industries.
+          </p>
+        </div>
+      </details>
+
+      <details class="resource-section">
+        <summary>LLM as copilot</summary>
+        <div class="resource-detail">
+          <p>
+            A language model that supports a human. The human drives, the AI assists. This includes drafting text, summarising documents, explaining concepts, brainstorming options and translating between formats.
+          </p>
+
+          <p>
+            Copilot mode is lower risk than most other AI paradigms because the human is always in the loop. The LLM <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">still hallucinate</a> and still gets things wrong, but the human catches it before it goes anywhere. This is the most common and safest way to start using AI.
+          </p>
+
+          <p>
+            <strong>When to use it:</strong> First drafts of anything (emails, reports, documentation). Summarising long documents. Explaining technical content in plain language. Brainstorming ideas. Any task where the output needs human review anyway.
+          </p>
+
+          <p>
+            <strong>When not to use it:</strong> When the volume is too high for a human to review every output. If you need to process 1,000 documents a day, copilot mode becomes a bottleneck. At that point you need either automation or agent mode with strong boundaries.
+          </p>
+
+          <p>
+            <strong>Key risks:</strong> Review fatigue. If the AI is right 95% of the time, the human starts rubber-stamping. The 5% that is wrong gets through. Mitigate this by making the review process structured (checklists, specific things to verify) rather than just "does this look right?"
+          </p>
+        </div>
+      </details>
+
+      <details class="resource-section">
+        <summary>LLM as agent</summary>
+        <div class="resource-detail">
+          <p>
+            An LLM that takes actions autonomously. The human sets the goal, the AI figures out the steps. This includes tool calling (querying databases, calling APIs, sending emails), multi-step workflows and decision-making without human approval at each step.
+          </p>
+
+          <p>
+            Agent mode is significantly higher risk than copilot mode because errors compound. If the LLM makes a wrong decision at step 2 of a 5-step process, steps 3 through 5 are all working with bad input. And unlike copilot mode, there is no human catching mistakes in real time.
+          </p>
+
+          <p>
+            <strong>When to use it:</strong> When the task is well-defined, the actions are reversible, the volume is too high for human review and the consequences of a single error are low. Internal research tasks, data enrichment, first-pass classification.
+          </p>
+
+          <p>
+            <strong>When not to use it:</strong> Anything customer-facing without human approval. Anything involving financial transactions. Anything where a single wrong action could cause harm. The bar for agent mode should be high.
+          </p>
+
+          <p>
+            <strong>Key risks:</strong> Compounding errors across steps. Scope creep (the agent does more than intended). Difficulty auditing what happened and why. <a href="https://hdsr.mitpress.mit.edu/pub/aelql9qy">Transparency problems</a>: users may not realise the system acted autonomously. Mitigate with strong boundaries, logging everything and having kill switches.
+          </p>
+        </div>
+      </details>
+
+      <details class="resource-section">
+        <summary>RAG (retrieval-augmented generation)</summary>
+        <div class="resource-detail">
+          <p>
+            An LLM that retrieves information from a knowledge base before generating a response. Instead of relying on what it learned during training (<a href="https://promptrevolution.poltextlab.com/understanding-knowledge-cut-offs-in-genai-models/">which is frozen in time</a>), it looks up relevant documents and uses them to answer the question. This grounds the response in your actual data.
+          </p>
+
+          <p>
+            RAG is the right choice when you need the LLM to answer questions about your specific documents, policies, products or processes. It is not a general-purpose improvement to an LLM. It is a specific architecture for knowledge retrieval.
+          </p>
+
+          <p>
+            <strong>When to use it:</strong> Internal knowledge bases, policy lookups, product documentation, customer support answers. Any time someone asks "what does our documentation say about X?" and the answer exists somewhere in your files.
+          </p>
+
+          <p>
+            <strong>When not to use it:</strong> When the answer requires reasoning across multiple complex sources, when the source documents are unreliable or when the task is not really about retrieval (e.g. generating creative content does not benefit from RAG).
+          </p>
+
+          <p>
+            <strong>Key risks:</strong> Source quality. The system is only as good as the documents indexed. Stale documents produce stale answers. Incomplete indexing produces incomplete answers. And a citation does not guarantee the interpretation is correct. The LLM might retrieve the right document but misinterpret it. Access control is also critical: if the system retrieves from documents with different permission levels, it could surface confidential information to the wrong person.
+          </p>
+        </div>
+      </details>
+
+      <details class="resource-section">
+        <summary>Hybrid (deterministic core + AI layer)</summary>
+        <div class="resource-detail">
+          <p>
+            Systems where the critical logic is deterministic and AI handles the language-rich parts. The CFO reporting case in this guide is a good example: the numbers come from spreadsheets and SQL (deterministic), the variance commentary is drafted by an LLM and the qualitative signals are surfaced by a RAG system. The maths is never touched by AI.
+          </p>
+
+          <p>
+            Hybrid is the right approach when a workflow has both "must be exact" and "needs interpretation" components. You get the reliability of rules for the parts that matter most and the flexibility of AI for the parts that benefit from it.
+          </p>
+
+          <p>
+            <strong>When to use it:</strong> Financial reporting (calculations are rules, commentary is LLM). Data pipelines (validation is rules, enrichment is AI). Content workflows (formatting is templates, adaptation is LLM). Anywhere the workflow mixes exact logic with language.
+          </p>
+
+          <p>
+            <strong>When not to use it:</strong> When the added complexity is not justified. If the entire workflow can be handled by rules alone, adding an AI layer creates more failure modes without adding value. Hybrid is worth it only when both layers are genuinely needed.
+          </p>
+
+          <p>
+            <strong>Key risks:</strong> The boundary between layers. If the deterministic layer passes data to the AI layer, the interface needs to be clean and well-defined. The AI must not be able to modify the deterministic outputs. Enforce this in the architecture, not just in documentation. The most common failure is an LLM generating a number that looks like it came from a calculation but did not.
+          </p>
+        </div>
+      </details>
     </div>
 
     <div class="divider"></div>
@@ -130,7 +373,110 @@ const base = import.meta.env.BASE_URL;
     <!-- Glossary -->
     <div class="mb-10" id="glossary">
       <h2>Glossary</h2>
-      <p>TODO: Plain-language definitions of key terms used throughout the guide. Gate, baseline, boundary, pilot, qualification, readiness profile, automation level, deterministic vs generative, approval gate, etc.</p>
+
+      <p>Plain-language definitions of terms used throughout this guide.</p>
+
+      <dl class="glossary-list">
+
+        <dt>Workflow</dt>
+        <dd>The actual work people do to get something done: the steps, the tools, the handoffs, the decisions. Not the idealised version in the process documentation. This guide starts with workflows because that is where the real opportunities are.</dd>
+
+        <dt>Intervention</dt>
+        <dd>A change you introduce to improve a workflow. Could be AI, could be simpler automation, could be a better process. The guide helps you figure out what kind of intervention fits and how to test it.</dd>
+
+        <dt>Component</dt>
+        <dd>A building block in an AI system. This guide uses five: language models (LLM), deterministic tools, retrieval (RAG), trained models (ML) and human checkpoints. How you combine them determines what the system can do and where it can fail.</dd>
+
+        <dt id="llm">LLM (large language model)</dt>
+        <dd>A type of AI model trained on large amounts of text. It generates text by predicting what comes next, <a href="https://bbycroft.net/llm">one token at a time</a>. Examples: GPT, Claude, Gemini, Llama. Good at language tasks, bad at maths and facts.</dd>
+
+        <dt id="deterministic">Deterministic</dt>
+        <dd>A process where the same input always produces the same output. Spreadsheet formulas, database queries, rules engines. The opposite of probabilistic.</dd>
+
+        <dt>Probabilistic</dt>
+        <dd>A process where the same input can produce different outputs each time. This is how LLMs work. It is what makes them flexible but also what makes them unreliable for tasks that require exact, repeatable answers.</dd>
+
+        <dt id="hallucination">Hallucination</dt>
+        <dd>When an LLM generates text that sounds correct but is factually wrong. This is not a bug. It is <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">how the technology works</a>. The model is always generating plausible text, not verified facts.</dd>
+
+        <dt id="rag">RAG (retrieval-augmented generation)</dt>
+        <dd>An architecture where an LLM looks up information from a document collection before answering a question. Grounds the response in your actual data instead of relying on what the model learned during training.</dd>
+
+        <dt id="trained-model">Trained model (machine learning)</dt>
+        <dd>A model that learns patterns from historical data. You give it labelled examples and it learns to classify, score or predict new inputs. Good at finding patterns at scale. Only as good as the data it was trained on.</dd>
+
+        <dt id="tool-calling">Tool calling</dt>
+        <dd>When an LLM can trigger actions in external systems: querying a database, sending an email, looking up a record. The LLM decides what to call and when. This is what turns a chatbot into an agent.</dd>
+
+        <dt>API (application programming interface)</dt>
+        <dd>A way for one piece of software to talk to another. When the guide mentions "tool calls" or "API calls", it means the AI system is sending a request to another service (a database, a CRM, a search engine) and getting a response back.</dd>
+
+        <dt id="agent">Agent</dt>
+        <dd>An AI system that takes actions autonomously toward a goal. The human sets the objective, the system figures out the steps. Agents use tool calling to interact with external systems. Higher autonomy means higher risk.</dd>
+
+        <dt id="copilot">Copilot</dt>
+        <dd>An AI system that assists a human without acting independently. The human decides, the AI suggests. Lower risk than agent mode because a person reviews everything before it goes anywhere.</dd>
+
+        <dt id="hybrid-system">Hybrid system</dt>
+        <dd>A system where the critical logic is deterministic and AI handles the language-rich parts. For example: numbers from a spreadsheet (deterministic), commentary drafted by an LLM, signals surfaced by RAG. The maths is never touched by AI.</dd>
+
+        <dt>Human checkpoint</dt>
+        <dd>A point where a person reviews, approves or redirects the system's output. One of the five component types in this guide. Where you place these determines how much risk the system carries.</dd>
+
+        <dt id="approval-gate">Approval gate</dt>
+        <dd>A human checkpoint where the process pauses until a person signs off. Used for high-stakes outputs: customer-facing, financial, legal. Too many gates create bottlenecks. Too few create risk.</dd>
+
+        <dt id="boundary">Boundary</dt>
+        <dd>A rule about what the system can and cannot do. Boundaries should be enforced in the architecture (the system literally cannot do the thing) rather than just documented in a policy (the system is told not to).</dd>
+
+        <dt id="bias">Bias</dt>
+        <dd>Systematic errors in AI outputs that reflect patterns in the training data. If the training data over-represents certain perspectives, the model will too. <a href="https://www.nature.com/articles/s41586-024-07856-5">This affects real decisions</a>. Test for it explicitly, especially when outputs affect people.</dd>
+
+        <dt>Cloud model / local model</dt>
+        <dd>Cloud models (OpenAI, Anthropic, Google) are the most capable but your data leaves your infrastructure. Local models (Ollama, llama.cpp) keep everything on your machines but require hardware and expertise. The choice depends on what data each component processes.</dd>
+
+        <dt>Review fatigue</dt>
+        <dd>When the AI is right often enough that the human reviewer stops checking carefully and starts rubber-stamping. The errors that get through are the ones the system was supposed to prevent. Mitigate with structured review checklists, not just "does this look right?"</dd>
+
+        <dt>Compounding errors</dt>
+        <dd>When an AI makes a wrong decision at one step and every subsequent step builds on that mistake. A key risk in agent mode, where there is no human catching errors between steps.</dd>
+
+        <dt>Scope creep</dt>
+        <dd>When an AI system starts doing more than it was designed to do. Particularly dangerous in agent mode where the system decides its own actions. Prevent with explicit boundaries on what the system can and cannot touch.</dd>
+
+        <dt>Blast radius</dt>
+        <dd>How much damage a failure can cause. A pilot should have a small blast radius: one team, one dataset, one time period. If it goes wrong, the impact is contained.</dd>
+
+        <dt>Handoff</dt>
+        <dd>A point where work passes from one person, team or system to another. Handoffs are where things break down: information gets lost, context is missing, delays accumulate. Discovery often starts by mapping these.</dd>
+
+        <dt>Rework loop</dt>
+        <dd>When work has to be done again because something went wrong earlier in the process: missing information, unclear instructions, errors caught too late. A signal that the workflow has a structural problem.</dd>
+
+        <dt>Cycle time</dt>
+        <dd>The time it takes for one instance of a workflow to complete, from start to finish. One of the most useful baseline metrics because it is easy to measure and easy to compare before and after a pilot.</dd>
+
+        <dt id="baseline">Baseline</dt>
+        <dd>A measurement of how the workflow performs today, before the intervention. Without a baseline, you cannot tell whether the pilot made things better or worse.</dd>
+
+        <dt>Qualification</dt>
+        <dd>The process of checking whether a workflow is ready to pilot. This guide uses six criteria: business impact, frequency, baseline measurability (gate), data readiness, boundary clarity (gate) and pilotability.</dd>
+
+        <dt id="gate">Gate</dt>
+        <dd>A qualification criterion that must meet a minimum threshold. In this guide, baseline measurability and boundary clarity are gates. If either scores below 3, the workflow is not ready to pilot yet.</dd>
+
+        <dt>Pilot</dt>
+        <dd>A small, structured test of an intervention. Bounded scope, defined timeline, success criteria decided before you start. The goal is to learn, not to deploy.</dd>
+
+        <dt>Success criteria</dt>
+        <dd>Specific, measurable conditions you define before the pilot starts that tell you whether it worked. "It felt faster" is not success criteria. "Cycle time dropped by 30% without increasing error rate" is.</dd>
+
+        <dt>Stop criteria</dt>
+        <dd>Conditions you define before the pilot starts that would cause you to end it early. Decide these upfront. If you wait until problems appear, you will rationalise them.</dd>
+
+        <dt id="build-brief">Build brief</dt>
+        <dd>A document you hand to the person building the system. Contains the components, boundaries, connections and specific questions from the pilot plan. Separates the "what to build" from the "why we are building it."</dd>
+      </dl>
     </div>
 
   </div>
@@ -140,5 +486,76 @@ const base = import.meta.env.BASE_URL;
   .landing-content .subtitle {
     color: var(--text-light);
     font-size: 15px;
+  }
+
+  .resource-section {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    margin-bottom: 0.5rem;
+  }
+
+  .resource-section summary {
+    padding: 0.875rem 1.25rem;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .resource-section summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .resource-section[open] summary::after {
+    content: '\2212';
+  }
+
+  .resource-section summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .resource-detail {
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .resource-detail p {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  .resource-detail p + p {
+    margin-top: 1.25em;
+  }
+
+  .glossary-list {
+    margin-top: 1rem;
+  }
+
+  .glossary-list dt {
+    font-weight: 600;
+    font-size: 15px;
+    margin-top: 1.25rem;
+    color: var(--purple);
+  }
+
+  .glossary-list dt:first-child {
+    margin-top: 0;
+  }
+
+  .glossary-list dd {
+    font-size: 15px;
+    line-height: 1.75;
+    margin-left: 0;
+    margin-top: 0.25rem;
+    color: var(--text-light);
   }
 </style>

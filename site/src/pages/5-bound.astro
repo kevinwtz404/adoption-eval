@@ -133,7 +133,7 @@ const base = import.meta.env.BASE_URL;
         <details class="bound-section">
           <summary>Approval gates</summary>
           <div class="bound-detail">
-            <p>An approval gate pauses the workflow until a person signs off. Use these for high-stakes outputs: anything customer-facing, legally binding or financially significant.</p>
+            <p>An <a href={`${base}resources/#approval-gate`}>approval gate</a> pauses the workflow until a person signs off. Use these for high-stakes outputs: anything customer-facing, legally binding or financially significant.</p>
             <p><strong>Think about:</strong> Which outputs need human approval? Who approves? What happens if they are unavailable?</p>
           </div>
         </details>
@@ -157,7 +157,7 @@ const base = import.meta.env.BASE_URL;
         <details class="bound-section">
           <summary>Bias and transparency</summary>
           <div class="bound-detail">
-            <p>Models reflect <a href="https://www.nature.com/articles/s41586-024-07856-5">biases in their training data</a>. If your system makes decisions that affect people, test for this. <a href="https://hdsr.mitpress.mit.edu/pub/aelql9qy">Users should know when they are interacting with AI</a>.</p>
+            <p>Models reflect <a href={`${base}resources/#bias`}>biases</a> in their <a href="https://www.nature.com/articles/s41586-024-07856-5">training data</a>. If your system makes decisions that affect people, test for this. <a href="https://hdsr.mitpress.mit.edu/pub/aelql9qy">Users should know when they are interacting with AI</a>.</p>
             <p><strong>Think about:</strong> Does your system produce outputs that affect people? Is it clear to users when AI is involved?</p>
           </div>
         </details>

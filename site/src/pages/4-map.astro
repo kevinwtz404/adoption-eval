@@ -30,7 +30,7 @@ const base = import.meta.env.BASE_URL;
           <div class="diagram-components">
             <div class="diagram-component">
               <div class="comp-icon">LLM</div>
-              <div class="comp-desc">Language model. Understands text, generates responses, decides what to do next. Can hallucinate.</div>
+              <div class="comp-desc">Language model. Understands text, generates responses, decides what to do next. Can <a href={`${base}resources/#hallucination`}>hallucinate</a>.</div>
             </div>
             <div class="diagram-component">
               <div class="comp-icon">Tool</div>
@@ -42,14 +42,14 @@ const base = import.meta.env.BASE_URL;
             </div>
             <div class="diagram-component">
               <div class="comp-icon">ML</div>
-              <div class="comp-desc">Trained models. Classification, scoring, prediction from data. Good at patterns, blind to context.</div>
+              <div class="comp-desc"><a href={`${base}resources/#trained-model`}>Trained models</a>. Classification, scoring, prediction from data. Good at patterns, blind to context.</div>
             </div>
             <div class="diagram-component">
               <div class="comp-icon">Human</div>
               <div class="comp-desc">Human checkpoints. Review, approve, redirect. Catches what AI misses. Slow but accountable.</div>
             </div>
           </div>
-          <div class="diagram-connections">Connected via tool calls and APIs. The LLM decides when to use each component.</div>
+          <div class="diagram-connections">Connected via <a href={`${base}resources/#tool-calling`}>tool calls</a> and APIs. The LLM decides when to use each component.</div>
         </div>
       </div>
     </div>

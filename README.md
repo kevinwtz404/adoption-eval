@@ -1,20 +1,22 @@
 # adoption-eval
 
-A free, open-source, interactive web guide that helps organisations figure out where and how to adopt AI in their workflows.
+Every organisation is being told to "use AI." But when you actually sit down to figure out where it fits, the picture gets complicated fast. Which workflows should you touch? What should AI actually do vs what should stay with people? How do you test any of this without putting your operations, your data or your reputation at risk?
 
-Most teams do not fail because they lack AI tools. They fail because they cannot reliably move from a pain point to a safe, testable implementation plan. This guide closes that gap.
+This is a free, open-source, interactive guide that helps you work through those questions. It walks you through finding the right workflow, checking whether it is ready to pilot, designing an intervention with the right components, stress-testing it for what could go wrong, building a pilot plan and evaluating whether it actually worked.
+
+The goal is to help you think clearly about AI adoption: what the pieces are, how they fit together, where the risks hide and how to run a safe, structured test before committing to anything.
 
 ## what this is
 
-An interactive walkthrough hosted on GitHub Pages. You bring a workflow that hurts, and the guide walks you through seven steps to figure out whether AI fits, what components you need, what boundaries to set and how to run a pilot.
+An interactive walkthrough hosted on GitHub Pages. You bring a workflow that hurts and the guide walks you through seven steps. It is not a product or a platform. It is a practical guide with tools embedded in it.
 
-It is not a product or a platform. It is a practical guide with tools embedded in it.
+You do not need to be technical. You do not need to know which model to use. You just need a workflow you are curious about.
 
 ## who this is for
 
-**Decision makers** (AI adoption leads, consultants, ops managers, team leads) who need to figure out where AI fits in their organisation. You do not need to be technical.
+**Decision makers** (AI adoption leads, consultants, ops managers, team leads) who need to figure out where AI fits in their organisation. The guide helps you make structured decisions without needing to understand the technology in depth.
 
-**Implementers** (developers, technical leads) who take those decisions and need to build something. The guide produces a build brief you can hand to a developer or paste into an AI assistant.
+**Implementers** (developers, technical leads) who take those decisions and need to build something. The guide produces a build brief you can hand to a developer or paste into an AI assistant for implementation options.
 
 ## the seven steps
 
@@ -25,6 +27,8 @@ It is not a product or a platform. It is a practical guide with tools embedded i
 5. **Bound** — stress-test the design: error tolerance, data privacy, cost, human checkpoints
 6. **Pilot** — build the pilot plan with scope, success criteria, stop criteria, timeline, ownership
 7. **Evaluate** — measure what changed across 6 dimensions, then decide: scale, revise or stop
+
+There is also a **Resources** page with deeper guidance on each qualification criterion, the six AI paradigms and their risk profiles, an automation levels reference table and a glossary of terms used throughout the guide.
 
 ## the core insight
 
@@ -97,12 +101,16 @@ The guide produces two deliverables at the end:
 
 ## current state
 
-The guide is functional end-to-end. All seven steps work with both flagship cases and custom workflows. The resources page content and glossary are still TODO. See `docs/project-brief.md` for the full picture.
+The guide is functional end-to-end. All seven steps work with both flagship cases and custom workflows. It is a work in progress and actively being developed. The content tries to be practical and accessible without oversimplifying. That is a hard balance and I am sure some of it is not quite right yet.
 
-## contributing
+## feedback
 
-This is a solo project by [Kevin Witzenberger](https://linkedin.com/in/kevin-witzenberger/). Feedback is welcome:
+I built this because I kept seeing the same gap. Organisations want to use AI but do not have a practical way to evaluate where it actually fits. The existing options are either too abstract, too technical or too focused on selling tools.
 
-- [Send an email](mailto:kevin.witzenberger@posteo.de)
+If something does not make sense, if a step feels wrong or if you have ideas for how to make it more useful, I would genuinely like to hear from you.
+
+- [Send me feedback](mailto:kevin.witzenberger@posteo.de)
 - [Open an issue](https://github.com/kevinwtz404/adoption-eval/issues)
 - [Connect on LinkedIn](https://linkedin.com/in/kevin-witzenberger/)
+
+Built by [Kevin Witzenberger](https://kevinwtz404.github.io/kevin-witzenberger/).

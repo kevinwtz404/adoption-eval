@@ -241,6 +241,13 @@ li {
   gap: 1.5rem;
 }
 
+.sidebar-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text) !important;
+  margin-bottom: 0.75rem;
+}
+
 .sidebar-heading {
   font-weight: 700;
   font-size: 18px;
