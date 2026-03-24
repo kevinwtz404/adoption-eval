@@ -250,7 +250,7 @@ li {
 
 .sidebar-heading {
   font-weight: 700;
-  font-size: 18px;
+  font-size: 22px;
   margin-bottom: 0.75rem;
 }
 
@@ -263,7 +263,7 @@ li {
 .sidebar-section a {
   color: var(--purple);
   text-decoration: none;
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .sidebar-section a:hover {

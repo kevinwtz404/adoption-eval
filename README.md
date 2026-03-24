@@ -28,7 +28,7 @@ You do not need to be technical. You do not need to know which model to use. You
 6. **Pilot** — build the pilot plan with scope, success criteria, stop criteria, timeline, ownership
 7. **Evaluate** — measure what changed across 6 dimensions, then decide: scale, revise or stop
 
-There is also a **Resources** page with deeper guidance on each qualification criterion, the six AI paradigms and their risk profiles, an automation levels reference table and a glossary of terms used throughout the guide.
+There is also a **Resources** page with deeper guidance on each qualification criterion, the AI paradigms and their risk profiles, and a glossary of terms used throughout the guide.
 
 ## the core insight
 
