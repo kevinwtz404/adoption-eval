@@ -4,20 +4,16 @@ import { loadState, saveState } from '../data/store';
 
 interface BoundaryDecision {
   id: string;
-  category: string;
   question: string;
-  helpText: string;
   choice: string;
   detail: string;
   pilotImplication: { yes: string; partly: string; no: string };
 }
 
 const DECISIONS: BoundaryDecision[] = [
-  // Error tolerance
   {
-    id: 'review-text', category: 'Error tolerance',
+    id: 'review-text',
     question: 'Should AI-generated text be reviewed by a person before it is used?',
-    helpText: 'AI text can be factually wrong, off-tone or misleading. The risk depends on who sees the output and what decisions are made from it.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'All AI-generated text goes through human review before use. Build a review interface into the pilot.',
@@ -26,9 +22,8 @@ const DECISIONS: BoundaryDecision[] = [
     },
   },
   {
-    id: 'numbers-deterministic', category: 'Error tolerance',
+    id: 'numbers-deterministic',
     question: 'Should all numbers and calculations come from deterministic sources only?',
-    helpText: 'LLMs can generate numbers that look calculated but are made up. A wrong number in a report is very different from a wrong word in a summary.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'Numbers must come from spreadsheets, databases or rules engines. The LLM handles language only. Enforce this in the architecture.',
@@ -37,9 +32,8 @@ const DECISIONS: BoundaryDecision[] = [
     },
   },
   {
-    id: 'verify-retrieved', category: 'Error tolerance',
+    id: 'verify-retrieved',
     question: 'Should retrieved information be verified before it informs decisions?',
-    helpText: 'If your system retrieves from documents, the answers depend on what was indexed. Stale or incomplete sources produce unreliable answers. A citation does not guarantee the interpretation is correct.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'All retrieved answers include source citations. Users are trained to verify before acting on them.',
@@ -47,11 +41,9 @@ const DECISIONS: BoundaryDecision[] = [
       no: 'Retrieved information is trusted directly. Ensure source quality is high and indexing is current.',
     },
   },
-  // Data and privacy
   {
-    id: 'data-local', category: 'Data and privacy',
+    id: 'data-local',
     question: 'Should the data in this workflow stay within your systems?',
-    helpText: 'Cloud AI models process your data on external servers. For confidential, personal or regulated data this may not be acceptable. Local models keep everything on your infrastructure.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'Use local models (Ollama, llama.cpp, vLLM) or on-premises deployment. No data sent to external APIs.',
@@ -60,9 +52,8 @@ const DECISIONS: BoundaryDecision[] = [
     },
   },
   {
-    id: 'access-permissions', category: 'Data and privacy',
+    id: 'access-permissions',
     question: 'Should the system enforce existing access permissions?',
-    helpText: 'If the system retrieves internal information, it could surface documents that not everyone should see: salary data, confidential client information, unreleased plans.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'Permission checks are built into the retrieval layer. The system only surfaces what the user is allowed to see.',
@@ -70,11 +61,9 @@ const DECISIONS: BoundaryDecision[] = [
       no: 'All information in scope is accessible to all users of the system.',
     },
   },
-  // Cost
   {
-    id: 'model-size', category: 'Cost and environment',
+    id: 'model-size',
     question: 'Should we start with the smallest model that works?',
-    helpText: 'Larger models are more capable but more expensive and use more energy. For many tasks a smaller model works just as well. Testing smaller models first saves money and reduces environmental impact.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'Test with small/medium models first. Only upgrade if quality is insufficient. Document why a larger model is needed.',
@@ -83,9 +72,8 @@ const DECISIONS: BoundaryDecision[] = [
     },
   },
   {
-    id: 'scale-cost', category: 'Cost and environment',
+    id: 'scale-cost',
     question: 'Should we estimate costs at full scale before committing to the pilot?',
-    helpText: 'What costs pennies for 10 users can cost thousands for 1000. Deterministic components are effectively free at scale. LLM calls are not.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'Calculate cost per call, multiply by expected volume at scale. Include this in the pilot evaluation criteria.',
@@ -93,11 +81,9 @@ const DECISIONS: BoundaryDecision[] = [
       no: 'Pilot first, worry about scale costs later.',
     },
   },
-  // Human checkpoints
   {
-    id: 'approval-gate', category: 'Human checkpoints',
+    id: 'approval-gate',
     question: 'Should a person approve outputs before they leave the system?',
-    helpText: 'An approval gate pauses the workflow until someone signs off. Essential for anything customer-facing, legally binding or financially significant. But too many gates create bottlenecks.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'Define who approves, what they check and what happens if they are unavailable. Build the approval step into the workflow.',
@@ -106,9 +92,8 @@ const DECISIONS: BoundaryDecision[] = [
     },
   },
   {
-    id: 'fallback', category: 'Human checkpoints',
+    id: 'fallback',
     question: 'Should there be a manual fallback for every AI step?',
-    helpText: 'If the AI fails, produces bad output or is unavailable, what happens? A manual fallback means a person can always step in. Without one, the workflow breaks when the AI breaks.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'Every AI step has a documented manual process. The pilot can fall back to the old workflow at any point.',
@@ -117,9 +102,8 @@ const DECISIONS: BoundaryDecision[] = [
     },
   },
   {
-    id: 'transparency', category: 'Human checkpoints',
+    id: 'transparency',
     question: 'Should it be clear to users when AI is involved?',
-    helpText: 'People affected by AI outputs should know the output was AI-generated. This builds trust and allows them to apply appropriate scrutiny.',
     choice: '', detail: '',
     pilotImplication: {
       yes: 'All AI-generated outputs are labelled. Users know what was written by a person and what was generated.',
@@ -129,19 +113,27 @@ const DECISIONS: BoundaryDecision[] = [
   },
 ];
 
+const TABS = [
+  { id: 'errors', label: 'Error tolerance' },
+  { id: 'data', label: 'Data and privacy' },
+  { id: 'cost', label: 'Cost' },
+  { id: 'humans', label: 'Human checkpoints' },
+];
+
+const base = import.meta.env.BASE_URL || '/';
+
 export default function BoundaryDesigner() {
-  const [workflowName, setWorkflowName] = useState('');
+  const [activeTab, setActiveTab] = useState('errors');
   const [decisions, setDecisions] = useState<BoundaryDecision[]>([]);
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const state = loadState();
-    setWorkflowName(state.workflow?.name || '');
 
     const saved = (state as any).boundaryDecisions;
     if (saved && saved.length > 0 && saved[0].pilotImplication) {
       setDecisions(saved);
     } else {
-      // Check for flagship boundary defaults
       const defaults = (state as any).boundaryDefaults;
       const fresh = DECISIONS.map(d => {
         if (defaults && defaults[d.id]) {
@@ -166,81 +158,271 @@ export default function BoundaryDesigner() {
     saveState({ boundaryDecisions: updated } as any);
   }
 
-  const categories = [...new Set(decisions.map(d => d.category))];
+  function toggleSection(key: string) {
+    setOpenSections(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }
+
+  function getDecision(id: string) {
+    return decisions.find(d => d.id === id);
+  }
+
   const answered = decisions.filter(d => d.choice).length;
 
-  return (
-    <div style={{ marginTop: '1.5rem' }}>
+  // --- Render helpers ---
 
-      <div style={{ padding: '1.25rem', border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fafafa', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '15px' }}>Decisions for your pilot: {workflowName}</div>
-            <div style={{ fontSize: '15px', color: '#999' }}>{answered} of {decisions.length} decisions made</div>
+  function renderDecisionBlock(id: string) {
+    const decision = getDecision(id);
+    if (!decision) return null;
+    return (
+      <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #e0e0e0' }}>
+        <div style={{ fontSize: '15px', fontWeight: 600, lineHeight: '1.75', marginBottom: '0.5rem' }}>
+          {decision.question}
+        </div>
+        <div style={{ display: 'inline-flex', border: '1px solid #e0e0e0', borderRadius: '6px', overflow: 'hidden' }}>
+          {(['yes', 'partly', 'no'] as const).map((val, vi) => (
+            <button
+              key={val}
+              onClick={() => updateChoice(decision.id, val)}
+              style={{
+                padding: '0.375rem 1rem', fontSize: '15px',
+                fontFamily: 'inherit', fontWeight: 600, cursor: 'pointer',
+                border: 'none',
+                borderRight: vi < 2 ? '1px solid #e0e0e0' : 'none',
+                background: decision.choice === val ? '#6830C4' : '#fff',
+                color: decision.choice === val ? '#fff' : '#666',
+              }}
+            >
+              {val === 'yes' ? 'Yes' : val === 'partly' ? 'Partly' : 'No'}
+            </button>
+          ))}
+        </div>
+        {decision.choice && (
+          <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#fafafa', borderRadius: '6px', fontSize: '15px', color: '#666', lineHeight: '1.75', borderLeft: '3px solid #6830C4' }}>
+            <strong>What this means for your pilot:</strong> {decision.pilotImplication[decision.choice as 'yes' | 'partly' | 'no']}
           </div>
-        </div>
-        <div style={{ fontSize: '15px', color: '#666', lineHeight: '1.75', marginTop: '0.75rem' }}>
-          These questions are about your specific pilot. Your answers will shape the build instructions and evaluation criteria.
-        </div>
+        )}
+        {decision.choice === 'partly' && (
+          <textarea
+            value={decision.detail}
+            onInput={(e) => updateDetail(decision.id, (e.target as HTMLTextAreaElement).value)}
+            placeholder="Describe how this applies to your specific workflow..."
+            rows={2}
+            style={{
+              width: '100%', marginTop: '0.75rem', padding: '0.5rem',
+              border: '1px solid #e0e0e0', borderRadius: '6px',
+              fontFamily: 'inherit', fontSize: '15px', resize: 'vertical' as const, lineHeight: '1.75',
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  function renderSection(key: string, title: string, content: preact.ComponentChildren, decisionId?: string) {
+    const isOpen = openSections.has(key);
+    return (
+      <div key={key} style={{ border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fff', marginBottom: '0.5rem' }}>
+        <button
+          onClick={() => toggleSection(key)}
+          style={{
+            padding: '0.875rem 1.25rem', fontWeight: 600, fontSize: '15px',
+            cursor: 'pointer', display: 'flex', alignItems: 'center',
+            justifyContent: 'space-between', width: '100%',
+            border: 'none', background: 'transparent', fontFamily: 'inherit',
+            textAlign: 'left' as const,
+          }}
+        >
+          <span>{title}</span>
+          <span style={{ fontSize: '1.25rem', color: '#999', fontWeight: 400 }}>
+            {isOpen ? '\u2212' : '+'}
+          </span>
+        </button>
+        {isOpen && (
+          <div style={{ padding: '0 1.25rem 1.25rem', borderTop: '1px solid #e0e0e0', paddingTop: '1rem' }}>
+            {content}
+            {decisionId && renderDecisionBlock(decisionId)}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const p = (text: preact.ComponentChildren) => (
+    <p style={{ fontSize: '15px', lineHeight: '1.75' }}>{text}</p>
+  );
+
+  const pGap = (text: preact.ComponentChildren) => (
+    <p style={{ fontSize: '15px', lineHeight: '1.75', marginTop: '1.25em' }}>{text}</p>
+  );
+
+  // --- Main render ---
+
+  return (
+    <div>
+      {/* Tab bar */}
+      <div style={{ display: 'flex', border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'hidden', marginBottom: '0.5rem' }}>
+        {TABS.map((tab, i) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            style={{
+              flex: 1, padding: '0.625rem 0.5rem', fontSize: '15px',
+              fontWeight: 600, fontFamily: 'inherit', cursor: 'pointer',
+              border: 'none',
+              borderRight: i < TABS.length - 1 ? '1px solid #e0e0e0' : 'none',
+              background: activeTab === tab.id ? '#6830C4' : '#fff',
+              color: activeTab === tab.id ? '#fff' : '#999',
+              transition: 'all 0.15s',
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      {categories.map(category => {
-        const categoryDecisions = decisions.filter(d => d.category === category);
+      {/* Progress */}
+      <div style={{ fontSize: '13px', color: '#999', marginBottom: '1.25rem' }}>
+        {answered} of {decisions.length} boundary decisions made
+      </div>
 
-        return (
-          <div key={category} style={{ marginBottom: '2rem' }}>
-            <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '0.75rem' }}>{category}</div>
-            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
-              {categoryDecisions.map(item => (
-                <div key={item.id} style={{ border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fff', padding: '1rem 1.25rem' }}>
-                  <div style={{ fontSize: '15px', fontWeight: 600, lineHeight: '1.75', marginBottom: '0.375rem' }}>
-                    {item.question}
-                  </div>
-                  <div style={{ fontSize: '15px', color: '#666', lineHeight: '1.75', marginBottom: '0.75rem' }}>
-                    {item.helpText}
-                  </div>
-                  <div style={{ display: 'inline-flex', border: '1px solid #e0e0e0', borderRadius: '6px', overflow: 'hidden' }}>
-                    {['yes', 'partly', 'no'].map((val, vi) => (
-                      <button
-                        key={val}
-                        onClick={() => updateChoice(item.id, val)}
-                        style={{
-                          padding: '0.375rem 1rem', fontSize: '15px',
-                          fontFamily: 'inherit', fontWeight: 600, cursor: 'pointer',
-                          border: 'none',
-                          borderRight: vi < 2 ? '1px solid #e0e0e0' : 'none',
-                          background: item.choice === val ? '#6830C4' : '#fff',
-                          color: item.choice === val ? '#fff' : '#666',
-                        }}
-                      >
-                        {val === 'yes' ? 'Yes' : val === 'partly' ? 'Partly' : 'No'}
-                      </button>
-                    ))}
-                  </div>
-                  {item.choice && (
-                    <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#fafafa', borderRadius: '6px', fontSize: '15px', color: '#666', lineHeight: '1.75', borderLeft: '3px solid #6830C4' }}>
-                      <strong>What this means for your pilot:</strong> {item.pilotImplication[item.choice as 'yes' | 'partly' | 'no']}
-                    </div>
-                  )}
-                  {item.choice === 'partly' && (
-                    <textarea
-                      value={item.detail}
-                      onInput={(e) => updateDetail(item.id, (e.target as HTMLTextAreaElement).value)}
-                      placeholder="Describe how this applies to your specific workflow..."
-                      rows={2}
-                      style={{
-                        width: '100%', marginTop: '0.75rem', padding: '0.5rem',
-                        border: '1px solid #e0e0e0', borderRadius: '6px',
-                        fontFamily: 'inherit', fontSize: '15px', resize: 'vertical' as const, lineHeight: '1.75',
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
+      {/* Error tolerance */}
+      {activeTab === 'errors' && (
+        <div>
+          {p('Not all errors are equal. A slightly off tone in a LinkedIn post is fixable. A wrong number in a board deck is not. Think about what happens when each part of your system produces a bad output.')}
+
+          <div style={{ marginTop: '1rem' }}>
+            {renderSection('gen-text', 'Errors in generated text', (
+              <>
+                {p(<>Language models <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html" target="_blank" rel="noopener" style={{ color: '#6830C4' }}>hallucinate</a>. They produce text that sounds right but can be factually wrong. This is not a bug that will be fixed. It is how the technology works.</>)}
+                {pGap(<><strong>Think about:</strong> Who sees this output? Is it a draft or a final product? What happens if it contains a factual error?</>)}
+              </>
+            ), 'review-text')}
+
+            {renderSection('numbers', 'Errors in numbers', (
+              <>
+                {p('Numbers from a spreadsheet are deterministic and reliable. Numbers from an LLM are not. An LLM can generate a number that looks calculated but is actually made up. A wrong projection in a brainstorming session is tolerable. A wrong revenue figure in a board report is not.')}
+                {pGap(<><strong>Think about:</strong> Does any AI component produce or handle numbers? Are those numbers verified against a deterministic source?</>)}
+              </>
+            ), 'numbers-deterministic')}
+
+            {renderSection('retrieved', 'Errors in retrieved information', (
+              <>
+                {p('If your design uses retrieval (RAG), the answers are only as good as the documents indexed. Stale documents produce stale answers. A citation does not guarantee the interpretation is correct.')}
+                {pGap(<><strong>Think about:</strong> How current are the source documents? What happens if the system retrieves the wrong document?</>)}
+              </>
+            ), 'verify-retrieved')}
+
+            {renderSection('signals', 'Errors in signals and patterns', (
+              <>
+                {p('If your design surfaces signals from unstructured data, these are pattern matches, not facts. The system might count wrong, misattribute a mention or flag something irrelevant.')}
+                {pGap(<><strong>Think about:</strong> Are signals clearly labelled as signals, not facts? What is the worst that happens if a signal is wrong?</>)}
+              </>
+            ))}
           </div>
-        );
-      })}
+        </div>
+      )}
+
+      {/* Data and privacy */}
+      {activeTab === 'data' && (
+        <div>
+          {p('Most AI models run in the cloud. That means your data is sent to an external server for processing. For some workflows this is fine. For others it is a dealbreaker.')}
+
+          <div style={{ marginTop: '1rem' }}>
+            {renderSection('cloud-local', 'Cloud vs local models', (
+              <>
+                {p('Cloud models (OpenAI, Anthropic, Google) are the most capable but your data leaves your infrastructure. Local models (Ollama, llama.cpp) keep everything on your machines but require hardware and expertise. For many tasks, a smaller local model works well enough.')}
+                {pGap(<><strong>Think about:</strong> What data does each AI component process? Is any of it confidential, personal or regulated?</>)}
+              </>
+            ), 'data-local')}
+
+            {renderSection('access-control', 'Access control and permissions', (
+              <>
+                {p('If your system retrieves from internal sources, it must respect existing permissions. A system that surfaces salary data or confidential client information to the wrong person is worse than no system at all.')}
+                {pGap(<><strong>Think about:</strong> Who can see what in the current workflow? Does the AI system enforce the same permissions?</>)}
+              </>
+            ), 'access-permissions')}
+
+            {renderSection('hard-rules', 'Hard rules', (
+              <>
+                {p('Every system needs things it must never do regardless of what the AI decides. These should be enforced in the architecture, not just documented in a policy.')}
+                {pGap('Examples: never send an email without human approval. Never modify financial records. Never surface confidential documents to unauthorised users.')}
+              </>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Cost */}
+      {activeTab === 'cost' && (
+        <div>
+          {p('Not every step needs the most expensive model. And what costs pennies at pilot scale can cost thousands at full scale.')}
+
+          <div style={{ marginTop: '1rem' }}>
+            {renderSection('model-selection', 'Model selection', (
+              <>
+                {p('A step that classifies support tickets might work with a small, cheap model. A step that drafts nuanced board commentary might need a more capable one. Match the model to the task.')}
+                {pGap(<><strong>Think about:</strong> For each AI component, what is the simplest model that could work? Have you tested smaller models?</>)}
+              </>
+            ), 'model-size')}
+
+            {renderSection('cost-scale', 'Cost at scale', (
+              <>
+                {p('Deterministic components (rules, APIs, calculations) are effectively free at scale. LLM calls are not. Think about volume before you build.')}
+                {pGap(<><strong>Think about:</strong> How often will each AI component be called? What is the cost at pilot vs full scale?</>)}
+              </>
+            ), 'scale-cost')}
+
+            {renderSection('env-cost', 'Environmental cost', (
+              <>
+                {p(<>AI systems <a href="https://www.technologyreview.com/2023/12/05/1084417/ais-carbon-footprint-is-bigger-than-you-think/" target="_blank" rel="noopener" style={{ color: '#6830C4' }}>consume significant energy</a> and <a href="https://www.unep.org/news-and-stories/story/ai-has-environmental-problem-heres-what-world-can-do-about" target="_blank" rel="noopener" style={{ color: '#6830C4' }}>massive amounts of water</a>. <a href="https://www.npm.org/2024/07/12/g-s1-9545/ai-brings-soaring-emissions-for-google-and-microsoft-a-major-contributor-to-climate-change" target="_blank" rel="noopener" style={{ color: '#6830C4' }}>Running models at scale has a real footprint</a>. Using a large model for a task a script could handle is wasteful.</>)}
+                {pGap(<><strong>Think about:</strong> For each AI component, is a model call actually necessary? Could a rule, a template or a script do it instead?</>)}
+              </>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Human checkpoints */}
+      {activeTab === 'humans' && (
+        <div>
+          {p('Not everything needs to pause for human approval. But some things absolutely do. The question is which ones.')}
+
+          <div style={{ marginTop: '1rem' }}>
+            {renderSection('approval-gates', 'Approval gates', (
+              <>
+                {p(<>An <a href={`${base}resources/#approval-gate`} style={{ color: '#6830C4' }}>approval gate</a> pauses the workflow until a person signs off. Use these for high-stakes outputs: anything customer-facing, legally binding or financially significant.</>)}
+                {pGap(<><strong>Think about:</strong> Which outputs need human approval? Who approves? What happens if they are unavailable?</>)}
+              </>
+            ), 'approval-gate')}
+
+            {renderSection('monitoring', 'Monitoring vs approval', (
+              <>
+                {p('Low-stakes outputs can proceed with monitoring: the system logs everything and a person reviews periodically. If you put approval gates on everything, the human becomes a bottleneck and starts rubber-stamping.')}
+                {pGap(<><strong>Think about:</strong> Which outputs need approval and which can proceed with monitoring?</>)}
+              </>
+            ))}
+
+            {renderSection('rejection', 'Rejection paths', (
+              <>
+                {p('If the reviewer rejects the AI output, what happens? Does it regenerate? Does a person handle it manually? Does it queue?')}
+                {pGap(<><strong>Think about:</strong> For each approval gate, what is the fallback when the human disagrees?</>)}
+              </>
+            ), 'fallback')}
+
+            {renderSection('bias-transparency', 'Bias and transparency', (
+              <>
+                {p(<>Models reflect <a href={`${base}resources/#bias`} style={{ color: '#6830C4' }}>biases in their training data</a>. If your system makes decisions that affect people, test for this. <a href="https://hdsr.mitpress.mit.edu/pub/aelql9qy" target="_blank" rel="noopener" style={{ color: '#6830C4' }}>Users should know when they are interacting with AI</a>.</>)}
+                {pGap(<><strong>Think about:</strong> Does your system produce outputs that affect people? Is it clear to users when AI is involved?</>)}
+              </>
+            ), 'transparency')}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
