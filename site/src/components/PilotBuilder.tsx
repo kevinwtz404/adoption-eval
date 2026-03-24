@@ -38,7 +38,7 @@ const TAB_CONTENT: Record<string, { explanation: string; placeholder: string }> 
   },
   owner: {
     explanation: 'One person owns the pilot. Not a committee. They are responsible for running it, collecting data, reporting results and making the call at the end. The pilot owner needs authority to stop the pilot if something goes wrong. Without this, problems get escalated instead of resolved.',
-    placeholder: 'e.g. Sarah Chen, FP&A lead. Has authority to pause or stop the pilot.',
+    placeholder: 'e.g. AI enablement lead or finance team lead. Must have authority to pause or stop the pilot.',
   },
 };
 

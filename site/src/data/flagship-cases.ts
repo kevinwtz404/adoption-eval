@@ -9,6 +9,13 @@ export interface FlagshipCase {
   whyAI: string;
   userDescription: string;
   redesign: string;
+  pilotPlan: {
+    scope: string;
+    successCriteria: string;
+    stopCriteria: string;
+    timeline: string;
+    owner: string;
+  };
   redesignData: {
     components: Array<{ name: string; type: string; description: string; risks: string[]; considerations: string[] }>;
     boundaries: string[];
@@ -51,6 +58,13 @@ If the system is confident in the answer, it shows it directly. If confidence is
 Every answer (whether from the system or a person) is captured and becomes searchable. When the same question comes up again, the existing answer surfaces first.
 
 Access control must respect existing document permissions. Not everyone should be able to look up everything. The system must only surface documents the person asking is allowed to see.`,
+    pilotPlan: {
+      scope: 'One team (ops), one document set (internal wikis and decision logs only). Test for 3 weeks with 10-15 users asking real questions.',
+      successCriteria: 'Time to find an answer drops by 50%. 80% of answers include correct source citations. Fewer than 10% of answers need escalation to a person.',
+      stopCriteria: 'System surfaces confidential documents to the wrong person. More than 30% of answers are factually wrong. Users stop using it within the first week.',
+      timeline: '3 weeks. Midpoint review after week 2. Final evaluation in week 4.',
+      owner: 'Ops lead. Has authority to pause the pilot and restrict document access.',
+    },
     redesignData: {
       components: [
         { name: 'User asks question', type: 'human', description: 'Someone asks a question through a single interface', risks: [], considerations: ['Chat, Slack command, internal tool'] },
@@ -97,6 +111,13 @@ Based on the enriched profile, the LLM drafts a personalised outreach message. T
 The sales rep reviews both the research summary and the draft outreach. They can edit, rewrite or approve as is. Nothing is sent until the rep explicitly approves it.
 
 Once approved, the outreach is sent via the existing email or messaging tool. The enriched data and outreach history are saved to the CRM automatically.`,
+    pilotPlan: {
+      scope: 'One sales rep, 20 new leads over 2 weeks. Compare enrichment quality and outreach response rate against the same rep doing it manually the previous month.',
+      successCriteria: 'Research time per lead drops from 15 minutes to under 2 minutes. Outreach personalisation quality rated as equal or better by the rep. Response rate does not decline.',
+      stopCriteria: 'Enrichment data is consistently wrong or outdated. Outreach drafts require more editing than writing from scratch. Rep loses trust in the tool.',
+      timeline: '2 weeks. Quick check after week 1. Full evaluation after week 2.',
+      owner: 'Sales team lead. Reviews enrichment quality daily during the pilot.',
+    },
     redesignData: {
       components: [
         { name: 'New lead arrives', type: 'deterministic', description: 'Lead enters the system from marketing or inbound', risks: [], considerations: ['Trigger for the pipeline'] },
@@ -144,6 +165,13 @@ Once both tracks are done, an LLM assembles a campaign summary from the approved
 The content lead reviews the complete campaign package in one place and approves it. This replaces the current process of chasing versions through Slack and email.
 
 Approved versions are published to each channel via the existing publishing tools and the system logs what went where and when.`,
+    pilotPlan: {
+      scope: 'One campaign, three channels (LinkedIn, email, website). Copywriter creates the master copy as usual, then the system generates the channel versions.',
+      successCriteria: 'Time from master copy to all channel versions ready drops by 60%. Copywriter rates generated versions as needing only minor edits. Brand consistency across channels improves (rated by content lead).',
+      stopCriteria: 'Generated versions consistently miss brand voice. Copywriter spends more time editing than they would writing from scratch. Content lead rejects more than 30% of generated versions.',
+      timeline: '3 weeks, covering 2 campaign cycles. Midpoint review after the first campaign.',
+      owner: 'Content lead. Reviews all generated versions and has authority to revert to manual process.',
+    },
     redesignData: {
       components: [
         { name: 'Master copy created', type: 'human', description: 'Copywriter creates master narrative and key messages', risks: [], considerations: ['This is the creative work and stays fully human'] },
@@ -206,6 +234,13 @@ Approved versions are published to each channel via the existing publishing tool
 8. CFO review and approval: the CFO reviews, asks questions, approves. If steps 4 and 5 are better, this cycle gets shorter because there are fewer "but why?" follow-ups.
 
 The pilot hypothesis: given that the numbers are already computed, can AI draft useful commentary and surface signals the team would have missed or taken hours to find?`,
+    pilotPlan: {
+      scope: 'One monthly business review for one business unit. Use last month\'s already-computed numbers as input. Test commentary drafting and signal surfacing only, not the data pipeline.',
+      successCriteria: 'Commentary drafting time drops from 2 days to half a day. Finance team rates AI-drafted commentary as requiring only minor edits. At least 2 qualitative signals surfaced that the team would have missed. No AI-generated numbers appear in the output.',
+      stopCriteria: 'AI-generated commentary misrepresents what the numbers mean. Generated numbers appear that look like calculations. Confidential data is exposed. Finance team does not trust the output.',
+      timeline: '4 weeks covering one full reporting cycle. Midpoint check after the data is pulled and reconciled (before AI steps run).',
+      owner: 'Finance team lead. Reviews all AI-generated output before it enters the report.',
+    },
     redesignData: {
       components: [
         { name: 'Data collection', type: 'tool', description: 'Pull numbers from CRM, ERP and billing via APIs', risks: ['API changes', 'Incomplete data'], considerations: ['Integration tooling, not AI'] },
