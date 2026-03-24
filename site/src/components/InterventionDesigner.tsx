@@ -17,6 +17,7 @@ export default function InterventionDesigner() {
   const [painPoint, setPainPoint] = useState('');
   const [userDescription, setUserDescription] = useState('');
   const [redesign, setRedesign] = useState('');
+  const [components, setComponents] = useState<Array<{ name: string; type: string; description: string }>>([]);
   const [generating, setGenerating] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
 
@@ -27,9 +28,11 @@ export default function InterventionDesigner() {
       setWorkflowName(state.workflow.name || '');
     }
 
-    // Load redesign from localStorage
     if ((state as any).redesign) {
       setRedesign((state as any).redesign);
+    }
+    if ((state as any).redesignData?.components) {
+      setComponents((state as any).redesignData.components);
     }
 
     if (state.selectedCase && state.selectedCase !== 'custom') {
@@ -39,7 +42,11 @@ export default function InterventionDesigner() {
         setUserDescription(flagship.userDescription || '');
         if (!(state as any).redesign && flagship.redesign) {
           setRedesign(flagship.redesign);
+          setComponents(flagship.redesignData.components);
           saveState({ redesign: flagship.redesign, redesignData: flagship.redesignData } as any);
+        }
+        if (flagship.redesignData?.components && components.length === 0) {
+          setComponents(flagship.redesignData.components);
         }
       }
     }
@@ -136,6 +143,7 @@ export default function InterventionDesigner() {
                 const result = await analyseWorkflow(workflowName, userDescription || painPoint, steps);
                 if (result) {
                   setRedesign(result.narrative);
+                  setComponents(result.components || []);
                   saveState({
                     redesign: result.narrative,
                     redesignData: {
@@ -166,18 +174,65 @@ export default function InterventionDesigner() {
         )}
 
         {/* The solution text */}
+        {/* Flow diagram */}
+        {components.length > 0 && (
+          <div style={{
+            marginBottom: '1.25rem',
+            padding: '1.25rem',
+            border: '1px solid #e0e0e0',
+            borderRadius: '8px',
+            background: '#fff',
+            overflowX: 'auto' as const,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', minWidth: 'max-content' }}>
+              {components.map((comp, i) => {
+                const typeColors: Record<string, { bg: string; border: string }> = {
+                  human: { bg: '#faf5ff', border: '#6830C4' },
+                  llm: { bg: '#eff6ff', border: '#3b82f6' },
+                  rag: { bg: '#f0fdf4', border: '#22c55e' },
+                  tool: { bg: '#fefce8', border: '#eab308' },
+                  deterministic: { bg: '#fefce8', border: '#eab308' },
+                  ml: { bg: '#fff7ed', border: '#f97316' },
+                };
+                const colors = typeColors[comp.type] || { bg: '#f9fafb', border: '#d1d5db' };
+
+                return (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <div style={{
+                      padding: '0.5rem 0.75rem',
+                      border: `2px solid ${colors.border}`,
+                      borderRadius: '8px',
+                      background: colors.bg,
+                      textAlign: 'center' as const,
+                      minWidth: '5rem',
+                      maxWidth: '9rem',
+                    }}>
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.125rem' }}>
+                        {comp.type}
+                      </div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, lineHeight: '1.3' }}>
+                        {comp.name}
+                      </div>
+                    </div>
+                    {i < components.length - 1 && (
+                      <div style={{ fontSize: '15px', color: '#ccc', padding: '0 0.125rem' }}>&rarr;</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {redesign && (
           <div>
-            <textarea
-              value={redesign}
-              onInput={(e) => handleRedesignChange((e.target as HTMLTextAreaElement).value)}
-              rows={20}
-              style={{
-                width: '100%', padding: '1rem', border: '1px solid #e0e0e0', borderRadius: '8px',
-                fontFamily: 'inherit', fontSize: '15px', resize: 'vertical' as const, lineHeight: '1.75',
-                background: '#fff',
-              }}
-            />
+            <div style={{
+              padding: '1.25rem', border: '1px solid #e0e0e0', borderRadius: '8px',
+              background: '#fafafa', fontSize: '15px', lineHeight: '1.75',
+              whiteSpace: 'pre-wrap' as const,
+            }}>
+              {redesign}
+            </div>
             <p style={{ fontSize: '15px', color: '#999', marginTop: '0.75rem', lineHeight: '1.75' }}>
               This solution will be used in the next step to identify boundaries, risks and controls for your pilot.
             </p>
