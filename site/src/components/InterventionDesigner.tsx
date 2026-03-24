@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 import { flagshipCases } from '../data/flagship-cases';
-import { analyseStep } from '../data/gemini';
+import { analyseStep, analyseWorkflow } from '../data/gemini';
 
 interface StepDesign {
   isCandidate: boolean;
@@ -25,6 +25,8 @@ export default function InterventionDesigner() {
   const [painPoint, setPainPoint] = useState<string | null>(null);
   const [analyses, setAnalyses] = useState<Record<string, string>>({});
   const [analysing, setAnalysing] = useState<string | null>(null);
+  const [bulkAnalysing, setBulkAnalysing] = useState(false);
+  const [hasBeenAnalysed, setHasBeenAnalysed] = useState(false);
 
   useEffect(() => {
     const state = loadState();
@@ -37,7 +39,15 @@ export default function InterventionDesigner() {
     }
     if (state.selectedCase) {
       const flagship = flagshipCases.find(c => c.id === state.selectedCase);
-      if (flagship) setPainPoint(flagship.painPoint);
+      if (flagship) {
+        setPainPoint(flagship.painPoint);
+        setHasBeenAnalysed(true); // Flagship cases are pre-filled
+      }
+    }
+    // Check if designs already exist (from a previous visit)
+    if ((state as any).designs) {
+      const hasAnyCandidate = Object.values((state as any).designs).some((d: any) => d.isCandidate);
+      if (hasAnyCandidate) setHasBeenAnalysed(true);
     }
   }, []);
 
@@ -84,6 +94,67 @@ export default function InterventionDesigner() {
         </div>
         {painPoint && <div style={{ fontSize: '15px', color: '#666', lineHeight: '1.75', marginTop: '0.75rem' }}>{painPoint}</div>}
       </div>
+
+      {/* Bulk analysis prompt for custom workflows */}
+      {!hasBeenAnalysed && steps.length > 0 && (
+        <div style={{
+          padding: '1.5rem',
+          border: '1px solid #6830C4',
+          borderRadius: '8px',
+          background: 'rgba(104, 48, 196, 0.04)',
+          marginBottom: '1.5rem',
+          textAlign: 'center' as const,
+        }}>
+          <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '0.5rem' }}>
+            Ready to analyse your workflow?
+          </div>
+          <p style={{ fontSize: '15px', color: '#666', lineHeight: '1.75', marginBottom: '1rem', maxWidth: '500px', margin: '0 auto 1rem' }}>
+            We will review all your steps at once and suggest where changes could help. You can edit everything afterwards.
+          </p>
+          <button
+            onClick={async () => {
+              setBulkAnalysing(true);
+              const suggestions = await analyseWorkflow(
+                workflowName,
+                painPoint || '',
+                steps,
+              );
+              if (Object.keys(suggestions).length > 0) {
+                const newDesigns: Record<string, StepDesign> = {};
+                steps.forEach(s => {
+                  const suggestion = suggestions[s.id];
+                  newDesigns[s.id] = {
+                    isCandidate: suggestion?.isCandidate || false,
+                    description: suggestion?.description || '',
+                    notes: '',
+                  };
+                });
+                setDesigns(newDesigns);
+                saveState({ designs: newDesigns } as any);
+              }
+              setHasBeenAnalysed(true);
+              setBulkAnalysing(false);
+            }}
+            disabled={bulkAnalysing}
+            style={{
+              padding: '0.625rem 1.5rem', borderRadius: '6px', fontSize: '15px',
+              fontFamily: 'inherit', fontWeight: 600, cursor: bulkAnalysing ? 'wait' : 'pointer',
+              background: '#6830C4', color: '#fff', border: 'none',
+              opacity: bulkAnalysing ? 0.6 : 1,
+            }}
+          >
+            {bulkAnalysing ? 'Analysing your workflow...' : 'Analyse all steps'}
+          </button>
+          <div style={{ marginTop: '0.75rem' }}>
+            <button
+              onClick={() => setHasBeenAnalysed(true)}
+              style={{ fontSize: '15px', color: '#999', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline' }}
+            >
+              Skip and fill in manually
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Steps */}
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
