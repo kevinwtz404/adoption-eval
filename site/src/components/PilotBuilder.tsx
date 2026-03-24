@@ -21,24 +21,24 @@ const TABS = [
 
 const TAB_CONTENT: Record<string, { explanation: string; placeholder: string }> = {
   scope: {
-    explanation: 'Pick the smallest meaningful slice of the workflow you can test. Not the whole thing. One team, one process, one time period. The goal is to learn, not to deploy. Ask: "If this pilot goes wrong, what is the worst that can happen?" If the answer is scary, the scope is too big.',
-    placeholder: 'e.g. One monthly business review for the APAC business unit, using CRM and ERP data only',
+    explanation: 'Pick the smallest meaningful slice you can test. One team, one process, one cycle. The goal is to learn, not to deploy. If the pilot goes wrong, the impact should be contained.',
+    placeholder: 'What specific slice of the workflow will you test? Which team, which data, how many users?',
   },
   success: {
-    explanation: 'Before you start, write down what "success" looks like. Be specific. "It works" is not a criterion. "Reduces report assembly time from 5 days to 2 days without increasing error rate" is. Include criteria for control and quality, not just speed. A pilot that is faster but less accurate or less controllable is not a success.',
-    placeholder: 'e.g. Assembly time drops from 5 days to 2 days. Error rate stays the same or improves. CFO asks fewer follow-up questions.',
+    explanation: 'Write down what success looks like before you start. Be specific and measurable. Include quality and control, not just speed. A pilot that is faster but less accurate or harder to trust is not a success.',
+    placeholder: 'What specific improvements would make this worth scaling? What must not get worse?',
   },
   stop: {
-    explanation: 'Equally important: what would cause you to stop the pilot early? Define this before you start so you are not rationalising problems away when they appear. Examples: error rate exceeds a threshold, a boundary is violated, user trust drops, cost exceeds budget.',
-    placeholder: 'e.g. Error rate exceeds 5%. A boundary is violated. Team refuses to use it. Cost exceeds budget by 20%.',
+    explanation: 'Define what would cause you to stop early. Write this down now so you are not rationalising problems when they appear. Think about error rates, boundary violations, user trust and cost.',
+    placeholder: 'What would cause you to stop the pilot? What is the threshold for each?',
   },
   timeline: {
-    explanation: 'Most useful pilots run 2-4 weeks. Shorter and you do not have enough data. Longer and you lose momentum and the conditions change. Build in a check-in at the midpoint. If things are not working at the halfway mark, you should know why and decide whether to adjust or stop.',
-    placeholder: 'e.g. 3 weeks. Midpoint check-in after week 2. Final evaluation in week 4.',
+    explanation: 'Most useful pilots run 2-4 weeks. Shorter and you do not have enough data. Longer and you lose momentum. Build in a midpoint check-in so you can adjust or stop halfway through.',
+    placeholder: 'How long will the pilot run? When is the midpoint check-in? When is the final evaluation?',
   },
   owner: {
-    explanation: 'One person owns the pilot. Not a committee. They are responsible for running it, collecting data, reporting results and making the call at the end. The pilot owner needs authority to stop the pilot if something goes wrong. Without this, problems get escalated instead of resolved.',
-    placeholder: 'e.g. AI enablement lead or finance team lead. Must have authority to pause or stop the pilot.',
+    explanation: 'One person owns the pilot. Not a committee. They run it, collect data, report results and make the call at the end. They need authority to stop the pilot if something goes wrong.',
+    placeholder: 'Which role owns this pilot? Do they have authority to pause or stop it?',
   },
 };
 
@@ -157,7 +157,7 @@ export default function PilotBuilder() {
               flex: 1, padding: '0.625rem 0.5rem', fontSize: '15px', fontWeight: 600, fontFamily: 'inherit', cursor: 'pointer',
               border: 'none', borderRight: i < TABS.length - 1 ? '1px solid #e0e0e0' : 'none',
               background: activeTab === tab.id ? '#6830C4' : '#fff',
-              color: activeTab === tab.id ? '#fff' : plan[tab.field].trim() ? '#333' : '#999',
+              color: activeTab === tab.id ? '#fff' : '#666',
             }}
           >
             {tab.label}{plan[tab.field].trim() ? ' \u2713' : ''}

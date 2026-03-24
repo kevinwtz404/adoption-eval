@@ -85,7 +85,7 @@ export default function EvaluationMatrix() {
                     style={{
                       padding: '0.375rem 0.75rem', fontSize: '15px', fontFamily: 'inherit', fontWeight: 600, cursor: 'pointer',
                       border: 'none', borderRight: vi < 2 ? '1px solid #e0e0e0' : 'none',
-                      background: dim.direction === val ? (val === 'improved' ? '#166534' : val === 'declined' ? '#991b1b' : '#854d0e') : '#fff',
+                      background: dim.direction === val ? '#6830C4' : '#fff',
                       color: dim.direction === val ? '#fff' : '#666',
                     }}>
                     {val === 'improved' ? 'Improved' : val === 'neutral' ? 'Neutral' : 'Declined'}
@@ -104,6 +104,49 @@ export default function EvaluationMatrix() {
           </div>
         ))}
       </div>
+
+      {/* Results summary */}
+      {measured >= 3 && (() => {
+        const improved = dimensions.filter(d => d.direction === 'improved').length;
+        const declined = dimensions.filter(d => d.direction === 'declined').length;
+        const neutral = dimensions.filter(d => d.direction === 'neutral').length;
+        const riskDeclined = dimensions.find(d => d.id === 'risk')?.direction === 'declined';
+        const controlDeclined = dimensions.find(d => d.id === 'control')?.direction === 'declined';
+        const qualityDeclined = dimensions.find(d => d.id === 'quality')?.direction === 'declined';
+
+        let verdict = '';
+        let verdictColor = '';
+        if (riskDeclined || controlDeclined) {
+          verdict = 'Risk or control declined. This needs to be addressed before scaling.';
+          verdictColor = '#991b1b';
+        } else if (qualityDeclined) {
+          verdict = 'Quality declined. Faster or cheaper is not enough if the output is worse.';
+          verdictColor = '#991b1b';
+        } else if (improved >= 3 && declined === 0) {
+          verdict = 'Strong result. Multiple dimensions improved with no declines.';
+          verdictColor = '#166534';
+        } else if (improved >= 2 && declined <= 1) {
+          verdict = 'Mixed but promising. Some improvements, minor concerns. Consider revising and running another iteration.';
+          verdictColor = '#854d0e';
+        } else {
+          verdict = 'Weak result. Consider whether this intervention fits the workflow or needs a different approach.';
+          verdictColor = '#991b1b';
+        }
+
+        return (
+          <div style={{ marginTop: '1.5rem', padding: '1.25rem', border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fafafa' }}>
+            <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '0.75rem' }}>Results summary</div>
+            <div style={{ display: 'flex', gap: '1.5rem', fontSize: '15px', marginBottom: '1rem' }}>
+              <span>{improved} improved</span>
+              <span>{neutral} neutral</span>
+              <span>{declined} declined</span>
+            </div>
+            <div style={{ padding: '0.75rem', borderLeft: `3px solid ${verdictColor}`, background: '#fff', borderRadius: '0 6px 6px 0', fontSize: '15px', lineHeight: '1.75', color: verdictColor }}>
+              {verdict}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
