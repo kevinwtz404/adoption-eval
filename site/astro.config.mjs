@@ -5,8 +5,8 @@ import preact from '@astrojs/preact';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://kevin-witzenberger.github.io',
-  base: '/adoption-eval',
+  site: 'https://kevinwtz404.github.io',
+  base: '/adoption-eval/',
   integrations: [preact()],
   vite: {
     resolve: {
