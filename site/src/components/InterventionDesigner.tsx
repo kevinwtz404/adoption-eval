@@ -184,7 +184,7 @@ export default function InterventionDesigner() {
             background: '#fff',
             overflowX: 'auto' as const,
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', minWidth: 'max-content' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', minWidth: 'max-content' }}>
               {components.map((comp, i) => {
                 const isHuman = comp.type === 'human';
                 const colors = isHuman
@@ -210,7 +210,7 @@ export default function InterventionDesigner() {
                       </div>
                     </div>
                     {i < components.length - 1 && (
-                      <div style={{ fontSize: '12px', color: '#ccc', padding: '0 0.0625rem' }}>&rarr;</div>
+                      <div style={{ fontSize: '15px', color: '#999', padding: '0 0.125rem', fontWeight: 700 }}>&rarr;</div>
                     )}
                   </div>
                 );
