@@ -2,6 +2,7 @@ import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
 import { flagshipCases } from '../data/flagship-cases';
+import { callAI } from '../data/api';
 
 interface PilotPlan {
   scope: string;
@@ -58,11 +59,7 @@ function renderMarkdown(md: string): string {
     .replace(/$/, '</p>');
 }
 
-// Gemini call for generating the pilot overview
 async function generateOverview(allData: any): Promise<string> {
-  const HF_SPACE_URL = 'https://cantcomeupwithaname-adoption-eval-api.hf.space/gradio_api/call/predict';
-  const API_TOKEN = 'ae-2026-kw-pilot';
-
   const prompt = `You are helping someone plan an AI pilot. Here is everything they have decided so far:
 
 Workflow: ${allData.workflowName}
@@ -95,27 +92,7 @@ A short analysis covering: recommended approach (one sentence), what stays with 
 
 IMPORTANT: Only produce these five sections. Keep the total response concise.`;
 
-  try {
-    const submitResponse = await fetch(HF_SPACE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: [allData.workflowName, 'pilot plan', allData.painPoint, prompt, API_TOKEN] }),
-    });
-    if (!submitResponse.ok) return '';
-    const { event_id } = await submitResponse.json();
-    if (!event_id) return '';
-    const resultResponse = await fetch(`${HF_SPACE_URL}/${event_id}`);
-    if (!resultResponse.ok) return '';
-    const text = await resultResponse.text();
-    const lines = text.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i] === 'event: complete' && lines[i + 1]?.startsWith('data: ')) {
-        const rawData = JSON.parse(lines[i + 1].slice(6));
-        return rawData[0] || '';
-      }
-    }
-    return '';
-  } catch { return ''; }
+  return await callAI(prompt, allData.workflowName);
 }
 
 export default function PilotBuilder() {

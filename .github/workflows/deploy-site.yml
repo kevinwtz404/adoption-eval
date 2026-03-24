@@ -29,6 +29,8 @@ jobs:
           cache-dependency-path: site/package-lock.json
       - run: npm ci
       - run: npx astro build
+        env:
+          PUBLIC_AI_API_URL: ${{ vars.PUBLIC_AI_API_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist

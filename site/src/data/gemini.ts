@@ -1,8 +1,4 @@
-// This module calls a Hugging Face Space that proxies to the Gemini API.
-// The API key lives on the HF Space as a secret, never in this codebase.
-
-const HF_SPACE_URL = 'https://cantcomeupwithaname-adoption-eval-api.hf.space/gradio_api/call/predict';
-const API_TOKEN = 'ae-2026-kw-pilot';
+import { callAI } from './api';
 
 export interface RedesignComponent {
   name: string;
@@ -19,39 +15,6 @@ export interface RedesignResult {
   confidentiality: string[];
   costFactors: string[];
   humanCheckpoints: string[];
-}
-
-async function callGemini(prompt: string, context: string): Promise<string> {
-  try {
-    const submitResponse = await fetch(HF_SPACE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        data: [context, 'workflow analysis', '', prompt, API_TOKEN],
-      }),
-    });
-
-    if (!submitResponse.ok) return '';
-
-    const { event_id } = await submitResponse.json();
-    if (!event_id) return '';
-
-    const resultResponse = await fetch(`${HF_SPACE_URL}/${event_id}`);
-    if (!resultResponse.ok) return '';
-
-    const text = await resultResponse.text();
-    const lines = text.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i] === 'event: complete' && lines[i + 1]?.startsWith('data: ')) {
-        const rawData = JSON.parse(lines[i + 1].slice(6));
-        return rawData[0] || '';
-      }
-    }
-    return '';
-  } catch (err) {
-    console.error('Gemini call error:', err);
-    return '';
-  }
 }
 
 export async function analyseWorkflow(
@@ -97,7 +60,7 @@ Respond with a JSON object (no other text) with this exact structure:
 
 Be practical and specific to this workflow. Not generic advice. Think about what data is involved, who should see what, what happens when things go wrong. Consider whether local models (like Ollama) would be more appropriate than cloud models for sensitive data. Keep the components list to 5-8 items maximum. Focus on the key steps, not every substep.`;
 
-  const responseText = await callGemini(prompt, workflowName);
+  const responseText = await callAI(prompt, workflowName);
   if (!responseText) return null;
 
   try {
@@ -133,5 +96,5 @@ Analyse this and provide:
 
 Be concise and practical. Structure your response with clear headings.`;
 
-  return await callGemini(prompt, workflowContext) || 'Analysis unavailable. Try again.';
+  return await callAI(prompt, workflowContext) || 'Analysis unavailable. Try again.';
 }

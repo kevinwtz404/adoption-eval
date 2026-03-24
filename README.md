@@ -1,127 +1,108 @@
 # adoption-eval
 
-A practical workflow implementation method for AI adoption.
+A free, open-source, interactive web guide that helps organisations figure out where and how to adopt AI in their workflows.
 
-Most teams do not fail because they lack AI tools. They fail because they cannot reliably move from a painpoint to a safe, testable implementation plan. `adoption-eval` exists to close that gap.
+Most teams do not fail because they lack AI tools. They fail because they cannot reliably move from a pain point to a safe, testable implementation plan. This guide closes that gap.
 
-## what this is for
-Use this repo to:
-- discover and qualify AI adoption opportunities in real workflows
-- compare intervention options (including non-AI, ML, LLM, hybrid)
-- define hard boundaries (policy + capability + architectural gates)
-- design small pilots with measurable outcomes
-- make clear scale/revise/reject decisions
+## what this is
+
+An interactive walkthrough hosted on GitHub Pages. You bring a workflow that hurts, and the guide walks you through seven steps to figure out whether AI fits, what components you need, what boundaries to set and how to run a pilot.
+
+It is not a product or a platform. It is a practical guide with tools embedded in it.
 
 ## who this is for
-- AI adoption leads
-- ops and transformation teams
-- consultants running workflow discovery and pilot design
-- technical teams translating business workflow needs into build choices
 
-## architecture at a glance
+**Decision makers** (AI adoption leads, consultants, ops managers, team leads) who need to figure out where AI fits in their organisation. You do not need to be technical.
 
-This repo has three layers. They share one method backbone and one schema contract.
+**Implementers** (developers, technical leads) who take those decisions and need to build something. The guide produces a build brief you can hand to a developer or paste into an AI assistant.
 
-| Layer | Location | Purpose | Audience |
-|-------|----------|---------|----------|
-| **Web app** | `site/` | Interactive walkthrough of the method. Pick a flagship case or enter your own workflow, score it, map opportunities, review boundaries, get a pilot plan. | Anyone learning or applying the method |
-| **CLI** | `src/` + `bin/` | Operational tool for running assessments in pipelines or local workflows. Same logic as the web app. | Technical teams, automation pipelines |
-| **Method docs** | `docs/` | Canonical method documentation, rubrics, discovery guides, flagship use cases. | Everyone — the source of truth for the method |
+## the seven steps
 
-The web app and CLI both import the same core logic from `src/lib/`. The method docs define the rules that the logic implements.
+1. **Discover** — find the workflows worth looking at using 10 structured discovery methods
+2. **Select** — pick a workflow to evaluate (4 built-in scenarios or describe your own)
+3. **Qualify** — score it against 6 readiness criteria with two gates
+4. **Map** — design the intervention: what components you need, how they connect, where people stay in the loop
+5. **Bound** — stress-test the design: error tolerance, data privacy, cost, human checkpoints
+6. **Pilot** — build the pilot plan with scope, success criteria, stop criteria, timeline, ownership
+7. **Evaluate** — measure what changed across 6 dimensions, then decide: scale, revise or stop
 
-## method backbone (end-to-end)
-1. discover opportunities
-2. qualify and shortlist
-3. match each opportunity to intervention options
-4. design boundaries and controls
-5. run pilot and evaluate outcomes
-6. decide (scale / revise / reject) and loop
+## the core insight
 
-Detailed flow: `docs/adoption-eval-method-overview.md`
-
-## what this repo owns
-- workflow-level analysis and decision logic
-- `could / should / must-stay-human` decisions
-- opportunity-to-solution matching
-- boundary design and approval-gate patterns
-- pilot planning and outcome evaluation
-
-## what this repo does not own
-- org-wide readiness diagnostics and roadmap generation (`ai-readiness`)
-- deep technical architecture implementation repos (`hybrid-rag`, `edge-agent`)
-
-## key principles
-- method is stable but adaptable
-- solutions are variable by context and risk
-- mixed options are always considered
-- not every problem is an AI problem
-- boundary enforcement should be architectural where risk is high
+What people call "an AI agent" is actually a combination of different components: a language model, deterministic tools, a retrieval layer and human checkpoints. Each has different strengths and failure modes. How you put them together matters as much as which ones you pick.
 
 ## start here
 
-### web app (interactive)
+### web app
 ```bash
-cd site && nvm use 22 && npm run dev
+cd site && nvm use 22 && npm install && npx astro dev --port 3001
 ```
-Or visit the hosted version (once GitHub Pages is enabled).
 
 ### CLI
 ```bash
-npm run build
+npm install && npm run build
 node bin/adoption-eval.js run --input examples/cli/support-triage-workflow.example.json --out examples/out
 ```
 
-### docs
-- docs map: `docs/README.md`
-- method overview: `docs/adoption-eval-method-overview.md`
-- discovery methods: `docs/ai-adoption-opportunity-discovery-methods.md`
-- matching canvas: `docs/opportunity-to-solution-matching-canvas.md`
-- rubric + thresholds: `docs/rubric-and-thresholds.md`
-- outcome matrix: `docs/outcome-dimensions-matrix.md`
-- LLM boundary guide: `docs/llm-limitations-and-boundary-design.md`
-- positioning draft: `docs/market-facing-positioning.md`
-- flagship examples: `docs/flagship-use-cases/README.md`
+## tech stack
 
-## schema contract
+| Layer | Location | What it does |
+|-------|----------|-------------|
+| **Web app** | `site/` | Astro + Preact static site. Interactive components for each step. All state in localStorage |
+| **AI backend** | `hf-space/` | Hugging Face Space (Gradio + Python) proxying to Google Gemini API. Generates redesign proposals for custom workflows and pilot overviews. Rate limited, token-authenticated |
+| **CLI** | `src/` + `bin/` | TypeScript. Runs qualification scoring, opportunity mapping and readiness evaluation from the command line |
+| **Schema** | `schemas/` | JSON Schema defining the workflow input contract. Used by the CLI for validation |
 
-The canonical input shape is defined in `schemas/workflow-input.schema.json`. Both the CLI and web app validate against it.
-
-All outputs include `method_version` and `schema_version` tags to track drift between the method docs, CLI, and web app.
-
-Key fields: `workflow.name`, `workflow.steps[]`, `workflow.actors[]`, `workflow.data_assets[]`, `workflow.success_metrics[]`, and optional `workflow.qualification` scores (1-5 scale).
-
-### optional upstream input
-- readiness profile contract: `docs/readiness-interface.md`
-- sample file: `examples/cli/readiness-profile.input.example.json`
-
-### typical outputs
-- opportunity map (could / should / must-stay-human per step)
-- qualification score with weighted criteria and gate checks
-- readiness score with domain breakdown
-- 30-day action plan with prerequisites, controls, and gate-failure remediation
-- outcome dimensions matrix (`time`, `cost`, `quality`, `risk`, `adoption friction`, `control confidence`)
+The web app and CLI share core logic from `src/lib/`.
 
 ## project structure
 
 ```
 adoption-eval/
-├── bin/                    # CLI entry point
-├── src/                    # TypeScript source (shared logic + CLI commands)
-│   ├── lib/                # Core logic (browser-safe, used by both CLI and web app)
-│   ├── commands/           # CLI command handlers
-│   ├── core/               # Output helpers, exit codes
-│   └── types.ts            # Shared type definitions
-├── site/                   # Astro + Preact web app
+├── site/                    # Astro + Preact web app
 │   └── src/
-│       ├── pages/          # 7 pages (landing + 6 method steps)
-│       ├── components/     # Interactive Preact islands
-│       └── data/           # Flagship case fixtures, localStorage state
-├── docs/                   # Method documentation (source of truth)
+│       ├── pages/          # 7 step pages + landing + resources
+│       ├── components/     # Interactive Preact components
+│       ├── data/           # Flagship cases, localStorage store, Gemini client
+│       ├── layouts/        # BaseLayout with nav, sidebar, footer
+│       └── styles/         # Global CSS
+├── hf-space/               # Hugging Face Space (Gemini proxy)
+│   ├── app.py              # Gradio app with rate limiting and token auth
+│   └── requirements.txt
+├── src/                    # CLI TypeScript source
+│   ├── lib/                # Core logic (scoring, mapping, validation)
+│   ├── commands/           # CLI command handlers
+│   └── types.ts            # Shared type definitions
 ├── schemas/                # JSON Schema for workflow input
-└── examples/
-    └── cli/                # CLI example inputs (workflow, readiness, outcome matrix)
+├── examples/cli/           # Example workflow inputs
+└── docs/                   # Local reference docs (not published)
 ```
 
+## built-in scenarios
+
+The guide includes four pre-filled flagship cases you can click through immediately:
+
+- **Finding internal answers** — knowledge scattered across tools, people waste hours searching
+- **CRM data chaos** — sales reps spend more time researching leads than talking to them
+- **Campaign adaptation overload** — one idea manually rewritten for every channel
+- **The reporting cycle problem** — finance teams spend days assembling reports instead of analysing them
+
+Each comes with pre-filled workflow steps, qualification scores, a proposed redesign with component flow diagram, boundary defaults and a pilot plan. Or describe your own workflow and the guide generates a proposal using AI.
+
+## outputs
+
+The guide produces two deliverables at the end:
+
+- **Pilot roadmap** (Markdown) — what you are testing, how you measure, what the timeline is
+- **Build brief** (Markdown) — components, boundaries, connections, designed to paste into an AI assistant for implementation options
+
 ## current state
-This repo is in active development. The method docs, CLI logic, and web app prototype are in place. The web app is a prototype sandbox for learning and applying the method interactively. The next phase is iterative testing and refinement across the 4 flagship examples.
+
+The guide is functional end-to-end. All seven steps work with both flagship cases and custom workflows. The resources page content and glossary are still TODO. See `docs/project-brief.md` for the full picture.
+
+## contributing
+
+This is a solo project by [Kevin Witzenberger](https://linkedin.com/in/kevin-witzenberger/). Feedback is welcome:
+
+- [Send an email](mailto:kevin.witzenberger@posteo.de)
+- [Open an issue](https://github.com/kevinwtz404/adoption-eval/issues)
+- [Connect on LinkedIn](https://linkedin.com/in/kevin-witzenberger/)
