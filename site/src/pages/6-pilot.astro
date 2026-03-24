@@ -13,87 +13,18 @@ const base = import.meta.env.BASE_URL;
     </div>
 
     <div class="mb-10">
-      <h2>What you have so far</h2>
-
       <p>
-        You have worked through four steps. You discovered a workflow, selected it, qualified it as ready to pilot, mapped the components you need and set the boundaries. Now it is time to put it all together into something actionable.
+        You have a design and you have set boundaries. Now define how you will actually test it. A pilot is not "turn it on and see what happens." It is a structured test with clear criteria for what success looks like and what would cause you to stop.
       </p>
 
       <p>
-        This page produces two outputs, designed for two different audiences:
+        This page produces two outputs: a roadmap for the decision maker (what we are testing, how we measure, what the timeline is) and a build brief for the implementer (components, boundaries, connections, specific questions).
       </p>
-
-      <div class="output-cards">
-        <div class="output-card">
-          <div class="output-card-header">For the decision maker</div>
-          <p>A pilot roadmap: what you are testing, how you will measure success, what the timeline looks like and what needs to happen before you start. This is what you share with leadership, stakeholders and the team.</p>
-        </div>
-        <div class="output-card">
-          <div class="output-card-header">For the implementer</div>
-          <p>A build brief: the components you need, the boundaries you have set, the connections between them and the specific technical questions that need answering. This is what you hand to a developer or paste into an AI assistant to get implementation options.</p>
-        </div>
-      </div>
     </div>
 
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>Before you start the pilot</h2>
-
-      <p>
-        A pilot is not "turn it on and see what happens." It is a structured test with clear criteria for what success looks like and what would cause you to stop.
-      </p>
-
-      <details class="pilot-section">
-        <summary>Define the scope</summary>
-        <div class="pilot-detail">
-          <p>Pick the smallest meaningful slice of the workflow you can test. Not the whole thing. One team, one process, one time period. The goal is to learn, not to deploy.</p>
-          <p>Ask: "If this pilot goes wrong, what is the worst that can happen?" If the answer is scary, the scope is too big.</p>
-        </div>
-      </details>
-
-      <details class="pilot-section">
-        <summary>Set success criteria</summary>
-        <div class="pilot-detail">
-          <p>Before you start, write down what "success" looks like. Be specific. "It works" is not a criterion. "Reduces report assembly time from 5 days to 2 days without increasing error rate" is.</p>
-          <p>Include criteria for control and quality, not just speed. A pilot that is faster but less accurate or less controllable is not a success.</p>
-        </div>
-      </details>
-
-      <details class="pilot-section">
-        <summary>Set stop criteria</summary>
-        <div class="pilot-detail">
-          <p>Equally important: what would cause you to stop the pilot early? Define this before you start so you are not rationalising problems away when they appear.</p>
-          <p>Examples: error rate exceeds X%, a boundary is violated, user trust drops below a threshold, cost exceeds budget by more than 20%.</p>
-        </div>
-      </details>
-
-      <details class="pilot-section">
-        <summary>Plan the timeline</summary>
-        <div class="pilot-detail">
-          <p>Most useful pilots run 2-4 weeks. Shorter and you do not have enough data. Longer and you lose momentum and the conditions change.</p>
-          <p>Build in a check-in at the midpoint. If things are not working at the halfway mark, you should know why and decide whether to adjust or stop.</p>
-        </div>
-      </details>
-
-      <details class="pilot-section">
-        <summary>Assign ownership</summary>
-        <div class="pilot-detail">
-          <p>One person owns the pilot. Not a committee. They are responsible for running it, collecting data, reporting results and making the call at the end.</p>
-          <p>The pilot owner needs authority to stop the pilot if something goes wrong. Without this, problems get escalated instead of resolved.</p>
-        </div>
-      </details>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="mb-10">
-      <h2>Your pilot plan</h2>
-
-      <p>
-        Below is your assembled pilot plan based on everything you have worked through. Review it, add any missing details and download it.
-      </p>
-
       <PilotBuilder client:load />
     </div>
 
@@ -104,85 +35,5 @@ const base = import.meta.env.BASE_URL;
   .landing-content .subtitle {
     color: var(--text-light);
     font-size: 15px;
-  }
-
-  .output-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin: 1.5rem 0;
-  }
-
-  .output-card {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.25rem;
-    background: var(--bg-card);
-  }
-
-  .output-card-header {
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--purple);
-    margin-bottom: 0.5rem;
-  }
-
-  .output-card p {
-    font-size: 15px;
-    color: var(--text-light);
-    margin: 0;
-    line-height: 1.75;
-  }
-
-  .pilot-section {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-card);
-    margin-bottom: 0.5rem;
-  }
-
-  .pilot-section summary {
-    padding: 0.875rem 1.25rem;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .pilot-section summary::after {
-    content: '+';
-    font-size: 1.25rem;
-    color: var(--text-muted);
-    font-weight: 400;
-  }
-
-  .pilot-section[open] summary::after {
-    content: '\2212';
-  }
-
-  .pilot-section summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .pilot-detail {
-    padding: 0 1.25rem 1.25rem;
-    border-top: 1px solid var(--border);
-    padding-top: 1rem;
-  }
-
-  .pilot-detail p {
-    font-size: 15px;
-    line-height: 1.75;
-  }
-
-  .pilot-detail p + p {
-    margin-top: 1.25em;
-  }
-
-  @media (max-width: 480px) {
-    .output-cards { grid-template-columns: 1fr; }
   }
 </style>
