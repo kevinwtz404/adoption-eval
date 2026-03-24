@@ -236,7 +236,7 @@ export default function InterventionDesigner() {
 
           function renderRow(items: Array<{ type: string; comp?: any; top?: any[]; bottom?: any[] }>, startIndex: number) {
             return (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', width: 'max-content', minWidth: '100%', justifyContent: 'center' }}>
                 {items.map((section, si) => (
                   <div key={si} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     {si > 0 && arrow('right')}
@@ -301,7 +301,7 @@ export default function InterventionDesigner() {
                       </div>
                     ))}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', width: 'max-content', minWidth: '100%', justifyContent: 'center' }}>
                     {row2.map((section, si) => (
                       <div key={si} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                         {si > 0 && <div style={{ fontSize: '15px', color: '#999', padding: '0 0.125rem', fontWeight: 700 }}>&larr;</div>}
