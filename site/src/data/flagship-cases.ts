@@ -132,21 +132,21 @@ Once approved, the outreach is sent via the existing email or messaging tool. Th
     subtitle: 'One idea manually rewritten and reformatted for every channel',
     buyer: 'Content / marketing leads',
     context: 'Creative',
-    painPoint: 'Content teams spend 60-70% of their effort on adaptation tasks. One campaign idea gets manually rewritten for LinkedIn, email, the website, X and internal comms. Each version is created separately, tracked in different places and approved through informal channels. Tone drifts between versions, assets get named inconsistently and nobody is sure which version was actually published where.',
-    discoveryMethod: 'Time-spend analysis showed the scale of adaptation work. Workplace shadowing revealed the copy-paste-tweak loop across channels. Retrospective review flagged version confusion and quality variance after publishing. The content lead described it as "we spend most of our time reformatting and almost no time on the actual creative work."',
-    whyAI: 'Generative AI is strong at structured text adaptation under style constraints. But the core creative judgement, brand-sensitive decisions and legal review must stay with people. The question is how much of the adaptation and version tracking can be automated without losing the quality that makes content effective.',
-    userDescription: 'We have a copywriter who creates the master narrative for each campaign. That part is great. But then they spend days manually rewriting it for LinkedIn, email, the website and social media. Each version is slightly different in tone and length but it is basically the same message. I want the channel versions generated automatically from the master copy so the copywriter reviews them instead of writing each one from scratch. Images also need resizing for each platform which is just mechanical work. And I want all versions tracked in one place with proper naming instead of scattered across Slack and email threads. The creative direction and final approval must stay with people.',
-    redesign: `The campaign brief and master narrative stay fully human. The content lead writes the brief, the copywriter creates the master copy and key messages. This is the creative work and it does not change.
+    painPoint: 'Content teams spend most of their time adapting one campaign idea for different channels. The copywriter creates a great master narrative, then spends days rewriting it for LinkedIn, email, the website and social media. Images need resizing for each platform. The content lead reviews everything through Slack messages and email threads. Nobody is sure which version was actually published where.',
+    discoveryMethod: 'Time-spend analysis showed the scale of adaptation work. Workplace shadowing revealed the copy-paste-tweak loop across channels. The content lead described it as "we spend most of our time reformatting and almost no time on the actual creative work."',
+    whyAI: 'Generative AI is strong at adapting text for different formats and tones. But the creative direction and final approval must stay with people. The question is how much of the repetitive adaptation can be automated while keeping quality high.',
+    userDescription: 'Our copywriter creates the master narrative for each campaign. That part is great. But then they spend days rewriting it for LinkedIn, email, the website and social media. Each version is slightly different in tone and length but it is basically the same message. I want the channel versions generated automatically so the copywriter reviews them instead of writing each one from scratch. Images need resizing for each platform which is just mechanical. Then I want the content lead to see everything in one place, approve it and publish. The creative work and final approval must stay with people.',
+    redesign: `The copywriter creates the master narrative and key messages. This is the creative work and it does not change.
 
-From the master copy, an LLM generates channel-specific versions: LinkedIn (professional tone, medium length), email newsletter (conversational, with CTA), website (scannable, SEO-friendly), X and other social platforms (short, punchy). Each version follows documented channel guidelines for tone, length and format.
+From the master copy, two things happen in parallel. An LLM generates channel-specific text versions: LinkedIn (professional tone, medium length), email (conversational, with CTA), website (scannable), social (short, punchy). At the same time, deterministic tools resize images to exact platform specifications.
 
-The copywriter reviews each generated version rather than writing them from scratch. They edit for nuance, brand voice and anything the LLM got wrong. This shifts their role from manual adaptation to quality review.
+The copywriter reviews the generated text versions, editing for brand voice, nuance and anything the LLM got wrong. Their role shifts from manual rewriting to creative review.
 
-Visual assets are handled separately. Deterministic tools (like Figma auto-layout or scripted templates) resize images to exact platform specifications. Asset naming and version tracking are automated: every asset is tagged with its campaign, channel and version number in a single registry.
+Once text and images are ready, a campaign summary tool assembles everything into a single overview: all channel versions, all assets, ready for review.
 
-All versions (text and visual) are visible in one approval interface. The content lead reviews everything in one place and approves each version, replacing the current informal Slack and email review process.
+The content lead reviews the complete campaign package in one place and approves it. This replaces the current process of chasing versions through Slack and email.
 
-Publishing is tracked automatically: what was published where, when and which version. This is deterministic logging, no AI needed.`,
+Approved versions are published to each channel and the system logs what went where and when.`,
     redesignData: {
       components: [
         { name: 'Master copy created', type: 'human', description: 'Copywriter creates master narrative and key messages', risks: [], considerations: ['This is the creative work and stays fully human'] },
