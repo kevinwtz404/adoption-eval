@@ -225,6 +225,8 @@ export default function BoundaryDesigner() {
 
   function renderSection(key: string, title: string, content: preact.ComponentChildren, decisionId?: string) {
     const isOpen = openSections.has(key);
+    const decision = decisionId ? getDecision(decisionId) : null;
+    const choiceLabel = decision?.choice === 'yes' ? 'Yes' : decision?.choice === 'partly' ? 'Partly' : decision?.choice === 'no' ? 'No' : null;
     return (
       <div key={key} style={{ border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fff', marginBottom: '0.5rem' }}>
         <button
@@ -237,7 +239,14 @@ export default function BoundaryDesigner() {
             textAlign: 'left' as const,
           }}
         >
-          <span>{title}</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {title}
+            {choiceLabel && !isOpen && (
+              <span style={{ fontSize: '12px', fontWeight: 600, padding: '0.125rem 0.5rem', borderRadius: '100px', background: '#f3f0ff', color: '#6830C4' }}>
+                {choiceLabel}
+              </span>
+            )}
+          </span>
           <span style={{ fontSize: '1.25rem', color: '#999', fontWeight: 400 }}>
             {isOpen ? '\u2212' : '+'}
           </span>
