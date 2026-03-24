@@ -151,11 +151,10 @@ Publishing is tracked automatically: what was published where, when and which ve
       components: [
         { name: 'Master copy created', type: 'human', description: 'Copywriter creates master narrative and key messages', risks: [], considerations: ['This is the creative work and stays fully human'] },
         { name: 'Channel adaptation', type: 'llm', description: 'Generate channel-specific versions (LinkedIn, email, web, social) from master copy', risks: ['Tone drift from brand voice', 'Inconsistency between channels'], considerations: ['Prompt with brand guidelines', 'A smaller model may work for straightforward adaptations'] },
-        { name: 'Image resizing', type: 'deterministic', description: 'Resize visual assets to exact platform specs', risks: ['Template changes when platforms update'], considerations: ['Figma auto-layout or scripted templates'] },
         { name: 'Copywriter review', type: 'human', description: 'Copywriter reviews generated versions for tone and accuracy', risks: ['Review fatigue with many channels'], considerations: ['Batch review interface'] },
-        { name: 'Asset registry', type: 'deterministic', description: 'Track versions, naming and campaign association', risks: ['Gets out of date if manual steps are skipped'], considerations: ['Automated tagging at creation time'] },
+        { name: 'Image resizing', type: 'deterministic', description: 'Resize visual assets to exact platform specs', risks: ['Template changes when platforms update'], considerations: ['Figma auto-layout or scripted templates'] },
         { name: 'Content lead approval', type: 'human', description: 'Content lead approves all versions in one interface', risks: ['Bottleneck if slow'], considerations: ['Parallel approval for independent channels'] },
-        { name: 'Publish tracking', type: 'deterministic', description: 'Log what was published where and when', risks: [], considerations: ['Integrate with publishing tools'] },
+        { name: 'Version tracking', type: 'deterministic', description: 'Track all versions, naming, campaign association and publish history', risks: ['Gets out of date if steps are bypassed'], considerations: ['Automated tagging at creation, log on publish'] },
       ],
       boundaries: ['No publishing without human approval', 'No unlicensed visual assets', 'No brand-unsafe or legally sensitive claims without review'],
       confidentiality: ['Campaign briefs may contain unreleased product information', 'Consider whether draft content can be processed by a cloud LLM', 'Client campaign data may require a local model'],
