@@ -26,139 +26,154 @@ const base = import.meta.env.BASE_URL;
 
     <div class="divider"></div>
 
-    <div class="mb-10">
-      <h2>What is the cost of getting it wrong?</h2>
+    <div class="mb-10" id="bound-tabs">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="errors">Error tolerance</button>
+        <button class="tab-btn" data-tab="data">Data and privacy</button>
+        <button class="tab-btn" data-tab="cost">Cost</button>
+        <button class="tab-btn" data-tab="humans">Human checkpoints</button>
+      </div>
 
-      <p>
-        Not all errors are equal. A slightly off tone in a LinkedIn post is fixable. A wrong number in a board deck is not. Before you set boundaries, think about what happens when each part of your system produces a bad output.
-      </p>
+      <div class="tab-panel active" id="tab-errors">
+        <p>Not all errors are equal. A slightly off tone in a LinkedIn post is fixable. A wrong number in a board deck is not. Think about what happens when each part of your system produces a bad output.</p>
 
-      <details class="bound-section">
-        <summary>Errors in generated text</summary>
-        <div class="bound-detail">
-          <p>Language models <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">hallucinate</a>. They produce text that sounds right but can be factually wrong. This is not a bug that will be fixed. It is how the technology works.</p>
-          <p>The question is: what happens when the text is wrong? If it is a draft that a human will review and edit, the risk is manageable. If it goes directly to a customer or into a financial report, the risk is high.</p>
-          <p><strong>Think about:</strong> Who sees this output? Is it a draft or a final product? What happens if it contains a factual error? Can the error be caught before it causes damage?</p>
-        </div>
-      </details>
+        <details class="bound-section">
+          <summary>Errors in generated text</summary>
+          <div class="bound-detail">
+            <p>Language models <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">hallucinate</a>. They produce text that sounds right but can be factually wrong. This is not a bug that will be fixed. It is how the technology works.</p>
+            <p><strong>Think about:</strong> Who sees this output? Is it a draft or a final product? What happens if it contains a factual error?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Errors in numbers and calculations</summary>
-        <div class="bound-detail">
-          <p>If your design includes any numbers, ask: where do they come from? Numbers from a spreadsheet or database are deterministic and reliable. Numbers from an LLM are not. An LLM can generate a number that looks calculated but is actually made up.</p>
-          <p>A wrong projection in a brainstorming session is tolerable. A wrong revenue figure in a board report is not. A wrong number in a tax calculation could be illegal.</p>
-          <p><strong>Think about:</strong> Does any AI component in your design produce or handle numbers? If so, are those numbers verified against a deterministic source? Could a generated number be mistaken for a calculated one?</p>
-        </div>
-      </details>
+        <details class="bound-section">
+          <summary>Errors in numbers</summary>
+          <div class="bound-detail">
+            <p>Numbers from a spreadsheet are deterministic and reliable. Numbers from an LLM are not. An LLM can generate a number that looks calculated but is actually made up. A wrong projection in a brainstorming session is tolerable. A wrong revenue figure in a board report is not.</p>
+            <p><strong>Think about:</strong> Does any AI component produce or handle numbers? Are those numbers verified against a deterministic source?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Errors in retrieved information</summary>
-        <div class="bound-detail">
-          <p>If your design includes retrieval (RAG), the answers are only as good as the documents that were indexed. Stale documents produce stale answers. Incomplete indexing means some information is invisible to the system. And <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">a citation does not guarantee the interpretation is correct</a>.</p>
-          <p><strong>Think about:</strong> How current are the source documents? How often are they updated? What happens if the system retrieves the wrong document or misinterprets the right one?</p>
-        </div>
-      </details>
+        <details class="bound-section">
+          <summary>Errors in retrieved information</summary>
+          <div class="bound-detail">
+            <p>If your design uses retrieval (RAG), the answers are only as good as the documents indexed. Stale documents produce stale answers. A citation does not guarantee the interpretation is correct.</p>
+            <p><strong>Think about:</strong> How current are the source documents? What happens if the system retrieves the wrong document?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Errors in signals and pattern matching</summary>
-        <div class="bound-detail">
-          <p>If your design surfaces signals from unstructured data (like "a competitor was mentioned 3 times this month"), these are pattern matches, not facts. The system might count wrong, misattribute a mention or flag something irrelevant.</p>
-          <p><strong>Think about:</strong> Are signals clearly labelled as signals, not facts? Does someone verify them before they influence decisions? What is the worst that happens if a signal is wrong?</p>
-        </div>
-      </details>
-    </div>
+        <details class="bound-section">
+          <summary>Errors in signals and patterns</summary>
+          <div class="bound-detail">
+            <p>If your design surfaces signals from unstructured data, these are pattern matches, not facts. The system might count wrong, misattribute a mention or flag something irrelevant.</p>
+            <p><strong>Think about:</strong> Are signals clearly labelled as signals, not facts? What is the worst that happens if a signal is wrong?</p>
+          </div>
+        </details>
+      </div>
 
-    <div class="divider"></div>
+      <div class="tab-panel" id="tab-data">
+        <p>Most AI models run in the cloud. That means your data is sent to an external server for processing. For some workflows this is fine. For others it is a dealbreaker.</p>
 
-    <div class="mb-10">
-      <h2>Can your data leave your systems?</h2>
+        <details class="bound-section">
+          <summary>Cloud vs local models</summary>
+          <div class="bound-detail">
+            <p>Cloud models (OpenAI, Anthropic, Google) are the most capable but your data leaves your infrastructure. Local models (Ollama, llama.cpp) keep everything on your machines but require hardware and expertise. For many tasks, a smaller local model works well enough.</p>
+            <p><strong>Think about:</strong> What data does each AI component process? Is any of it confidential, personal or regulated?</p>
+          </div>
+        </details>
 
-      <p>
-        Most AI models run in the cloud. That means your data is sent to an external server for processing. For some workflows this is fine. For others it is a dealbreaker.
-      </p>
+        <details class="bound-section">
+          <summary>Access control and permissions</summary>
+          <div class="bound-detail">
+            <p>If your system retrieves from internal sources, it must respect existing permissions. A system that surfaces salary data or confidential client information to the wrong person is worse than no system at all.</p>
+            <p><strong>Think about:</strong> Who can see what in the current workflow? Does the AI system enforce the same permissions?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Cloud vs local models</summary>
-        <div class="bound-detail">
-          <p>Cloud models (OpenAI, Anthropic, Google) are the most capable but your data leaves your infrastructure. Local models (Ollama, llama.cpp, vLLM) keep everything on your machines but require hardware and expertise.</p>
-          <p>For many tasks, a smaller local model works well enough. You do not always need the most powerful model. A local model that handles 80% of cases may be better than a cloud model that handles 95% but exposes confidential data.</p>
-          <p><strong>Think about:</strong> What data does each AI component in your design process? Is any of it confidential, personal or regulated? Could it leave your systems? What are the compliance requirements for your industry and jurisdiction?</p>
-        </div>
-      </details>
+        <details class="bound-section">
+          <summary>Hard rules</summary>
+          <div class="bound-detail">
+            <p>Every system needs things it must never do regardless of what the AI decides. These should be enforced in the architecture, not just documented in a policy.</p>
+            <p>Examples: never send an email without human approval. Never modify financial records. Never surface confidential documents to unauthorised users.</p>
+          </div>
+        </details>
+      </div>
 
-      <details class="bound-section">
-        <summary>Access control and permissions</summary>
-        <div class="bound-detail">
-          <p>If your system retrieves information from internal sources, it must respect existing permissions. A retrieval system that surfaces salary data, confidential client information or unreleased product plans to the wrong person is worse than no system at all.</p>
-          <p><strong>Think about:</strong> Who can see what in the current workflow? Does the AI system enforce the same permissions? What happens if it surfaces something the user should not see?</p>
-        </div>
-      </details>
-    </div>
+      <div class="tab-panel" id="tab-cost">
+        <p>Not every step needs the most expensive model. And what costs pennies at pilot scale can cost thousands at full scale.</p>
 
-    <div class="divider"></div>
+        <details class="bound-section">
+          <summary>Model selection</summary>
+          <div class="bound-detail">
+            <p>A step that classifies support tickets might work with a small, cheap model. A step that drafts nuanced board commentary might need a more capable one. Match the model to the task.</p>
+            <p><strong>Think about:</strong> For each AI component, what is the simplest model that could work? Have you tested smaller models?</p>
+          </div>
+        </details>
 
-    <div class="mb-10">
-      <h2>What does this cost?</h2>
+        <details class="bound-section">
+          <summary>Cost at scale</summary>
+          <div class="bound-detail">
+            <p>Deterministic components (rules, APIs, calculations) are effectively free at scale. LLM calls are not. Think about volume before you build.</p>
+            <p><strong>Think about:</strong> How often will each AI component be called? What is the cost at pilot vs full scale?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Model selection and sizing</summary>
-        <div class="bound-detail">
-          <p>Not every step needs a frontier model. A step that classifies support tickets might work fine with a small, cheap model. A step that drafts nuanced board commentary might need a more capable one. Match the model to the task.</p>
-          <p><strong>Think about:</strong> For each AI component, what is the simplest model that could work? Have you tested smaller models before assuming you need the most expensive one? What is the cost per call and how does that scale with volume?</p>
-        </div>
-      </details>
+        <details class="bound-section">
+          <summary>Environmental cost</summary>
+          <div class="bound-detail">
+            <p>AI systems <a href="https://www.technologyreview.com/2023/12/05/1084417/ais-carbon-footprint-is-bigger-than-you-think/">consume significant energy</a> and <a href="https://www.unep.org/news-and-stories/story/ai-has-environmental-problem-heres-what-world-can-do-about">massive amounts of water</a>. <a href="https://www.npm.org/2024/07/12/g-s1-9545/ai-brings-soaring-emissions-for-google-and-microsoft-a-major-contributor-to-climate-change">Running models at scale has a real footprint</a>. Using a large model for a task a script could handle is wasteful.</p>
+            <p><strong>Think about:</strong> For each AI component, is a model call actually necessary? Could a rule, a template or a script do it instead?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Cost at scale</summary>
-        <div class="bound-detail">
-          <p>What costs pennies for 10 users can cost thousands for 1000 users. Deterministic components (rules, APIs, calculations) are effectively free at scale. LLM calls are not.</p>
-          <p><strong>Think about:</strong> How often will each AI component be called? What is the cost at pilot scale vs full scale? Are there deterministic alternatives for any AI steps that would be cheaper at volume?</p>
-        </div>
-      </details>
-    </div>
+      </div>
 
-    <div class="divider"></div>
+      <div class="tab-panel" id="tab-humans">
+        <p>Not everything needs to pause for human approval. But some things absolutely do. The question is which ones.</p>
 
-    <div class="mb-10">
-      <h2>Where do humans stay in the loop?</h2>
+        <details class="bound-section">
+          <summary>Approval gates</summary>
+          <div class="bound-detail">
+            <p>An approval gate pauses the workflow until a person signs off. Use these for high-stakes outputs: anything customer-facing, legally binding or financially significant.</p>
+            <p><strong>Think about:</strong> Which outputs need human approval? Who approves? What happens if they are unavailable?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Approval gates</summary>
-        <div class="bound-detail">
-          <p>An approval gate pauses the workflow until a person signs off. Use these for high-stakes outputs: anything customer-facing, legally binding, financially significant or that could cause harm if wrong.</p>
-          <p><strong>Think about:</strong> Which outputs in your design need human approval before they go anywhere? Who approves? What happens if the approver is unavailable? What is the fallback?</p>
-        </div>
-      </details>
+        <details class="bound-section">
+          <summary>Monitoring vs approval</summary>
+          <div class="bound-detail">
+            <p>Low-stakes outputs can proceed with monitoring: the system logs everything and a person reviews periodically. If you put approval gates on everything, the human becomes a bottleneck and starts rubber-stamping.</p>
+            <p><strong>Think about:</strong> Which outputs need approval and which can proceed with monitoring?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>Monitoring vs approval</summary>
-        <div class="bound-detail">
-          <p>Not everything needs to pause for approval. Low-stakes outputs can proceed with monitoring: the system logs everything and a person reviews periodically. If you put approval gates on everything, the human becomes a bottleneck and starts rubber-stamping.</p>
-          <p><strong>Think about:</strong> Which outputs need approval before proceeding and which can proceed with monitoring? What is the consequence of a bad output getting through in each case?</p>
-        </div>
-      </details>
+        <details class="bound-section">
+          <summary>Rejection paths</summary>
+          <div class="bound-detail">
+            <p>If the reviewer rejects the AI output, what happens? Does it regenerate? Does a person handle it manually? Does it queue?</p>
+            <p><strong>Think about:</strong> For each approval gate, what is the fallback when the human disagrees?</p>
+          </div>
+        </details>
 
-      <details class="bound-section">
-        <summary>What happens when the human disagrees?</summary>
-        <div class="bound-detail">
-          <p>If the reviewer rejects the AI output, what happens next? Does it go back for regeneration? Does a person handle it manually? Does it go into a queue?</p>
-          <p><strong>Think about:</strong> For each approval gate, what is the rejection path? Is there a manual fallback for every AI step?</p>
-        </div>
-      </details>
-    </div>
+        <details class="bound-section">
+          <summary>Bias and transparency</summary>
+          <div class="bound-detail">
+            <p>Models reflect <a href="https://www.nature.com/articles/s41586-024-07856-5">biases in their training data</a>. If your system makes decisions that affect people, test for this. <a href="https://hdsr.mitpress.mit.edu/pub/aelql9qy">Users should know when they are interacting with AI</a>.</p>
+            <p><strong>Think about:</strong> Does your system produce outputs that affect people? Is it clear to users when AI is involved?</p>
+          </div>
+        </details>
+      </div>
 
-    <div class="divider"></div>
-
-    <div class="mb-10">
-      <h2>What must the system never do?</h2>
-
-      <p>
-        Every system needs hard rules. Things it must never do regardless of what the AI decides. These are non-negotiable and should be enforced in the architecture, not just documented in a policy.
-      </p>
-
-      <p>
-        Examples: never send an email without human approval. Never modify financial records. Never surface confidential documents to unauthorised users. Never generate numbers that look like calculations.
-      </p>
+      <script is:inline>
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var tabId = this.getAttribute('data-tab');
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+            document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+          });
+        });
+      </script>
     </div>
 
     <div class="divider"></div>
@@ -180,6 +195,55 @@ const base = import.meta.env.BASE_URL;
   .landing-content .subtitle {
     color: var(--text-light);
     font-size: 15px;
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 0.625rem 0.5rem;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-right: 1px solid var(--border);
+    background: #fff;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .tab-btn:last-child {
+    border-right: none;
+  }
+
+  .tab-btn.active {
+    background: var(--purple);
+    color: #fff;
+  }
+
+  .tab-btn:hover:not(.active) {
+    background: #fafafa;
+    color: var(--text);
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  .tab-panel > p {
+    margin-bottom: 1rem;
   }
 
   .bound-section {
