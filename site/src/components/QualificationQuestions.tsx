@@ -52,15 +52,15 @@ const CRITERIA: Criterion[] = [
   },
   {
     key: 'data_readiness', label: '4. Is the data in good enough shape?', gate: false,
-    question: 'What is the quality and accessibility of the data involved in this workflow? Poor data quality means any automation will amplify the mess, not fix it.',
+    question: 'How mature is the data that feeds this workflow? Poor data means any automation will amplify the mess, not fix it.',
     anchors: [
-      'Data is a mess. Scattered, inconsistent, incomplete or inaccessible.',
-      'Data exists but quality is poor. Lots of manual cleanup would be needed.',
-      'Data is usable. Mostly structured, some gaps but workable.',
-      'Data is good. Structured, accessible and reasonably clean.',
-      'Data is excellent. Well-structured, consistently maintained and readily accessible.',
+      'Not ready. Nobody has mapped out what data this workflow needs or where it lives.',
+      'Known but messy. You know what data exists but it is scattered, outdated or hard to get at in the format you would need.',
+      'Accessible and usable. The data is available in a consistent place and stays fresh enough for the workflow to run on.',
+      'Well-understood. You can tell where the data came from, what it means and whether to trust it.',
+      'Managed and protected. There are checks for quality, clear access rules and a log of who or what touches the data.',
     ],
-    resourceLabel: 'What does "good enough" data look like?', resourceHref: 'resources/#data-readiness',
+    resourceLabel: 'Gartner\'s data readiness checklist', resourceHref: 'https://www.gartner.com/technology/media-products/reprints/nice/1-2MQGL3GC.html',
   },
   {
     key: 'boundary_clarity', label: '5. Is it clear what should stay with people?', gate: true,

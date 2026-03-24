@@ -4,102 +4,204 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Step 7: Evaluate" step={7} prev={`${base}6-pilot/`}>
-  <div class="page-header">
-    <h1>Evaluate outcomes</h1>
-    <p class="subtitle">After your pilot, track what changed across 6 dimensions and decide: scale, revise, or reject.</p>
-  </div>
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
-  <div class="section">
-    <h2>Outcome dimensions</h2>
-    <p>Use this matrix at the end of every pilot to document what changed, where, and with what confidence.</p>
+    <div class="mb-10">
+      <h1>Evaluate the pilot</h1>
+      <p class="subtitle">You built it and ran it. Now measure what actually changed and decide what to do next.</p>
+    </div>
 
-    <div class="dimensions-grid">
-      <div class="dim-card">
-        <div class="dim-icon">⏱</div>
-        <strong>Time</strong>
-        <p>Faster or slower?</p>
+    <div class="mb-10">
+      <h2>Why evaluation matters</h2>
+
+      <p>
+        A pilot without evaluation is just an experiment you cannot learn from. The whole point of running a small test is to get evidence: did this intervention actually improve things, and at what cost?
+      </p>
+
+      <p>
+        Speed is the easiest thing to measure and the most misleading. A pilot that is faster but less accurate, less controllable or harder for the team to use has not succeeded. You need to measure across multiple dimensions to understand what actually happened.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>What to measure</h2>
+
+      <p>
+        Evaluate your pilot across six dimensions. Not all of them will be relevant to every pilot, but considering all six prevents you from optimising for one thing while quietly degrading another.
+      </p>
+
+      <div class="dimensions-grid">
+        <div class="dim-card">
+          <strong>Time</strong>
+          <p>Did the workflow get faster? By how much? Measure cycle time end-to-end, not just the automated steps.</p>
+        </div>
+        <div class="dim-card">
+          <strong>Cost</strong>
+          <p>What did the pilot cost to run (API calls, tools, people's time setting it up) vs what did it save?</p>
+        </div>
+        <div class="dim-card">
+          <strong>Quality</strong>
+          <p>Is the output better or worse? Measure accuracy, consistency, error rate. Ask the people who use the output.</p>
+        </div>
+        <div class="dim-card">
+          <strong>Risk</strong>
+          <p>Did the pilot increase or decrease operational risk? Were there any boundary violations, near-misses or unexpected behaviours?</p>
+        </div>
+        <div class="dim-card">
+          <strong>Adoption</strong>
+          <p>Did the team actually use it? Was there friction? Did people trust it, work around it or ignore it?</p>
+        </div>
+        <div class="dim-card">
+          <strong>Control</strong>
+          <p>Can you trace what the system did and why? Can you audit it? Do you trust the boundaries held?</p>
+        </div>
       </div>
-      <div class="dim-card">
-        <div class="dim-icon">💰</div>
-        <strong>Cost</strong>
-        <p>Cheaper or more expensive?</p>
-      </div>
-      <div class="dim-card">
-        <div class="dim-icon">✦</div>
-        <strong>Quality</strong>
-        <p>Better or worse output?</p>
-      </div>
-      <div class="dim-card">
-        <div class="dim-icon">⚠</div>
-        <strong>Risk</strong>
-        <p>Higher or lower operational risk?</p>
-      </div>
-      <div class="dim-card">
-        <div class="dim-icon">👥</div>
-        <strong>Adoption friction</strong>
-        <p>Easier or harder for teams?</p>
-      </div>
-      <div class="dim-card">
-        <div class="dim-icon">🔒</div>
-        <strong>Control confidence</strong>
-        <p>Better or worse traceability?</p>
+
+      <div class="interpretation-rule">
+        <strong>Do not treat time savings alone as success.</strong> A pilot is only considered strong when improvements in time and cost do not degrade risk, control or quality beyond accepted thresholds.
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>Interpretation rule</h2>
-    <div class="card" style="border-left: 3px solid var(--purple);">
-      <p style="margin: 0;"><strong>Do not treat time savings alone as success.</strong> A pilot is only considered strong when improvements in time/cost do not degrade risk/control beyond accepted thresholds.</p>
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>The decision</h2>
+
+      <p>
+        After evaluation, you have three options. Be honest about which one the evidence supports.
+      </p>
+
+      <div class="decision-list">
+        <div class="decision-item">
+          <div class="decision-label scale">Scale</div>
+          <div>
+            <p>The pilot worked. Expand to more of the workflow, more teams or more volume. But scale gradually: what worked for 10 users may break at 100.</p>
+          </div>
+        </div>
+        <div class="decision-item">
+          <div class="decision-label revise">Revise</div>
+          <div>
+            <p>Mixed results. Some things worked, some did not. Adjust the boundaries, change the components, fix the issues and run another iteration. Most pilots end up here.</p>
+          </div>
+        </div>
+        <div class="decision-item">
+          <div class="decision-label stop">Stop</div>
+          <div>
+            <p>It did not work. The intervention does not fit this workflow, the risks outweigh the benefits or the team is not ready. Document what you learned and move on. This is a valid outcome, not a failure.</p>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Whatever you decide, feed the learnings back into your process. What did you discover about the workflow that you did not know before? What assumptions were wrong? What would you do differently next time? These insights make your next pilot better.
+      </p>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>Decision and loop</h2>
-    <p>After evaluation, choose one of three paths:</p>
-    <div class="decision-options">
-      <div class="dec-opt">
-        <span class="badge badge-proceed">Scale</span>
-        <p>Expand the pilot to more workflow slices or teams.</p>
-      </div>
-      <div class="dec-opt">
-        <span class="badge badge-conditions">Revise</span>
-        <p>Adjust boundaries, controls, or scope and run another iteration.</p>
-      </div>
-      <div class="dec-opt">
-        <span class="badge badge-defer">Reject</span>
-        <p>The intervention didn't work for this workflow. Document learnings and move on.</p>
-      </div>
+    <div class="divider"></div>
+
+    <div class="mb-10" style="text-align: center;">
+      <p>Evaluation tracking tools coming soon.</p>
+      <a href={base} class="back-link">Back to start</a>
     </div>
-    <p style="margin-top: 1rem; color: var(--text-light); font-size: 0.9375rem;">
-      Feed learnings back into discovery and matching criteria so each cycle improves candidate selection and solution matching.
-    </p>
-  </div>
 
-  <div class="section" style="text-align: center; padding: 2rem 0;">
-    <p style="color: var(--text-muted);">Outcome tracking form coming in v2.</p>
-    <a href={base} class="btn btn-secondary">Back to start</a>
   </div>
 </BaseLayout>
 
 <style>
+  .landing-content .subtitle {
+    color: var(--text-light);
+    font-size: 15px;
+  }
+
   .dimensions-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
   }
+
   .dim-card {
-    background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--bg-card);
+  }
+
+  .dim-card strong {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 0.375rem;
+  }
+
+  .dim-card p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .interpretation-rule {
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--purple);
+    background: rgba(104, 48, 196, 0.04);
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .decision-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .decision-label {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    white-space: nowrap;
+    min-width: 4rem;
     text-align: center;
   }
-  .dim-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-  .dim-card p { font-size: 0.8125rem; color: var(--text-light); margin: 0.25rem 0 0; }
-  .decision-options { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem; }
-  .dec-opt { display: flex; align-items: flex-start; gap: 0.75rem; }
-  .dec-opt p { margin: 0; font-size: 0.9375rem; color: var(--text-light); }
-  @media (max-width: 480px) { .dimensions-grid { grid-template-columns: 1fr; } }
+
+  .decision-label.scale { background: #dcfce7; color: #166534; }
+  .decision-label.revise { background: #fef9c3; color: #854d0e; }
+  .decision-label.stop { background: #fee2e2; color: #991b1b; }
+
+  .decision-item p {
+    font-size: 14px;
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--purple);
+    border-radius: 8px;
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .back-link:hover {
+    background: var(--purple);
+    color: white;
+  }
+
+  @media (max-width: 480px) {
+    .dimensions-grid { grid-template-columns: 1fr; }
+  }
 </style>

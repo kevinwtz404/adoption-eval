@@ -4,110 +4,138 @@ import InterventionDesigner from '../components/InterventionDesigner.tsx';
 const base = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title="Step 4: Design" step={4} prev={`${base}3-qualify/`} next={`${base}5-bound/`}>
+<BaseLayout title="Step 4: Map" step={4} prev={`${base}3-qualify/`} next={`${base}5-bound/`}>
   <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
     <div class="mb-10">
-      <h1>Design the intervention</h1>
-      <p class="subtitle">You have a qualified workflow. Now figure out what to actually build and test.</p>
+      <h1>Map the components</h1>
+      <p class="subtitle">Figure out what you need to build: what components, how they connect and where people stay in the loop.</p>
     </div>
 
     <div class="mb-10">
-      <h2>What this step is about</h2>
+      <h2>What is actually inside an AI system?</h2>
 
       <p>
-        You have a workflow with steps, and you know it is worth piloting. The question now is: what does the intervention actually look like? Not "apply AI to step 4" but "how does the work change, what does AI handle, what stays with people, and how do they connect?"
+        When you see a demo of an "AI agent" that handles a whole workflow, what you are actually seeing is a combination of different components. A language model that understands and generates text. Tools that do specific things like query a database, call an API or run a calculation. A retrieval layer that looks up information in your documents. And human checkpoints where a person reviews, approves or redirects.
       </p>
 
       <p>
-        Most real interventions are a mix. A single workflow step might involve something deterministic (a calculation, a format conversion), something generative (drafting text, adjusting tone) and something that needs a person (reviewing, approving, making a judgement call). The goal here is to look at each step and figure out that mix.
+        None of these components work well in isolation. A language model without tools cannot look anything up. A database tool without a language model cannot interpret a question. A retrieval system without a human checkpoint might surface confidential information to the wrong person. How you put them together determines whether the system is useful or dangerous.
+      </p>
+
+      <div class="component-diagram">
+        <div class="diagram-label">What you see: "an AI agent"</div>
+        <div class="diagram-box">
+          <div class="diagram-inner-label">What is actually there:</div>
+          <div class="diagram-components">
+            <div class="diagram-component">
+              <div class="comp-icon">LLM</div>
+              <div class="comp-desc">Language model. Understands text, generates responses, decides what to do next. Can hallucinate.</div>
+            </div>
+            <div class="diagram-component">
+              <div class="comp-icon">Tool</div>
+              <div class="comp-desc">Deterministic tools. API calls, database queries, calculations. Exact and reliable but only do what they are told.</div>
+            </div>
+            <div class="diagram-component">
+              <div class="comp-icon">RAG</div>
+              <div class="comp-desc">Retrieval. Looks up information in your documents before the LLM generates a response. Only as good as what is indexed.</div>
+            </div>
+            <div class="diagram-component">
+              <div class="comp-icon">ML</div>
+              <div class="comp-desc">Trained models. Classification, scoring, prediction from data. Good at patterns, blind to context.</div>
+            </div>
+            <div class="diagram-component human">
+              <div class="comp-icon">Human</div>
+              <div class="comp-desc">Human checkpoints. Review, approve, redirect. Catches what AI misses. Slow but accountable.</div>
+            </div>
+          </div>
+          <div class="diagram-connections">Connected via tool calls and APIs. The LLM decides when to use each component.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Each component has strengths and weaknesses</h2>
+
+      <p>
+        There is no single "AI" that does everything. Each component is good at specific things and bad at others. Knowing this helps you design a system that plays to each component's strengths while compensating for its weaknesses.
+      </p>
+
+      <details class="paradigm-overview">
+        <summary>Language model (LLM)</summary>
+        <div class="paradigm-detail">
+          <p><strong>Good at:</strong> Understanding natural language, generating text, summarising, drafting, explaining, brainstorming, adapting tone and style.</p>
+          <p><strong>Bad at:</strong> Maths, facts, consistency. <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">Hallucination is a fundamental property</a>, not a bug to be fixed. The output is probabilistic: same input can give different outputs. <a href="https://promptrevolution.poltextlab.com/understanding-knowledge-cut-offs-in-genai-models/">Knowledge has a cut-off date</a>. <a href="https://www.coursera.org/articles/context-window">Limited context window</a>.</p>
+          <p><strong>Use it for:</strong> Drafting, summarisation, tone adaptation, explanation, triage support. Always with review for anything that matters.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Deterministic tools (APIs, calculations, rules)</summary>
+        <div class="paradigm-detail">
+          <p><strong>Good at:</strong> Exact results. Same input, same output, every time. Database queries, calculations, format conversions, routing, validation.</p>
+          <p><strong>Bad at:</strong> Anything that requires understanding context, nuance or natural language. Rigid: breaks when rules change or edge cases appear.</p>
+          <p><strong>Use it for:</strong> Any part of the workflow where accuracy matters more than flexibility. Financial calculations, data transformations, system integrations.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Retrieval (RAG)</summary>
+        <div class="paradigm-detail">
+          <p><strong>Good at:</strong> <a href="https://snorkel.ai/blog/which-is-better-retrieval-augmentation-rag-or-fine-tuning-both/">Grounding LLM responses in actual sources</a>. Finding relevant information across large document collections. Providing citations.</p>
+          <p><strong>Bad at:</strong> Only as good as what has been indexed. If the source documents are wrong, outdated or incomplete, the answers will be too. Access control is critical: the retrieval system can surface documents the user should not see if permissions are not enforced.</p>
+          <p><strong>Use it for:</strong> Internal knowledge retrieval, question answering over documents, support triage, anything where the answer should come from your own data rather than the model's training data.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Machine learning (classification, scoring, prediction)</summary>
+        <div class="paradigm-detail">
+          <p><strong>Good at:</strong> Pattern recognition at scale. Classifying, scoring, predicting from structured data. Consistent once trained.</p>
+          <p><strong>Bad at:</strong> <a href="https://www.nature.com/articles/s41586-024-07856-5">Bias inherited from training data</a>. Data drift over time makes models less accurate. Decisions can be hard to explain.</p>
+          <p><strong>Use it for:</strong> Lead scoring, spam filtering, anomaly detection, demand forecasting. Anything where you have good historical data and need consistent pattern matching.</p>
+        </div>
+      </details>
+
+      <details class="paradigm-overview">
+        <summary>Human checkpoints</summary>
+        <div class="paradigm-detail">
+          <p><strong>Good at:</strong> Judgement, accountability, context, relationships, catching errors that automated systems miss. The only component that can be held responsible.</p>
+          <p><strong>Bad at:</strong> Speed, scale, consistency over high volume. Expensive. Does not scale the way technology does.</p>
+          <p><strong>Use it for:</strong> Approval gates, quality review, strategic decisions, anything customer-facing or legally binding, anything where getting it wrong has real consequences.</p>
+        </div>
+      </details>
+
+      <p>
+        <a href={`${base}resources/#ai-paradigms`}>Read more about components and their risk profiles</a>
       </p>
     </div>
 
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>The mix within every step</h2>
+      <h2>How they connect matters</h2>
 
       <p>
-        Every step in a workflow contains a mix. Some parts are predictable and rule-based, like a calculator: same input, same output. Some parts need language, synthesis or pattern recognition. Some parts need human judgement, accountability or creative direction. Most steps are not purely one thing.
+        The components above are building blocks. The value (and the risk) is in how you connect them. A retrieval system that finds the right document but feeds it to an LLM that hallucinates the summary is worse than no system at all. A calculator that produces the right number but gets wrapped in an LLM narrative that misrepresents it is dangerous.
       </p>
 
       <p>
-        AI can play a role across all of these. It can support creative work by generating options for a person to shape. It can supplement judgement by surfacing patterns a human might miss. It can handle routine language tasks like adapting text for different formats. And some things don't need AI at all: a spreadsheet formula or a template does the job without the unpredictability.
+        The connections between components are where most things go wrong:
       </p>
+
+      <ul>
+        <li>What gets passed from one component to the next?</li>
+        <li>Who decides which tool to call and when?</li>
+        <li>What happens when a component fails or returns something unexpected?</li>
+        <li>Where does a human get to intervene before the output goes anywhere?</li>
+      </ul>
 
       <p>
-        The question is not "is this a human step or an AI step?" It is "within this step, what does each part need, and who is accountable for the outcome?" Where AI generates something that looks like a fact, someone needs to verify it. Where AI drafts something creative, someone needs to judge it. Where a calculation needs to be exact, use deterministic logic, not a language model.
+        These questions are what the next step (Boundaries) will help you work through in detail. For now, the goal is to identify what components your workflow needs.
       </p>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="mb-10">
-      <h2>When AI is involved, what kind?</h2>
-
-      <p>
-        Not all AI is the same. Different approaches have fundamentally different capabilities, limitations and risk profiles. This matters because it determines what can go wrong and what controls you need.
-      </p>
-
-      <p>
-        These are different technologies, not different uses of the same tool. An LLM can be asked to "follow rules" but that is not the same as a rules engine. A rules engine is deterministic: given the same input, it always produces the same output. An LLM following instructions is probabilistic: it might get it right most of the time but it can hallucinate, misinterpret or drift. <a href={`${base}resources/#ai-paradigms`}>Read more about the differences</a>.
-      </p>
-
-      <details class="paradigm-overview">
-        <summary>Follow set rules</summary>
-        <div class="paradigm-detail">
-          <p><strong>What it is:</strong> Deterministic logic. If X then Y. Spreadsheet formulas, workflow automation, business rules engines. Not really AI, but often the right answer.</p>
-          <p><strong>Use when:</strong> The logic is clear and stable. Routing, validation, formatting, calculations.</p>
-          <p><strong>Risks:</strong> Rigid. Breaks on edge cases. But predictable and auditable.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Find answers in existing documents (RAG)</summary>
-        <div class="paradigm-detail">
-          <p><strong>What it is:</strong> An AI that <a href="https://snorkel.ai/blog/which-is-better-retrieval-augmentation-rag-or-fine-tuning-both/">retrieves information from a knowledge base</a> before generating a response. Grounds output in actual sources.</p>
-          <p><strong>Use when:</strong> People need to find and synthesise information from internal documents, support tickets, policies.</p>
-          <p><strong>Risks:</strong> Source quality determines output quality. Access control is critical: who should see what. <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">Citation does not guarantee correctness</a>.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Draft, summarise or explain (LLM as copilot)</summary>
-        <div class="paradigm-detail">
-          <p><strong>What it is:</strong> A language model that supports a human. It drafts, summarises, explains or suggests. The human makes the final call.</p>
-          <p><strong>Use when:</strong> Text-heavy work where a person is needed but the first draft or summary could be automated.</p>
-          <p><strong>Risks:</strong> <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">Hallucination</a> (plausible but wrong output). <a href="https://ai-analytics.wharton.upenn.edu/generative-ai-labs/research-and-technical-reports/tech-report-prompt-engineering-is-complicated-and-contingent">Prompt sensitivity</a>. Inconsistency across runs. The model's <a href="https://promptrevolution.poltextlab.com/understanding-knowledge-cut-offs-in-genai-models/">knowledge has a cut-off date</a> and <a href="https://www.coursera.org/articles/context-window">a limited context window</a>.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Classify, score or predict (Machine learning)</summary>
-        <div class="paradigm-detail">
-          <p><strong>What it is:</strong> Trained models that learn patterns from historical data. Classification, scoring, anomaly detection, forecasting.</p>
-          <p><strong>Use when:</strong> You have structured data and need pattern recognition at scale. Lead scoring, spam filtering, demand forecasting.</p>
-          <p><strong>Risks:</strong> <a href="https://www.nature.com/articles/s41586-024-07856-5">Bias in training data</a>. Data drift over time. Decisions can be hard to explain.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Take actions across multiple steps (LLM as agent)</summary>
-        <div class="paradigm-detail">
-          <p><strong>What it is:</strong> An LLM that acts autonomously: calling tools, making API requests, executing multi-step workflows. The human sets the goal, the AI figures out the steps.</p>
-          <p><strong>Use when:</strong> Multi-step tasks with clear success criteria where the steps are routine but the orchestration is complex.</p>
-          <p><strong>Risks:</strong> Highest risk paradigm. Loss of control, scope creep, compounding errors across steps. Needs strong boundaries and monitoring.</p>
-        </div>
-      </details>
-
-      <details class="paradigm-overview">
-        <summary>Combine calculations with generated text (Hybrid)</summary>
-        <div class="paradigm-detail">
-          <p><strong>What it is:</strong> A system where the critical logic is deterministic (rules, calculations) and AI handles the language-rich parts (narrative, summaries, signals). Think financial reporting: the numbers are calculated, the commentary is generated.</p>
-          <p><strong>Use when:</strong> Accuracy matters for some parts and fluency matters for others. The boundary between them must be enforced.</p>
-          <p><strong>Risks:</strong> Architectural complexity. If the boundary between deterministic and generative is not enforced, AI-generated numbers can look like calculated ones.</p>
-        </div>
-      </details>
     </div>
 
     <div class="divider"></div>
@@ -116,11 +144,7 @@ const base = import.meta.env.BASE_URL;
       <h2>Design your intervention</h2>
 
       <p>
-        Below are the workflow steps you defined earlier. For each step, break down the work: what part is human, what part is deterministic and what part could involve AI. If AI is involved, pick the approach that fits.
-      </p>
-
-      <p>
-        Not every step needs to change. Some steps are already fine as they are. The goal is to identify the 2-4 steps where an intervention would make the biggest difference and design what that intervention looks like.
+        Below are the workflow steps you defined earlier. For each step, describe what you want to change. You do not need to know the technical details. Just describe what you want to happen differently. Our AI analysis tool will help you figure out which components fit and what the risks are.
       </p>
 
       <InterventionDesigner client:load />
@@ -133,6 +157,71 @@ const base = import.meta.env.BASE_URL;
   .landing-content .subtitle {
     color: var(--text-light);
     font-size: 15px;
+  }
+
+  .component-diagram {
+    margin: 1.5rem 0;
+  }
+
+  .diagram-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .diagram-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    background: var(--bg-card);
+  }
+
+  .diagram-inner-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .diagram-components {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .diagram-component {
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fafafa;
+  }
+
+  .diagram-component.human {
+    border-color: var(--purple);
+    background: rgba(104, 48, 196, 0.04);
+  }
+
+  .comp-icon {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 0.375rem;
+  }
+
+  .comp-desc {
+    font-size: 11px;
+    color: var(--text-light);
+    line-height: 1.4;
+  }
+
+  .diagram-connections {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
   }
 
   .paradigm-overview {
@@ -181,5 +270,17 @@ const base = import.meta.env.BASE_URL;
 
   .paradigm-detail p + p {
     margin-top: 0.75em;
+  }
+
+  @media (max-width: 768px) {
+    .diagram-components {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .diagram-components {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 </style>

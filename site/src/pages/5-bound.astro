@@ -1,62 +1,161 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import BoundaryChecklist from '../components/BoundaryChecklist.tsx';
+import BoundaryDesigner from '../components/BoundaryDesigner.tsx';
 const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Step 5: Bound" step={5} prev={`${base}4-map/`} next={`${base}6-pilot/`}>
-  <div class="page-header">
-    <h1>Design boundaries and controls</h1>
-    <p class="subtitle">Define what is deterministic vs generative, what must stay human, and where approval gates go.</p>
-  </div>
+  <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
-  <div class="section">
-    <h2>Why boundaries matter</h2>
-    <p>LLMs are powerful but unreliable in specific ways. Boundaries translate known limitations into design choices:</p>
-
-    <div class="limits-grid">
-      <div class="limit-card">
-        <strong>Hallucination</strong>
-        <p>Plausible but wrong output. Source traceability should be mandatory for factual claims.</p>
-      </div>
-      <div class="limit-card">
-        <strong>Weak determinism</strong>
-        <p>High-stakes numeric calculation should be deterministic, not generative.</p>
-      </div>
-      <div class="limit-card">
-        <strong>Inconsistency</strong>
-        <p>Output varies across runs. Confidence should never be treated as correctness.</p>
-      </div>
-      <div class="limit-card">
-        <strong>Prompt sensitivity</strong>
-        <p>Quality varies with phrasing. Externally shared outputs require human approval.</p>
-      </div>
+    <div class="mb-10">
+      <h1>Set the boundaries</h1>
+      <p class="subtitle">Each component you chose has specific failure modes. Put checks in place before you build anything.</p>
     </div>
 
-    <h3 style="margin-top: 1.5rem;">Design patterns</h3>
-    <ul class="pattern-list">
-      <li>Deterministic core + LLM narrative layer</li>
-      <li>Retrieval with citations for factual tasks</li>
-      <li>Approval gates before irreversible actions</li>
-      <li>Disallowed action list for agent/tool permissions</li>
-    </ul>
-  </div>
+    <div class="mb-10">
+      <h2>Why boundaries are not optional</h2>
 
-  <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;" />
+      <p>
+        Every component in your system can fail in specific ways. Language models <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">hallucinate</a>. Retrieval systems surface the wrong document. Classifiers inherit <a href="https://www.nature.com/articles/s41586-024-07856-5">bias from their training data</a>. Tools get called with the wrong parameters. And the connections between components are where most silent failures happen.
+      </p>
 
-  <div class="section">
-    <h2>Your boundary checklist</h2>
-    <p>Review and confirm each boundary consideration generated from your workflow mapping.</p>
-    <BoundaryChecklist client:load />
+      <p>
+        Boundaries are not about being cautious. They are about being specific. For each part of your system, you need to know: what can it do, what can it not do, what happens when it gets something wrong and who is accountable for the output.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>What to think about for each component</h2>
+
+      <details class="bound-section">
+        <summary>Language model limitations</summary>
+        <div class="bound-detail">
+          <p><strong>Hallucination:</strong> LLMs generate plausible text that can be factually wrong. This is not a bug that will be fixed. It is a <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">fundamental property of how these models work</a>. Any output that will be treated as fact must be verified.</p>
+          <p><strong>Knowledge cut-off:</strong> Models are <a href="https://promptrevolution.poltextlab.com/understanding-knowledge-cut-offs-in-genai-models/">frozen in time</a>. They do not know about events after their training date. <a href="https://www.toolify.ai/ai-news/demystifying-knowledge-cutoff-why-it-matters-for-ai-models-396770">Many users do not realise when they are getting outdated information</a>.</p>
+          <p><strong>Context window:</strong> Models can only process <a href="https://www.coursera.org/articles/context-window">a limited amount of text at once</a>. Long documents may be truncated or poorly understood.</p>
+          <p><strong>Prompt sensitivity:</strong> <a href="https://ai-analytics.wharton.upenn.edu/generative-ai-labs/research-and-technical-reports/tech-report-prompt-engineering-is-complicated-and-contingent">The way you phrase a question can subtly influence the answer</a>. Small changes in prompts can produce very different outputs.</p>
+          <p><strong>Bias:</strong> Models reflect the biases in their training data. This includes <a href="https://www.nature.com/articles/s41586-024-07856-5">racial bias</a>, <a href="https://aclanthology.org/2022.acl-long.482/">cultural bias</a> and <a href="https://www.washingtonpost.com/technology/interactive/2023/ai-generated-images-bias-racism-sexism-stereotypes/">gender stereotypes</a>.</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Data privacy and model choice</summary>
+        <div class="bound-detail">
+          <p><strong>Where does data go?</strong> If you use a cloud model (OpenAI, Anthropic, Google), your data leaves your systems. For sensitive workflows, consider whether this is acceptable. Some industries and jurisdictions have strict rules about where data can be processed.</p>
+          <p><strong>Local models:</strong> Running a model on your own infrastructure keeps data private but requires hardware and expertise. Small open-source models can handle many tasks without cloud dependency.</p>
+          <p><strong>Hybrid approach:</strong> Use cloud models for non-sensitive tasks and local models for anything involving personal data, financial records or confidential information.</p>
+          <p><strong>Access control:</strong> If your system retrieves internal documents, it must respect existing access permissions. A RAG system that surfaces salary data to someone who should not see it is worse than no system at all.</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Cost and model selection</summary>
+        <div class="bound-detail">
+          <p><strong>Not every step needs a frontier model.</strong> A step that classifies support tickets might work fine with a small, cheap model. A step that drafts nuanced board commentary might need a more capable (and expensive) one. Match the model to the task.</p>
+          <p><strong>Cost at scale:</strong> What costs pennies for 10 users can cost thousands for 1000 users. Think about the volume each step will handle and price accordingly. Deterministic tools (rules, APIs, calculations) cost effectively nothing at scale. LLM calls do not.</p>
+          <p><strong>Latency:</strong> Larger models are slower. If a step needs to respond in real-time (like a customer-facing chatbot), model size matters. If it runs overnight (like a batch report), it might not.</p>
+          <p><strong>Small models vs large models:</strong> For many tasks, a smaller model with good prompting works as well as a large one at a fraction of the cost. Test before assuming you need the most expensive option.</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Human checkpoints and approval gates</summary>
+        <div class="bound-detail">
+          <p><strong>Where must a human review?</strong> Any output that is customer-facing, legally binding, financially significant or could cause harm if wrong needs a human checkpoint before it goes anywhere.</p>
+          <p><strong>Approval vs monitoring:</strong> An approval gate pauses the workflow until a person signs off. Monitoring lets the system proceed but logs everything for later review. Choose based on the risk: high-stakes steps need approval, low-stakes steps can use monitoring.</p>
+          <p><strong>What happens when the human disagrees?</strong> Design for it. If the reviewer rejects the AI output, what happens next? Is there a fallback? Does it go to a queue? Does the system learn from the correction?</p>
+          <p><strong>Reviewer fatigue:</strong> If every output needs review, the human becomes a bottleneck and starts rubber-stamping. Put checkpoints only where they matter most.</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Failure modes and fallbacks</summary>
+        <div class="bound-detail">
+          <p><strong>What happens when the AI is wrong?</strong> Every step that uses AI needs a failure plan. If the LLM hallucinates a number, if the retrieval system finds the wrong document, if the classifier misscores a lead, what is the consequence and how is it caught?</p>
+          <p><strong>Graceful degradation:</strong> If a component fails, the system should not break silently. It should either fall back to a simpler method (e.g. human handles it manually) or flag the issue visibly.</p>
+          <p><strong>Disallowed actions:</strong> Some things the system should never do, regardless of what the LLM decides. Sending external communications without approval. Modifying financial records. Accessing data it should not have. Define these explicitly.</p>
+          <p><strong>Monitoring and logging:</strong> Everything the system does should be logged. Not just the outputs but the inputs, the intermediate steps and the decisions. If something goes wrong, you need to be able to trace what happened.</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Environmental and ethical considerations</summary>
+        <div class="bound-detail">
+          <p><strong>Energy cost:</strong> AI models <a href="https://www.technologyreview.com/2023/12/05/1084417/ais-carbon-footprint-is-bigger-than-you-think/">consume significant energy</a>. <a href="https://www.unep.org/news-and-stories/story/ai-has-environmental-problem-heres-what-world-can-do-about">They consume massive amounts of water</a>. <a href="https://www.npm.org/2024/07/12/g-s1-9545/ai-brings-soaring-emissions-for-google-and-microsoft-a-major-contributor-to-climate-change">Running a large model for a task a simple script could handle is wasteful</a>. Use the smallest effective tool.</p>
+          <p><strong>Bias in outputs:</strong> If your system makes decisions about people (hiring, lending, support prioritisation), bias in the model <a href="https://www.nature.com/articles/s41586-024-07856-5">can lead to discriminatory outcomes</a>. Test for this explicitly before deploying.</p>
+          <p><strong>Transparency:</strong> <a href="https://hdsr.mitpress.mit.edu/pub/aelql9qy">Users should know when they are interacting with AI</a>. People affected by AI decisions should be able to understand and challenge them.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Your boundary checklist</h2>
+
+      <p>
+        Based on the components you chose in the previous step, review the boundary considerations below. This checklist will become part of your pilot plan.
+      </p>
+
+      <BoundaryDesigner client:load />
+    </div>
+
   </div>
 </BaseLayout>
 
 <style>
-  .limits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
-  .limit-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
-  .limit-card strong { font-size: 0.9375rem; }
-  .limit-card p { font-size: 0.8125rem; color: var(--text-light); margin: 0.25rem 0 0; }
-  .pattern-list { padding-left: 1.25rem; }
-  .pattern-list li { font-size: 0.9375rem; color: var(--text-light); padding: 0.25rem 0; }
-  @media (max-width: 480px) { .limits-grid { grid-template-columns: 1fr; } }
+  .landing-content .subtitle {
+    color: var(--text-light);
+    font-size: 15px;
+  }
+
+  .bound-section {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    margin-bottom: 0.5rem;
+  }
+
+  .bound-section summary {
+    padding: 0.875rem 1.25rem;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bound-section summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .bound-section[open] summary::after {
+    content: '\2212';
+  }
+
+  .bound-section summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .bound-detail {
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .bound-detail p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .bound-detail p + p {
+    margin-top: 1em;
+  }
 </style>

@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title="Home" next={`${base}1-discover/`}>
+<BaseLayout title="Home">
   <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
     <!-- Opening -->
@@ -38,24 +38,43 @@ const base = import.meta.env.BASE_URL;
 
     <div class="divider"></div>
 
+    <!-- What's actually inside an AI system -->
+    <div class="mb-10">
+      <h2>AI is not one thing</h2>
+
+      <p>
+        You have probably seen demos of "AI agents" that seem to do everything. Enrich your leads. Write your reports. Manage your content pipeline. But what looks like one intelligent system is actually a combination of different components working together.
+      </p>
+
+      <p>
+        Under the hood, a typical AI system includes: a language model that understands and generates text, deterministic tools that do exact things like query a database or run a calculation, a retrieval layer that looks up information from your documents and human checkpoints where a person reviews, approves or redirects. Each component has different strengths and different failure modes. How you put them together matters as much as which ones you pick.
+      </p>
+
+      <p>
+        This guide helps you figure out that combination for your own workflow. Not "should we use AI?" but "what components do we need, how do they connect and where do we need people in the loop?"
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
     <!-- What this does differently -->
     <div class="mb-10">
       <h2>What this guide does differently</h2>
 
       <p>
-        This guide starts with your work, not with AI capabilities. You pick a real workflow, break it into steps and ask practical questions about each one. Not "can AI do this?" but "how much should AI do here, and what needs to stay with people?"
+        This guide starts with your work, not with AI capabilities. You pick a real workflow, break it into steps and ask practical questions about each one. When you bring AI into a workflow, you are mixing two different worlds. One is human: messy, contextual, full of judgement calls and informal coordination. The other is technical: fast, consistent, but rigid and blind to context it was not given.
       </p>
 
       <p>
-        When you bring AI into a workflow, you're mixing two different worlds. One is human: messy, contextual, full of judgement calls and informal coordination. The other is technical: fast, consistent, but rigid and blind to context it wasn't given. The hard part isn't the technology. It's figuring out where these two worlds overlap productively and where they don't. That's why this guide maps your workflow step by step, so you can see exactly where AI fits, where it doesn't and where you need both working together.
+        The hard part is not the technology. It is figuring out where these two worlds overlap productively and where they do not. That is why this guide maps your workflow step by step. You identify what components you need, where the boundaries are, what could go wrong and how to test it safely.
       </p>
 
       <p>
-        It won't sell you on AI. Some of the workflows you look at might not need it at all. Instead, it gives you a structured way to find real opportunities, assess the right level of automation for each step, put boundaries in place and design a small pilot you can actually learn from.
+        It will not sell you on AI. Some of the workflows you look at might not need it at all. Instead, it gives you a structured way to find real opportunities, design the right combination of tools and checks, and build a pilot you can actually learn from.
       </p>
 
       <p>
-        You don't need to be technical. You don't need to know which model to use. You just need a workflow you're curious about.
+        You do not need to be technical. You do not need to know which model to use. You just need a workflow you are curious about.
       </p>
     </div>
 
@@ -83,22 +102,22 @@ const base = import.meta.env.BASE_URL;
         <div class="guide-step">
           <span class="guide-num">3</span>
           <div>
-            <p class="step-title">For each step, how much should AI do?</p>
-            <p class="step-desc">Walk through your workflow and decide the right level of automation for each part.</p>
+            <p class="step-title">What components do you need?</p>
+            <p class="step-desc">Map the ingredients: what needs a language model, what needs deterministic logic, what needs retrieval, where do humans stay in the loop.</p>
           </div>
         </div>
         <div class="guide-step">
           <span class="guide-num">4</span>
           <div>
-            <p class="step-title">What boundaries and controls do you need?</p>
-            <p class="step-desc">Define what's off-limits, where approvals are required and how you enforce it.</p>
+            <p class="step-title">What could go wrong?</p>
+            <p class="step-desc">Each component has specific failure modes. Put checks in place: what the system cannot do, where humans must approve, what happens when something fails.</p>
           </div>
         </div>
         <div class="guide-step">
           <span class="guide-num">5</span>
           <div>
-            <p class="step-title">How do you test this safely?</p>
-            <p class="step-desc">Design a small pilot with clear success criteria and a concrete action plan.</p>
+            <p class="step-title">Build the pilot plan</p>
+            <p class="step-desc">Assemble everything into a roadmap and a build brief you can hand to a developer or an AI assistant.</p>
           </div>
         </div>
         <div class="guide-step">
@@ -122,15 +141,15 @@ const base = import.meta.env.BASE_URL;
       </p>
 
       <ul class="takeaway-list">
-        <li>A clear picture of which parts of your workflow are candidates for AI and which aren't</li>
-        <li>A practical understanding of automation levels, from "AI assists" to "fully autonomous" and why most useful adoption sits in between</li>
-        <li>A scored qualification of your opportunity, so you know whether to proceed, adjust or defer</li>
-        <li>A boundary checklist covering what needs human approval, what's off-limits and how to enforce it</li>
-        <li>A concrete 30-day action plan you can actually execute</li>
+        <li>A clear picture of which parts of your workflow need AI, which need plain automation and which need people</li>
+        <li>A component map showing what you need to build: language models, tools, retrieval, human checkpoints and how they connect</li>
+        <li>A boundary checklist covering what the system cannot do, where humans must approve and what happens when things fail</li>
+        <li>A pilot roadmap with evaluation criteria and a timeline</li>
+        <li>A build brief you can hand to a developer or paste into an AI assistant to get implementation options</li>
       </ul>
 
       <p>
-        You can try the guide with one of four built-in scenarios or bring your own workflow. Everything runs in your browser. Nothing is sent anywhere.
+        You can try the guide with one of four built-in scenarios or bring your own workflow. Everything runs in your browser. The AI analysis feature uses a hosted service but no data is stored.
       </p>
     </div>
 
