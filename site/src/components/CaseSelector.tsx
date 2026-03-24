@@ -20,22 +20,11 @@ export default function CaseSelector() {
   function selectCase(c: FlagshipCase) {
     setSelectedId(c.id);
     setShowCustom(false);
-    // Convert interventions to the designs format that the Map page expects
-    const designs: Record<string, any> = {};
-    if (c.interventions) {
-      Object.entries(c.interventions).forEach(([stepId, intervention]) => {
-        designs[stepId] = {
-          isCandidate: intervention.isCandidate,
-          description: intervention.description,
-          notes: '',
-        };
-      });
-    }
     saveState({
       selectedCase: c.id,
       workflow: c.workflow,
       qualification: c.workflow.qualification,
-      designs,
+      redesign: c.redesign || '',
     } as any);
   }
 

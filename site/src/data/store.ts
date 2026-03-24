@@ -25,6 +25,7 @@ export interface AppState {
   } | null;
   selectedCase: string | null;
   mappings: Record<string, { level: number; paradigm: string | null }> | null;
+  redesign: string | null;
   designs: Record<string, { isCandidate: boolean; description: string; notes: string }> | null;
   boundaries: Record<string, Array<{ id: string; text: string; category: string; checked: boolean; notes: string }>> | null;
 }
@@ -33,6 +34,7 @@ const defaultState: AppState = {
   workflow: null,
   qualification: null,
   selectedCase: null,
+  redesign: null,
   mappings: null,
   designs: null,
   boundaries: null,
