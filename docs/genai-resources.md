@@ -68,6 +68,8 @@ Included categories: academic and peer-reviewed research, news and commentary, e
 
 ## explainers and practitioner resources
 
+- **Data Readiness Checklist**
+  https://www.gartner.com/technology/media-products/reprints/nice/1-2MQGL3GC.html
 - **the way we phrase questions can subtly influence the answers**  
   https://ai-analytics.wharton.upenn.edu/generative-ai-labs/research-and-technical-reports/tech-report-prompt-engineering-is-complicated-and-contingent  
 - **one token at a time**  

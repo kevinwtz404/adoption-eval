@@ -27,40 +27,18 @@ const base = import.meta.env.BASE_URL;
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>Three kinds of work</h2>
+      <h2>The mix within every step</h2>
 
       <p>
-        When you look at any workflow step, the work in it falls into three categories. Most steps contain more than one.
+        Every step in a workflow contains a mix. Some parts are predictable and rule-based, like a calculator: same input, same output. Some parts need language, synthesis or pattern recognition. Some parts need human judgement, accountability or creative direction. Most steps are not purely one thing.
       </p>
 
-      <div class="work-types">
-        <div class="work-type">
-          <div class="work-type-header">
-            <div class="work-type-icon">H</div>
-            <strong>Human work</strong>
-          </div>
-          <p>Requires judgement, creativity, accountability or relationships. A person needs to be involved because the outcome depends on context, experience or trust. Examples: strategic decisions, client conversations, creative direction, legal review, final sign-off.</p>
-        </div>
-
-        <div class="work-type">
-          <div class="work-type-header">
-            <div class="work-type-icon">D</div>
-            <strong>Deterministic work</strong>
-          </div>
-          <p>Predictable and rule-based. Same input always produces the same output. Just like a calculator. Does not need AI. Examples: reformatting data between systems, resizing images to platform specs, routing based on territory rules, applying a tax calculation, generating a PDF from a template.</p>
-        </div>
-
-        <div class="work-type">
-          <div class="work-type-header">
-            <div class="work-type-icon">AI</div>
-            <strong>AI work</strong>
-          </div>
-          <p>Requires language understanding, pattern recognition, synthesis or generation. The output is not fully predictable, which is both its strength and its risk. Examples: adjusting copy for different channels, summarising a long document, enriching a lead profile from multiple sources, drafting commentary from data.</p>
-        </div>
-      </div>
+      <p>
+        AI can play a role across all of these. It can support creative work by generating options for a person to shape. It can supplement judgement by surfacing patterns a human might miss. It can handle routine language tasks like adapting text for different formats. And some things don't need AI at all: a spreadsheet formula or a template does the job without the unpredictability.
+      </p>
 
       <p>
-        The boundaries between these matter. Where human work hands off to AI work, you need a review point. Where AI work produces something that looks deterministic but isn't (like a generated number), you need to be careful. Where deterministic work could be mistaken for AI work, you might be overcomplicating it.
+        The question is not "is this a human step or an AI step?" It is "within this step, what does each part need, and who is accountable for the outcome?" Where AI generates something that looks like a fact, someone needs to verify it. Where AI drafts something creative, someone needs to judge it. Where a calculation needs to be exact, use deterministic logic, not a language model.
       </p>
     </div>
 
@@ -155,52 +133,6 @@ const base = import.meta.env.BASE_URL;
   .landing-content .subtitle {
     color: var(--text-light);
     font-size: 15px;
-  }
-
-  .work-types {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 1.5rem 0;
-  }
-
-  .work-type {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-card);
-    padding: 1.25rem;
-  }
-
-  .work-type-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .work-type-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    background: rgba(104, 48, 196, 0.08);
-    color: var(--purple);
-    flex-shrink: 0;
-  }
-
-  .work-type strong {
-    font-size: 15px;
-  }
-
-  .work-type p {
-    font-size: 14px;
-    color: var(--text-light);
-    margin: 0;
-    line-height: 1.7;
   }
 
   .paradigm-overview {
