@@ -203,6 +203,7 @@ export default function InterventionDesigner() {
             const colors = isHuman
               ? { bg: '#f0fdf4', border: '#22c55e' }
               : { bg: '#faf5ff', border: '#6830C4' };
+            const typeLabel = comp.type === 'llm+tool' ? 'LLM & Tool' : comp.type;
             return (
               <div style={{
                 padding: '0.375rem 0.5rem',
@@ -213,7 +214,7 @@ export default function InterventionDesigner() {
                 width: '6.5rem',
               }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.0625rem' }}>
-                  {comp.type}
+                  {typeLabel}
                 </div>
                 <div style={{ fontSize: '11px', fontWeight: 600, lineHeight: '1.3' }}>
                   {comp.name}
