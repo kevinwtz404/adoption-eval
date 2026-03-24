@@ -6,6 +6,7 @@ site/node_modules/
 site/.astro/
 site/.vscode/
 .astro/
+.claude/
 .DS_Store
 .env
 site/.env
