@@ -131,7 +131,8 @@ export default function BoundaryDesigner() {
     const state = loadState();
 
     const saved = (state as any).boundaryDecisions;
-    if (saved && saved.length > 0 && saved[0].pilotImplication) {
+    const hasChoices = saved && saved.length > 0 && saved.some((d: any) => d.choice);
+    if (hasChoices && saved[0].pilotImplication) {
       setDecisions(saved);
     } else {
       const defaults = (state as any).boundaryDefaults;
