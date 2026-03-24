@@ -74,8 +74,8 @@ Respond with a JSON object (no other text) with this exact structure:
   "narrative": "A flowing description of the redesigned workflow in plain language. Describe how the work would flow from start to finish after the intervention. Be specific about what AI does, what stays with people and what is deterministic automation. Use UK English, no em dashes.",
   "components": [
     {
-      "name": "short name for this component",
-      "type": "one of: llm, tool, rag, ml, human, deterministic",
+      "name": "2-3 words max, e.g. 'Lead research' or 'CFO approval'",
+      "type": "MUST be one of these exact values: llm, tool, rag, ml, human, deterministic. Definitions: 'llm' = a language model generating, summarising or interpreting text. 'tool' = a deterministic service call like a database query, CRM API, enrichment API or email send (NOT an LLM API call). 'rag' = retrieval from a document/knowledge base before generating. 'ml' = a trained model for classification, scoring or prediction. 'human' = a person reviewing, approving or making a judgement call. 'deterministic' = rules-based logic, calculations, formatting or templates where same input always gives same output.",
       "description": "what this component does in the redesigned workflow",
       "risks": ["specific risk 1", "specific risk 2"],
       "considerations": ["what to think about when building this"]
@@ -95,7 +95,7 @@ Respond with a JSON object (no other text) with this exact structure:
   ]
 }
 
-Be practical and specific to this workflow. Not generic advice. Think about what data is involved, who should see what, what happens when things go wrong. Consider whether local models (like Ollama) would be more appropriate than cloud models for sensitive data.`;
+Be practical and specific to this workflow. Not generic advice. Think about what data is involved, who should see what, what happens when things go wrong. Consider whether local models (like Ollama) would be more appropriate than cloud models for sensitive data. Keep the components list to 5-8 items maximum. Focus on the key steps, not every substep.`;
 
   const responseText = await callGemini(prompt, workflowName);
   if (!responseText) return null;

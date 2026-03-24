@@ -175,7 +175,7 @@ export default function InterventionDesigner() {
 
         {/* The solution text */}
         {/* Flow diagram */}
-        {components.length > 0 && (() => {
+        {components.length > 0 && (components.length <= 5 || components.some((c: any) => c.name?.startsWith('_parallel'))) && (() => {
           // Parse components into sections: linear steps and parallel groups
           const sections: Array<{ type: 'step'; comp: any } | { type: 'parallel'; top: any[]; bottom: any[] }> = [];
           let i = 0;
@@ -203,7 +203,12 @@ export default function InterventionDesigner() {
             const colors = isHuman
               ? { bg: '#f0fdf4', border: '#22c55e' }
               : { bg: '#faf5ff', border: '#6830C4' };
-            const typeLabel = comp.type === 'llm+tool' ? 'LLM & Tool' : comp.type;
+            const typeLabels: Record<string, string> = {
+              'llm+tool': 'LLM & API/Tool',
+              'tool': 'API/Tool',
+            };
+            const typeLabel = typeLabels[comp.type] || comp.type;
+            const nameLabel = comp.name.length > 20 ? comp.name.slice(0, 18) + '...' : comp.name;
             return (
               <div style={{
                 padding: '0.375rem 0.5rem',
@@ -211,33 +216,30 @@ export default function InterventionDesigner() {
                 borderRadius: '6px',
                 background: colors.bg,
                 textAlign: 'center' as const,
-                width: '6.5rem',
+                width: '7.5rem',
               }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.0625rem' }}>
                   {typeLabel}
                 </div>
                 <div style={{ fontSize: '11px', fontWeight: 600, lineHeight: '1.3' }}>
-                  {comp.name}
+                  {nameLabel}
                 </div>
               </div>
             );
           }
 
-          const arrow = <div style={{ fontSize: '15px', color: '#999', padding: '0 0.125rem', fontWeight: 700 }}>&rarr;</div>;
+          const arrow = (direction: 'right' | 'down' = 'right') => (
+            <div style={{ fontSize: '15px', color: '#999', padding: direction === 'right' ? '0 0.125rem' : '0.125rem 0', fontWeight: 700, textAlign: 'center' as const }}>
+              {direction === 'right' ? '\u2192' : '\u2193'}
+            </div>
+          );
 
-          return (
-            <div style={{
-              marginBottom: '1.25rem',
-              padding: '1.25rem',
-              border: '1px solid #e0e0e0',
-              borderRadius: '8px',
-              background: '#fff',
-              overflowX: 'auto' as const,
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', minWidth: 'max-content' }}>
-                {sections.map((section, si) => (
+          function renderRow(items: Array<{ type: string; comp?: any; top?: any[]; bottom?: any[] }>, startIndex: number) {
+            return (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
+                {items.map((section, si) => (
                   <div key={si} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                    {si > 0 && arrow}
+                    {si > 0 && arrow('right')}
                     {section.type === 'step' ? (
                       renderBox(section.comp)
                     ) : (
@@ -251,17 +253,17 @@ export default function InterventionDesigner() {
                         background: '#fafafa',
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                          {section.top.map((comp: any, ti: number) => (
+                          {section.top!.map((comp: any, ti: number) => (
                             <div key={ti} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                              {ti > 0 && arrow}
+                              {ti > 0 && arrow('right')}
                               {renderBox(comp)}
                             </div>
                           ))}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                          {section.bottom.map((comp: any, bi: number) => (
+                          {section.bottom!.map((comp: any, bi: number) => (
                             <div key={bi} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                              {bi > 0 && arrow}
+                              {bi > 0 && arrow('right')}
                               {renderBox(comp)}
                             </div>
                           ))}
@@ -271,6 +273,44 @@ export default function InterventionDesigner() {
                   </div>
                 ))}
               </div>
+            );
+          }
+
+          // Split into rows if more than 5 sections
+          const maxPerRow = 5;
+          const needsWrap = sections.length > maxPerRow;
+          const row1 = needsWrap ? sections.slice(0, Math.ceil(sections.length / 2)) : sections;
+          const row2 = needsWrap ? [...sections.slice(Math.ceil(sections.length / 2))].reverse() : [];
+
+          return (
+            <div style={{
+              marginBottom: '1.25rem',
+              padding: '1.25rem',
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px',
+              background: '#fff',
+              overflowX: 'auto' as const,
+            }}>
+              {renderRow(row1, 0)}
+              {needsWrap && (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '0.25rem' }}>
+                    {row1.map((_, i) => (
+                      <div key={i} style={{ width: '7.5rem', textAlign: 'center' as const, paddingLeft: i === row1.length - 1 ? '1.5rem' : '0' }}>
+                        {i === row1.length - 1 ? arrow('down') : null}
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
+                    {row2.map((section, si) => (
+                      <div key={si} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                        {si > 0 && <div style={{ fontSize: '15px', color: '#999', padding: '0 0.125rem', fontWeight: 700 }}>&larr;</div>}
+                        {section.type === 'step' ? renderBox(section.comp) : null}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           );
         })()}

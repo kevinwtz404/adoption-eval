@@ -8,84 +8,62 @@ const base = import.meta.env.BASE_URL;
   <div class="max-w-5xl mx-auto py-10 px-4 landing-content">
 
     <div class="mb-10">
-      <h1>Set the boundaries</h1>
-      <p class="subtitle">Each component you chose has specific failure modes. Put checks in place before you build anything.</p>
+      <h1>Reality check</h1>
+      <p class="subtitle">You have a design. Now stress-test it. What can go wrong, what must stay off-limits and what decisions do you need to make before building anything?</p>
     </div>
 
     <div class="mb-10">
-      <h2>Why boundaries are not optional</h2>
+      <h2>Why this step matters</h2>
 
       <p>
-        Every component in your system can fail in specific ways. Language models <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">hallucinate</a>. Retrieval systems surface the wrong document. Classifiers inherit <a href="https://www.nature.com/articles/s41586-024-07856-5">bias from their training data</a>. Tools get called with the wrong parameters. And the connections between components are where most silent failures happen.
+        The Map page produced an ideal design. This page puts the brakes on it. Every AI component can fail in specific ways. Every dataset has privacy constraints. Every model has a cost. And some errors are acceptable while others are not.
       </p>
 
       <p>
-        Boundaries are not about being cautious. They are about being specific. For each part of your system, you need to know: what can it do, what can it not do, what happens when it gets something wrong and who is accountable for the output.
+        The goal is not to be cautious. It is to be specific. By the end of this page, you should know exactly what you need to protect against and how.
       </p>
     </div>
 
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>What to think about for each component</h2>
+      <h2>What is the cost of getting it wrong?</h2>
+
+      <p>
+        Not all errors are equal. A slightly off tone in a LinkedIn post is fixable. A wrong number in a board deck is not. Before you set boundaries, think about what happens when each part of your system produces a bad output.
+      </p>
 
       <details class="bound-section">
-        <summary>Language model limitations</summary>
+        <summary>Errors in generated text</summary>
         <div class="bound-detail">
-          <p><strong>Hallucination:</strong> LLMs generate plausible text that can be factually wrong. This is not a bug that will be fixed. It is a <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">fundamental property of how these models work</a>. Any output that will be treated as fact must be verified.</p>
-          <p><strong>Knowledge cut-off:</strong> Models are <a href="https://promptrevolution.poltextlab.com/understanding-knowledge-cut-offs-in-genai-models/">frozen in time</a>. They do not know about events after their training date. <a href="https://www.toolify.ai/ai-news/demystifying-knowledge-cutoff-why-it-matters-for-ai-models-396770">Many users do not realise when they are getting outdated information</a>.</p>
-          <p><strong>Context window:</strong> Models can only process <a href="https://www.coursera.org/articles/context-window">a limited amount of text at once</a>. Long documents may be truncated or poorly understood.</p>
-          <p><strong>Prompt sensitivity:</strong> <a href="https://ai-analytics.wharton.upenn.edu/generative-ai-labs/research-and-technical-reports/tech-report-prompt-engineering-is-complicated-and-contingent">The way you phrase a question can subtly influence the answer</a>. Small changes in prompts can produce very different outputs.</p>
-          <p><strong>Bias:</strong> Models reflect the biases in their training data. This includes <a href="https://www.nature.com/articles/s41586-024-07856-5">racial bias</a>, <a href="https://aclanthology.org/2022.acl-long.482/">cultural bias</a> and <a href="https://www.washingtonpost.com/technology/interactive/2023/ai-generated-images-bias-racism-sexism-stereotypes/">gender stereotypes</a>.</p>
+          <p>Language models <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">hallucinate</a>. They produce text that sounds right but can be factually wrong. This is not a bug that will be fixed. It is how the technology works.</p>
+          <p>The question is: what happens when the text is wrong? If it is a draft that a human will review and edit, the risk is manageable. If it goes directly to a customer or into a financial report, the risk is high.</p>
+          <p><strong>Think about:</strong> Who sees this output? Is it a draft or a final product? What happens if it contains a factual error? Can the error be caught before it causes damage?</p>
         </div>
       </details>
 
       <details class="bound-section">
-        <summary>Data privacy and model choice</summary>
+        <summary>Errors in numbers and calculations</summary>
         <div class="bound-detail">
-          <p><strong>Where does data go?</strong> If you use a cloud model (OpenAI, Anthropic, Google), your data leaves your systems. For sensitive workflows, consider whether this is acceptable. Some industries and jurisdictions have strict rules about where data can be processed.</p>
-          <p><strong>Local models:</strong> Running a model on your own infrastructure keeps data private but requires hardware and expertise. Small open-source models can handle many tasks without cloud dependency.</p>
-          <p><strong>Hybrid approach:</strong> Use cloud models for non-sensitive tasks and local models for anything involving personal data, financial records or confidential information.</p>
-          <p><strong>Access control:</strong> If your system retrieves internal documents, it must respect existing access permissions. A RAG system that surfaces salary data to someone who should not see it is worse than no system at all.</p>
+          <p>If your design includes any numbers, ask: where do they come from? Numbers from a spreadsheet or database are deterministic and reliable. Numbers from an LLM are not. An LLM can generate a number that looks calculated but is actually made up.</p>
+          <p>A wrong projection in a brainstorming session is tolerable. A wrong revenue figure in a board report is not. A wrong number in a tax calculation could be illegal.</p>
+          <p><strong>Think about:</strong> Does any AI component in your design produce or handle numbers? If so, are those numbers verified against a deterministic source? Could a generated number be mistaken for a calculated one?</p>
         </div>
       </details>
 
       <details class="bound-section">
-        <summary>Cost and model selection</summary>
+        <summary>Errors in retrieved information</summary>
         <div class="bound-detail">
-          <p><strong>Not every step needs a frontier model.</strong> A step that classifies support tickets might work fine with a small, cheap model. A step that drafts nuanced board commentary might need a more capable (and expensive) one. Match the model to the task.</p>
-          <p><strong>Cost at scale:</strong> What costs pennies for 10 users can cost thousands for 1000 users. Think about the volume each step will handle and price accordingly. Deterministic tools (rules, APIs, calculations) cost effectively nothing at scale. LLM calls do not.</p>
-          <p><strong>Latency:</strong> Larger models are slower. If a step needs to respond in real-time (like a customer-facing chatbot), model size matters. If it runs overnight (like a batch report), it might not.</p>
-          <p><strong>Small models vs large models:</strong> For many tasks, a smaller model with good prompting works as well as a large one at a fraction of the cost. Test before assuming you need the most expensive option.</p>
+          <p>If your design includes retrieval (RAG), the answers are only as good as the documents that were indexed. Stale documents produce stale answers. Incomplete indexing means some information is invisible to the system. And <a href="https://casmi.northwestern.edu/news/articles/2024/the-hallucination-problem-a-feature-not-a-bug.html">a citation does not guarantee the interpretation is correct</a>.</p>
+          <p><strong>Think about:</strong> How current are the source documents? How often are they updated? What happens if the system retrieves the wrong document or misinterprets the right one?</p>
         </div>
       </details>
 
       <details class="bound-section">
-        <summary>Human checkpoints and approval gates</summary>
+        <summary>Errors in signals and pattern matching</summary>
         <div class="bound-detail">
-          <p><strong>Where must a human review?</strong> Any output that is customer-facing, legally binding, financially significant or could cause harm if wrong needs a human checkpoint before it goes anywhere.</p>
-          <p><strong>Approval vs monitoring:</strong> An approval gate pauses the workflow until a person signs off. Monitoring lets the system proceed but logs everything for later review. Choose based on the risk: high-stakes steps need approval, low-stakes steps can use monitoring.</p>
-          <p><strong>What happens when the human disagrees?</strong> Design for it. If the reviewer rejects the AI output, what happens next? Is there a fallback? Does it go to a queue? Does the system learn from the correction?</p>
-          <p><strong>Reviewer fatigue:</strong> If every output needs review, the human becomes a bottleneck and starts rubber-stamping. Put checkpoints only where they matter most.</p>
-        </div>
-      </details>
-
-      <details class="bound-section">
-        <summary>Failure modes and fallbacks</summary>
-        <div class="bound-detail">
-          <p><strong>What happens when the AI is wrong?</strong> Every step that uses AI needs a failure plan. If the LLM hallucinates a number, if the retrieval system finds the wrong document, if the classifier misscores a lead, what is the consequence and how is it caught?</p>
-          <p><strong>Graceful degradation:</strong> If a component fails, the system should not break silently. It should either fall back to a simpler method (e.g. human handles it manually) or flag the issue visibly.</p>
-          <p><strong>Disallowed actions:</strong> Some things the system should never do, regardless of what the LLM decides. Sending external communications without approval. Modifying financial records. Accessing data it should not have. Define these explicitly.</p>
-          <p><strong>Monitoring and logging:</strong> Everything the system does should be logged. Not just the outputs but the inputs, the intermediate steps and the decisions. If something goes wrong, you need to be able to trace what happened.</p>
-        </div>
-      </details>
-
-      <details class="bound-section">
-        <summary>Environmental and ethical considerations</summary>
-        <div class="bound-detail">
-          <p><strong>Energy cost:</strong> AI models <a href="https://www.technologyreview.com/2023/12/05/1084417/ais-carbon-footprint-is-bigger-than-you-think/">consume significant energy</a>. <a href="https://www.unep.org/news-and-stories/story/ai-has-environmental-problem-heres-what-world-can-do-about">They consume massive amounts of water</a>. <a href="https://www.npm.org/2024/07/12/g-s1-9545/ai-brings-soaring-emissions-for-google-and-microsoft-a-major-contributor-to-climate-change">Running a large model for a task a simple script could handle is wasteful</a>. Use the smallest effective tool.</p>
-          <p><strong>Bias in outputs:</strong> If your system makes decisions about people (hiring, lending, support prioritisation), bias in the model <a href="https://www.nature.com/articles/s41586-024-07856-5">can lead to discriminatory outcomes</a>. Test for this explicitly before deploying.</p>
-          <p><strong>Transparency:</strong> <a href="https://hdsr.mitpress.mit.edu/pub/aelql9qy">Users should know when they are interacting with AI</a>. People affected by AI decisions should be able to understand and challenge them.</p>
+          <p>If your design surfaces signals from unstructured data (like "a competitor was mentioned 3 times this month"), these are pattern matches, not facts. The system might count wrong, misattribute a mention or flag something irrelevant.</p>
+          <p><strong>Think about:</strong> Are signals clearly labelled as signals, not facts? Does someone verify them before they influence decisions? What is the worst that happens if a signal is wrong?</p>
         </div>
       </details>
     </div>
@@ -93,10 +71,103 @@ const base = import.meta.env.BASE_URL;
     <div class="divider"></div>
 
     <div class="mb-10">
-      <h2>Your boundary checklist</h2>
+      <h2>Can your data leave your systems?</h2>
 
       <p>
-        Based on the components you chose in the previous step, review the boundary considerations below. This checklist will become part of your pilot plan.
+        Most AI models run in the cloud. That means your data is sent to an external server for processing. For some workflows this is fine. For others it is a dealbreaker.
+      </p>
+
+      <details class="bound-section">
+        <summary>Cloud vs local models</summary>
+        <div class="bound-detail">
+          <p>Cloud models (OpenAI, Anthropic, Google) are the most capable but your data leaves your infrastructure. Local models (Ollama, llama.cpp, vLLM) keep everything on your machines but require hardware and expertise.</p>
+          <p>For many tasks, a smaller local model works well enough. You do not always need the most powerful model. A local model that handles 80% of cases may be better than a cloud model that handles 95% but exposes confidential data.</p>
+          <p><strong>Think about:</strong> What data does each AI component in your design process? Is any of it confidential, personal or regulated? Could it leave your systems? What are the compliance requirements for your industry and jurisdiction?</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Access control and permissions</summary>
+        <div class="bound-detail">
+          <p>If your system retrieves information from internal sources, it must respect existing permissions. A retrieval system that surfaces salary data, confidential client information or unreleased product plans to the wrong person is worse than no system at all.</p>
+          <p><strong>Think about:</strong> Who can see what in the current workflow? Does the AI system enforce the same permissions? What happens if it surfaces something the user should not see?</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>What does this cost?</h2>
+
+      <details class="bound-section">
+        <summary>Model selection and sizing</summary>
+        <div class="bound-detail">
+          <p>Not every step needs a frontier model. A step that classifies support tickets might work fine with a small, cheap model. A step that drafts nuanced board commentary might need a more capable one. Match the model to the task.</p>
+          <p><strong>Think about:</strong> For each AI component, what is the simplest model that could work? Have you tested smaller models before assuming you need the most expensive one? What is the cost per call and how does that scale with volume?</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Cost at scale</summary>
+        <div class="bound-detail">
+          <p>What costs pennies for 10 users can cost thousands for 1000 users. Deterministic components (rules, APIs, calculations) are effectively free at scale. LLM calls are not.</p>
+          <p><strong>Think about:</strong> How often will each AI component be called? What is the cost at pilot scale vs full scale? Are there deterministic alternatives for any AI steps that would be cheaper at volume?</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Where do humans stay in the loop?</h2>
+
+      <details class="bound-section">
+        <summary>Approval gates</summary>
+        <div class="bound-detail">
+          <p>An approval gate pauses the workflow until a person signs off. Use these for high-stakes outputs: anything customer-facing, legally binding, financially significant or that could cause harm if wrong.</p>
+          <p><strong>Think about:</strong> Which outputs in your design need human approval before they go anywhere? Who approves? What happens if the approver is unavailable? What is the fallback?</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>Monitoring vs approval</summary>
+        <div class="bound-detail">
+          <p>Not everything needs to pause for approval. Low-stakes outputs can proceed with monitoring: the system logs everything and a person reviews periodically. If you put approval gates on everything, the human becomes a bottleneck and starts rubber-stamping.</p>
+          <p><strong>Think about:</strong> Which outputs need approval before proceeding and which can proceed with monitoring? What is the consequence of a bad output getting through in each case?</p>
+        </div>
+      </details>
+
+      <details class="bound-section">
+        <summary>What happens when the human disagrees?</summary>
+        <div class="bound-detail">
+          <p>If the reviewer rejects the AI output, what happens next? Does it go back for regeneration? Does a person handle it manually? Does it go into a queue?</p>
+          <p><strong>Think about:</strong> For each approval gate, what is the rejection path? Is there a manual fallback for every AI step?</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>What must the system never do?</h2>
+
+      <p>
+        Every system needs hard rules. Things it must never do regardless of what the AI decides. These are non-negotiable and should be enforced in the architecture, not just documented in a policy.
+      </p>
+
+      <p>
+        Examples: never send an email without human approval. Never modify financial records. Never surface confidential documents to unauthorised users. Never generate numbers that look like calculations.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mb-10">
+      <h2>Your boundary decisions</h2>
+
+      <p>
+        Based on your design, here are the specific decisions you need to make. For each item, record how you are handling it. These decisions will feed into your pilot plan.
       </p>
 
       <BoundaryDesigner client:load />
