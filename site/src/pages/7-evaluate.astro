@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import EvaluationMatrix from '../components/EvaluationMatrix.tsx';
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -8,7 +9,7 @@ const base = import.meta.env.BASE_URL;
 
     <div class="mb-10">
       <h1>Evaluate the pilot</h1>
-      <p class="subtitle">You built it and ran it. Now measure what actually changed and decide what to do next.</p>
+      <p class="subtitle">You ran the pilot. Now measure what actually changed and decide what to do next.</p>
     </div>
 
     <div class="mb-10">
@@ -29,35 +30,10 @@ const base = import.meta.env.BASE_URL;
       <h2>What to measure</h2>
 
       <p>
-        Evaluate your pilot across six dimensions. Not all of them will be relevant to every pilot, but considering all six prevents you from optimising for one thing while quietly degrading another.
+        Evaluate your pilot across six dimensions. Not all will be relevant to every pilot, but considering all six prevents you from optimising for one thing while quietly degrading another. For each dimension, record what you measured before the pilot (baseline), what you measured after and what direction the change went.
       </p>
 
-      <div class="dimensions-grid">
-        <div class="dim-card">
-          <strong>Time</strong>
-          <p>Did the workflow get faster? By how much? Measure cycle time end-to-end, not just the automated steps.</p>
-        </div>
-        <div class="dim-card">
-          <strong>Cost</strong>
-          <p>What did the pilot cost to run (API calls, tools, people's time setting it up) vs what did it save?</p>
-        </div>
-        <div class="dim-card">
-          <strong>Quality</strong>
-          <p>Is the output better or worse? Measure accuracy, consistency, error rate. Ask the people who use the output.</p>
-        </div>
-        <div class="dim-card">
-          <strong>Risk</strong>
-          <p>Did the pilot increase or decrease operational risk? Were there any boundary violations, near-misses or unexpected behaviours?</p>
-        </div>
-        <div class="dim-card">
-          <strong>Adoption</strong>
-          <p>Did the team actually use it? Was there friction? Did people trust it, work around it or ignore it?</p>
-        </div>
-        <div class="dim-card">
-          <strong>Control</strong>
-          <p>Can you trace what the system did and why? Can you audit it? Do you trust the boundaries held?</p>
-        </div>
-      </div>
+      <EvaluationMatrix client:load />
 
       <div class="interpretation-rule">
         <strong>Do not treat time savings alone as success.</strong> A pilot is only considered strong when improvements in time and cost do not degrade risk, control or quality beyond accepted thresholds.
@@ -95,14 +71,13 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <p>
-        Whatever you decide, feed the learnings back into your process. What did you discover about the workflow that you did not know before? What assumptions were wrong? What would you do differently next time? These insights make your next pilot better.
+        Whatever you decide, feed the learnings back into your process. What did you discover about the workflow that you did not know before? What assumptions were wrong? What would you do differently next time?
       </p>
     </div>
 
     <div class="divider"></div>
 
     <div class="mb-10" style="text-align: center;">
-      <p>Evaluation tracking tools coming soon.</p>
       <a href={base} class="back-link">Back to start</a>
     </div>
 
@@ -115,33 +90,6 @@ const base = import.meta.env.BASE_URL;
     font-size: 15px;
   }
 
-  .dimensions-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-    margin: 1.5rem 0;
-  }
-
-  .dim-card {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    background: var(--bg-card);
-  }
-
-  .dim-card strong {
-    font-size: 15px;
-    display: block;
-    margin-bottom: 0.375rem;
-  }
-
-  .dim-card p {
-    font-size: 15px;
-    color: var(--text-light);
-    margin: 0;
-    line-height: 1.75;
-  }
-
   .interpretation-rule {
     padding: 1rem 1.25rem;
     border-left: 3px solid var(--purple);
@@ -149,6 +97,7 @@ const base = import.meta.env.BASE_URL;
     border-radius: 0 8px 8px 0;
     font-size: 15px;
     line-height: 1.75;
+    margin-top: 1.5rem;
   }
 
   .decision-list {
@@ -199,9 +148,5 @@ const base = import.meta.env.BASE_URL;
   .back-link:hover {
     background: var(--purple);
     color: white;
-  }
-
-  @media (max-width: 480px) {
-    .dimensions-grid { grid-template-columns: 1fr; }
   }
 </style>

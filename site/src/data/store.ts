@@ -35,6 +35,9 @@ export interface AppState {
   } | null;
   designs: Record<string, { isCandidate: boolean; description: string; notes: string }> | null;
   boundaries: Record<string, Array<{ id: string; text: string; category: string; checked: boolean; notes: string }>> | null;
+  boundaryDecisions: any[] | null;
+  pilotPlan: { scope: string; successCriteria: string; stopCriteria: string; timeline: string; owner: string } | null;
+  evaluation: any[] | null;
 }
 
 const defaultState: AppState = {
@@ -46,6 +49,9 @@ const defaultState: AppState = {
   mappings: null,
   designs: null,
   boundaries: null,
+  boundaryDecisions: null,
+  pilotPlan: null,
+  evaluation: null,
 };
 
 export function loadState(): AppState {
