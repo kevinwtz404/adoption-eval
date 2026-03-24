@@ -134,7 +134,7 @@ export default function QualificationForm() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
 
         {/* Left: Sliders */}
-        <div>
+        <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1.5rem' }}>
           {CRITERIA.map(({ key, label, gate }) => {
             const value = (scores as Record<string, number | undefined>)[key] ?? 3;
             const gateFailed = gate && (value as number) < 3;
