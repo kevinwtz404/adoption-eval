@@ -43,14 +43,12 @@ export const flagshipCases: FlagshipCase[] = [
     painPoint: 'Knowledge is fragmented across docs, chats, wikis and project tools. People use different terms for the same concepts, duplicate work because they cannot find what already exists and lose context on why decisions were made. Ops leads reported spending 5-6 hours per week manually answering the same questions from different people.',
     discoveryMethod: 'Champion workshops with ops and product leads surfaced repeated alignment pain. Workplace shadowing showed staff checking 3-5 different tools before finding a trusted answer. Time-spend analysis confirmed the scale: senior staff were spending significant time as informal help desks.',
     whyAI: 'This is a retrieval and synthesis problem across mixed unstructured sources. AI can improve speed and consistency of finding answers while keeping strategic judgement with humans. The key question is how much of the retrieval and summarisation can be automated without losing accuracy or leaking sensitive information.',
-    userDescription: 'I want people to be able to ask a question and get an answer from our internal docs, wikis and decision logs without having to search 5 different tools. The answer should show where it came from so people can check it. If the system is not sure, it should ask a person instead of guessing. Answers should be saved so the same question does not need answering twice. I also want a weekly summary of what changed, who owns what and what decisions were made so we can shorten or replace our sync meetings. Not everyone should be able to see everything though, permissions need to be respected.',
+    userDescription: 'I want people to be able to ask a question and get an answer from our internal docs, wikis and decision logs without having to search 5 different tools. The answer should show where it came from so people can check it. If the system is not sure, it should ask a person instead of guessing. Answers should be saved so the same question does not need answering twice. Not everyone should be able to see everything though, permissions need to be respected.',
     redesign: `Someone asks a question through a single interface (chat, Slack command or internal tool). A RAG system searches all internal sources (docs, wikis, decision logs, project trackers, Slack messages) and generates an answer with citations showing where each piece of information came from.
 
 If the system is confident in the answer, it shows it directly. If confidence is low or the question is ambiguous, it escalates to a person and shows what it found so far.
 
 Every answer (whether from the system or a person) is captured and becomes searchable. When the same question comes up again, the existing answer surfaces first.
-
-A weekly alignment summary is generated automatically from recent decisions, document changes and ownership updates. The ops lead reviews and edits the summary before sharing it, replacing or shortening the weekly sync meeting.
 
 Access control must respect existing document permissions. Not everyone should be able to look up everything. The system must only surface documents the person asking is allowed to see.`,
     redesignData: {
@@ -59,8 +57,7 @@ Access control must respect existing document permissions. Not everyone should b
         { name: 'Question answering', type: 'llm', description: 'Generate answers from retrieved documents with citations', risks: ['Hallucination: plausible but wrong answers', 'Citation present does not guarantee correct interpretation'], considerations: ['Model size vs cost trade-off', 'Confidence scoring to decide when to escalate'] },
         { name: 'Access control', type: 'tool', description: 'Enforce document permissions before retrieval', risks: ['Permission mapping errors could expose confidential information'], considerations: ['Must mirror existing permission structure', 'Need to handle documents with mixed access levels'] },
         { name: 'Answer capture', type: 'deterministic', description: 'Store every answer for future retrieval', risks: ['Outdated answers persisting'], considerations: ['Expiry or review cycle for stored answers'] },
-        { name: 'Weekly summary generation', type: 'llm', description: 'Draft alignment summary from recent changes', risks: ['May miss important context', 'Could misrepresent decisions'], considerations: ['Ops lead must review before sharing'] },
-        { name: 'Ops lead review', type: 'human', description: 'Review generated answers and summaries before they become authoritative', risks: ['Review fatigue if volume is high'], considerations: ['Define what requires review vs what can go directly'] },
+        { name: 'Ops lead review', type: 'human', description: 'Review generated answers before they become authoritative', risks: ['Review fatigue if volume is high'], considerations: ['Define what requires review vs what can go directly'] },
       ],
       boundaries: ['AI output must be reviewed before being treated as authoritative', 'Escalate to a person when confidence is low', 'Log all queries and answers for traceability'],
       confidentiality: ['Document permissions must be enforced at retrieval time', 'Salary, HR and legal documents must be excluded or access-controlled', 'Consider a local model if internal documents contain sensitive client data', 'Evaluate whether queries and answers can be sent to a cloud API'],
@@ -75,7 +72,6 @@ Access control must respect existing document permissions. Not everyone should b
         { id: 's3', name: 'Ask a colleague who might know', owner: 'any team member', pain: 'Interrupts the colleague, answer depends on who you ask' },
         { id: 's4', name: 'Piece together an answer from multiple sources', owner: 'any team member', pain: 'Time-consuming, no way to verify completeness' },
         { id: 's5', name: 'Share the answer with the person who asked', owner: 'senior staff / ops lead', pain: 'Answer not captured for next time, same question will come up again' },
-        { id: 's6', name: 'Weekly team alignment meeting to sync on who owns what', owner: 'ops lead', pain: 'Meeting is long, not everyone has context, decisions get lost in notes' },
       ],
       actors: ['team members', 'ops leads', 'product managers', 'team leads'],
       data_assets: ['internal docs', 'decision logs', 'project trackers', 'Slack messages', 'meeting notes'],
