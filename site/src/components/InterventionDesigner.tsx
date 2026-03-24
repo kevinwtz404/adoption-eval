@@ -186,36 +186,31 @@ export default function InterventionDesigner() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', minWidth: 'max-content' }}>
               {components.map((comp, i) => {
-                const typeColors: Record<string, { bg: string; border: string }> = {
-                  human: { bg: '#faf5ff', border: '#6830C4' },
-                  llm: { bg: '#eff6ff', border: '#3b82f6' },
-                  rag: { bg: '#f0fdf4', border: '#22c55e' },
-                  tool: { bg: '#fefce8', border: '#eab308' },
-                  deterministic: { bg: '#fefce8', border: '#eab308' },
-                  ml: { bg: '#fff7ed', border: '#f97316' },
-                };
-                const colors = typeColors[comp.type] || { bg: '#f9fafb', border: '#d1d5db' };
+                const isHuman = comp.type === 'human';
+                const colors = isHuman
+                  ? { bg: '#f0fdf4', border: '#22c55e' }
+                  : { bg: '#faf5ff', border: '#6830C4' };
 
                 return (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <div style={{
-                      padding: '0.5rem 0.75rem',
-                      border: `2px solid ${colors.border}`,
-                      borderRadius: '8px',
+                      padding: '0.375rem 0.5rem',
+                      border: `1.5px solid ${colors.border}`,
+                      borderRadius: '6px',
                       background: colors.bg,
                       textAlign: 'center' as const,
-                      minWidth: '5rem',
-                      maxWidth: '9rem',
+                      minWidth: '4rem',
+                      maxWidth: '7rem',
                     }}>
-                      <div style={{ fontSize: '11px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.125rem' }}>
+                      <div style={{ fontSize: '9px', fontWeight: 700, color: colors.border, textTransform: 'uppercase' as const, letterSpacing: '0.03em', marginBottom: '0.0625rem' }}>
                         {comp.type}
                       </div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, lineHeight: '1.3' }}>
+                      <div style={{ fontSize: '11px', fontWeight: 600, lineHeight: '1.3' }}>
                         {comp.name}
                       </div>
                     </div>
                     {i < components.length - 1 && (
-                      <div style={{ fontSize: '15px', color: '#ccc', padding: '0 0.125rem' }}>&rarr;</div>
+                      <div style={{ fontSize: '12px', color: '#ccc', padding: '0 0.0625rem' }}>&rarr;</div>
                     )}
                   </div>
                 );
