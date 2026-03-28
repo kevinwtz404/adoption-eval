@@ -38,6 +38,26 @@ export interface AppState {
   boundaryDecisions: any[] | null;
   pilotPlan: { scope: string; successCriteria: string; stopCriteria: string; timeline: string; owner: string } | null;
   evaluation: any[] | null;
+  simplifiedInputs: {
+    systemsStack: string[];
+    technicalCapacity: 'no-developers' | 'some-technical' | 'dedicated-dev' | null;
+    budgetBand: '<500' | '500-2k' | '2k-5k' | '5k+' | null;
+    buildPreference: 'existing-tools' | 'open-to-custom' | 'no-preference' | null;
+  } | null;
+  playbook: {
+    decision: 'go' | 'not-yet' | 'no-go' | null;
+    costRange: string | null;
+    sections: {
+      whatWereTesting: string | null;
+      howItWorks: string | null;
+      guardrails: string[] | null;
+      risksAndMitigations: Array<{ risk: string; mitigation: string }> | null;
+      twoWeekPlan: string | null;
+      stopCriteria: string[] | null;
+      whatTheTeamNeedsToKnow: string | null;
+      howWellMeasure: string | null;
+    } | null;
+  } | null;
 }
 
 const defaultState: AppState = {
@@ -52,6 +72,8 @@ const defaultState: AppState = {
   boundaryDecisions: null,
   pilotPlan: null,
   evaluation: null,
+  simplifiedInputs: null,
+  playbook: null,
 };
 
 export function loadState(): AppState {

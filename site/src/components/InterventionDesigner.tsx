@@ -21,6 +21,7 @@ export default function InterventionDesigner() {
   const [components, setComponents] = useState<Array<{ name: string; type: string; description: string }>>([]);
   const [generating, setGenerating] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
+  const [descriptionSaved, setDescriptionSaved] = useState(false);
 
   useEffect(() => {
     const state = loadState();
@@ -41,6 +42,7 @@ export default function InterventionDesigner() {
       if (flagship) {
         setPainPoint(flagship.painPoint);
         setUserDescription(flagship.userDescription || '');
+        if (flagship.userDescription) setDescriptionSaved(true);
         if (!(state as any).redesign && flagship.redesign) {
           setRedesign(flagship.redesign);
           setComponents(flagship.redesignData.components);
@@ -77,11 +79,25 @@ export default function InterventionDesigner() {
   return (
     <div style={{ marginTop: '1.5rem' }}>
 
-      {/* 1. Current state */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '0.75rem' }}>Current state</div>
-        <div style={{ border: '1px solid #e0e0e0', borderRadius: '8px', background: '#fafafa', padding: '1.25rem' }}>
-          <div style={{ fontWeight: 600, fontSize: '15px', marginBottom: '0.75rem' }}>{workflowName}</div>
+      {/* 1. Current state (collapsible) */}
+      <details style={{ marginBottom: '1.5rem', border: '1px solid #e0e0e0', borderRadius: '10px', background: '#fff', transition: 'border-color 0.2s' }}>
+        <summary style={{
+          padding: '1rem 1.25rem',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          listStyle: 'none',
+          WebkitAppearance: 'none' as const,
+        }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(104, 48, 196, 0.08)', flexShrink: 0 }}></div>
+          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.125rem' }}>
+            <span style={{ fontWeight: 600, fontSize: '0.9375rem' }}>Current state: {workflowName}</span>
+            <span style={{ fontSize: '0.8125rem', color: '#999' }}>{steps.length} steps as they work today</span>
+          </div>
+          <span style={{ marginLeft: 'auto', color: '#999', fontSize: '0.875rem' }}>▸</span>
+        </summary>
+        <div style={{ padding: '0 1.25rem 1.25rem', borderTop: '1px solid #e0e0e0', paddingTop: '1.25rem' }}>
           {painPoint && <div style={{ fontSize: '15px', color: '#666', lineHeight: '1.75', marginBottom: '1rem' }}>{painPoint}</div>}
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
             {steps.map((step, i) => (
@@ -96,7 +112,7 @@ export default function InterventionDesigner() {
             ))}
           </div>
         </div>
-      </div>
+      </details>
 
       {/* 2. What you want */}
       <div style={{ marginBottom: '1.5rem' }}>
@@ -109,6 +125,7 @@ export default function InterventionDesigner() {
           onInput={(e) => {
             const val = (e.target as HTMLTextAreaElement).value;
             setUserDescription(val);
+            setDescriptionSaved(false);
             saveState({ userDescription: val } as any);
           }}
           placeholder="e.g. I want people to be able to ask a question and get an answer from our internal docs without searching 5 tools. The answer should show where it came from. If it is not sure, ask a person."
@@ -119,6 +136,25 @@ export default function InterventionDesigner() {
             background: '#fff',
           }}
         />
+        <div style={{ marginTop: '0.75rem' }}>
+          <button
+            onClick={() => setDescriptionSaved(true)}
+            style={{
+              padding: '0.5rem 1.5rem',
+              borderRadius: '6px',
+              border: 'none',
+              background: descriptionSaved ? '#22c55e' : '#6830C4',
+              color: 'white',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              fontFamily: 'inherit',
+              transition: 'all 0.15s',
+            }}
+          >
+            {descriptionSaved ? 'Saved' : 'Save'}
+          </button>
+        </div>
       </div>
 
       {/* 3. Proposed solution */}

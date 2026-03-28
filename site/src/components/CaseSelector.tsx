@@ -28,6 +28,7 @@ export default function CaseSelector() {
       redesignData: c.redesignData || null,
       pilotPlan: c.pilotPlan || null,
       boundaryDefaults: c.boundaryDefaults || null,
+      simplifiedInputs: c.simplifiedInputs || null,
     } as any);
   }
 
@@ -63,6 +64,7 @@ export default function CaseSelector() {
     saveState({ selectedCase: 'custom', workflow, qualification: null });
   }
 
+  const [showExample, setShowExample] = useState(false);
   const expanded = expandedId ? flagshipCases.find(c => c.id === expandedId) : null;
 
   return (
@@ -227,7 +229,30 @@ export default function CaseSelector() {
             fontSize: '14px',
             lineHeight: '1.75',
           }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '0.5rem' }}>Describe your workflow</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 600, margin: 0 }}>Describe your workflow</h3>
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowExample(true); }}
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  border: '1.5px solid var(--purple-light)',
+                  background: 'none',
+                  color: 'var(--purple)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  fontFamily: 'inherit',
+                  padding: 0,
+                }}
+                title="See an example"
+              >i</button>
+            </div>
             <p style={{ fontSize: '13px', color: '#666', marginBottom: '1.25rem' }}>
               Describe the process as it works today. Don't worry about AI or solutions yet. Just describe what happens, who does it and where it hurts.
             </p>
@@ -305,6 +330,85 @@ export default function CaseSelector() {
           </div>
         )}
       </div>
+
+      {/* Example modal */}
+      {showExample && (
+        <div
+          onClick={() => setShowExample(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'white',
+              borderRadius: '12px',
+              maxWidth: '600px',
+              width: '100%',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              padding: '2rem',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0 }}>Example: CRO pipeline review</h3>
+              <button
+                onClick={() => setShowExample(false)}
+                style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '1.25rem', color: '#999', padding: '0.25rem' }}
+              >✕</button>
+            </div>
+
+            <div style={{ fontSize: '14px', lineHeight: 1.75 }}>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <div style={{ fontWeight: 600, fontSize: '13px', color: '#666', marginBottom: '0.25rem' }}>What is the process?</div>
+                <div style={{ padding: '0.5rem 0.75rem', background: '#fafafa', borderRadius: '6px', fontFamily: "'IBM Plex Mono', monospace", fontSize: '13px' }}>
+                  CRO weekly pipeline review
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <div style={{ fontWeight: 600, fontSize: '13px', color: '#666', marginBottom: '0.25rem' }}>What's the pain?</div>
+                <div style={{ padding: '0.5rem 0.75rem', background: '#fafafa', borderRadius: '6px', fontSize: '13px' }}>
+                  The CRO spends 2-3 hours before every pipeline review pulling data from the CRM, chasing account executives for updates on stale deals, and manually spotting risks like slipped stages or missing follow-ups. By the time the review happens, half the data is already outdated. Decisions get made on gut feel instead of evidence.
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <div style={{ fontWeight: 600, fontSize: '13px', color: '#666', marginBottom: '0.25rem' }}>Steps today</div>
+                <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.375rem' }}>
+                  {[
+                    { step: 'Pull pipeline snapshot from CRM', who: 'RevOps' },
+                    { step: 'Chase AEs for deal updates via Slack', who: 'CRO' },
+                    { step: 'Manually flag stale or at-risk opportunities', who: 'CRO' },
+                    { step: 'Build review deck with key numbers', who: 'RevOps' },
+                    { step: 'Run the pipeline review meeting', who: 'CRO' },
+                    { step: 'Assign follow-up actions', who: 'CRO' },
+                  ].map((s, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '0.5rem', padding: '0.375rem 0.75rem', background: '#fafafa', borderRadius: '6px', fontSize: '13px' }}>
+                      <span style={{ color: '#999', minWidth: '1.25em' }}>{i + 1}</span>
+                      <span style={{ flex: 2 }}>{s.step}</span>
+                      <span style={{ flex: 1, color: '#666', fontFamily: "'IBM Plex Mono', monospace" }}>{s.who}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <p style={{ fontSize: '13px', color: '#999', fontStyle: 'italic', margin: 0 }}>
+                Notice: no mention of AI or solutions. Just the process, the people and the pain. The guide helps you figure out the rest.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

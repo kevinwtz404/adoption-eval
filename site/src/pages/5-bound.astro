@@ -12,19 +12,25 @@ const base = import.meta.env.BASE_URL;
       <p class="subtitle">You have a design. Now stress-test it. What can go wrong, what must stay off-limits and what decisions do you need to make before building anything?</p>
     </div>
 
-    <div class="mb-10">
-      <h2>Why this step matters</h2>
+    <details class="expander mb-10">
+      <summary>
+        <div class="expander-icon"></div>
+        <div class="expander-label">
+          <span class="expander-title">Why this step matters</span>
+          <span class="expander-hint">Every component can fail in specific ways. This is where you get specific.</span>
+        </div>
+        <span class="expander-chevron">▸</span>
+      </summary>
+      <div class="expander-content">
+        <p>
+          The Map page produced an ideal design. This page puts the brakes on it. Every AI component can fail in specific ways. Every dataset has privacy constraints. Every model has a cost. And some errors are acceptable while others are not.
+        </p>
 
-      <p>
-        The Map page produced an ideal design. This page puts the brakes on it. Every AI component can fail in specific ways. Every dataset has privacy constraints. Every model has a cost. And some errors are acceptable while others are not.
-      </p>
-
-      <p>
-        The goal is not to be cautious. It is to be specific. By the end of this page, you should know exactly what you need to protect against and how.
-      </p>
-    </div>
-
-    <div class="divider"></div>
+        <p>
+          The goal is not to be cautious. It is to be specific. By the end of this page, you should know exactly what you need to protect against and how.
+        </p>
+      </div>
+    </details>
 
     <div class="mb-10">
       <BoundaryDesigner client:load />

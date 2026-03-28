@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { loadState, saveState } from '../data/store';
+import { suggestBoundaryDefaults } from '../data/gemini-playbook';
 
 interface BoundaryDecision {
   id: string;
@@ -126,6 +127,8 @@ export default function BoundaryDesigner() {
   const [activeTab, setActiveTab] = useState('errors');
   const [decisions, setDecisions] = useState<BoundaryDecision[]>([]);
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
+  const [suggesting, setSuggesting] = useState(false);
+  const [suggestError, setSuggestError] = useState('');
 
   useEffect(() => {
     const state = loadState();
@@ -144,8 +147,44 @@ export default function BoundaryDesigner() {
       });
       setDecisions(fresh);
       saveState({ boundaryDecisions: fresh } as any);
+
+      // For custom workflows with no defaults, auto-suggest via Gemini
+      const hasAnyChoice = fresh.some(d => d.choice);
+      if (!hasAnyChoice && state.selectedCase === 'custom' && state.redesign && state.redesignData) {
+        autoSuggest(state, fresh);
+      }
     }
   }, []);
+
+  async function autoSuggest(state: any, currentDecisions: BoundaryDecision[]) {
+    setSuggesting(true);
+    setSuggestError('');
+    try {
+      const suggestions = await suggestBoundaryDefaults(
+        state.workflow?.name || 'Custom workflow',
+        state.workflow?.steps?.[0]?.pain || '',
+        state.redesign || '',
+        (state.redesignData?.components || []).filter((c: any) => !c.name.startsWith('_')),
+      );
+      if (suggestions && suggestions.length > 0) {
+        const updated = currentDecisions.map(d => {
+          const suggestion = suggestions.find(s => s.id === d.id);
+          if (suggestion) {
+            return { ...d, choice: suggestion.choice, detail: suggestion.choice === 'partly' ? suggestion.rationale : '' };
+          }
+          return d;
+        });
+        setDecisions(updated);
+        saveState({ boundaryDecisions: updated } as any);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message.includes('Rate limit')) {
+        setSuggestError('Rate limit reached. Fill in the decisions manually or try again later.');
+      }
+    } finally {
+      setSuggesting(false);
+    }
+  }
 
   function updateChoice(id: string, value: string) {
     const updated = decisions.map(d => d.id === id ? { ...d, choice: value, detail: value === 'partly' ? d.detail : '' } : d);
@@ -297,7 +336,14 @@ export default function BoundaryDesigner() {
 
       {/* Progress */}
       <div style={{ fontSize: '13px', color: '#999', marginBottom: '1.25rem' }}>
-        {answered} of {decisions.length} boundary decisions made
+        {suggesting ? (
+          <span style={{ color: 'var(--purple)' }}>Suggesting defaults based on your workflow...</span>
+        ) : (
+          <>{answered} of {decisions.length} boundary decisions made</>
+        )}
+        {suggestError && (
+          <span style={{ color: 'var(--danger)', marginLeft: '0.5rem' }}>{suggestError}</span>
+        )}
       </div>
 
       {/* Error tolerance */}

@@ -40,12 +40,18 @@
 
 /* Base typography */
 body {
-  font-family: Monaco, monospace;
-  font-size: 13px;
-  line-height: 1.6;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Mono accent: cost ranges, system names, technical inputs, output blocks */
+.font-mono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 a {
@@ -249,8 +255,9 @@ li {
 }
 
 .sidebar-heading {
+  font-family: Monaco, monospace;
   font-weight: 700;
-  font-size: 22px;
+  font-size: 13px;
   margin-bottom: 0.75rem;
 }
 
@@ -261,9 +268,10 @@ li {
 }
 
 .sidebar-section a {
+  font-family: Monaco, monospace;
   color: var(--purple);
   text-decoration: none;
-  font-size: 18px;
+  font-size: 13px;
 }
 
 .sidebar-section a:hover {
@@ -278,19 +286,19 @@ li {
 
 .page-content p,
 .page-content li {
-  font-size: 15px;
-  line-height: 1.75;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .page-content h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: var(--purple);
   margin-bottom: 0.5rem;
 }
 
 .page-content h2 {
-  font-size: 1.375rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
   margin-top: 0.5rem;
@@ -300,6 +308,20 @@ li {
   font-size: 1.0625rem;
   font-weight: 600;
   margin-bottom: 0.4rem;
+}
+
+/* Small UI labels */
+.ui-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Big result text (Go / Not yet / No-go) */
+.result-badge {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .page-header {
@@ -425,6 +447,94 @@ input:focus, textarea:focus, select:focus {
   border-color: var(--purple-light);
 }
 
+/* Expander / progressive disclosure */
+.expander {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.expander:hover {
+  border-color: var(--purple-light);
+  box-shadow: 0 0 0 1px rgba(104, 48, 196, 0.08);
+}
+
+.expander summary {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.expander summary::before {
+  content: '';
+  display: none;
+}
+
+.expander summary::-webkit-details-marker {
+  display: none;
+}
+
+.expander-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(104, 48, 196, 0.08);
+  color: var(--purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.expander:hover .expander-icon {
+  background: rgba(104, 48, 196, 0.14);
+}
+
+.expander-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.expander-title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.expander-hint {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.expander-chevron {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  transition: transform 0.2s;
+}
+
+.expander[open] .expander-chevron {
+  transform: rotate(90deg);
+}
+
+.expander summary.expander-centered {
+  justify-content: center;
+}
+
+.expander-content {
+  padding: 0 1.25rem 1.25rem 1.25rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+  padding-top: 1.25rem;
+}
+
 /* Tags for action items */
 .tag {
   display: inline-flex;
@@ -433,7 +543,7 @@ input:focus, textarea:focus, select:focus {
   border-radius: 4px;
   font-size: 0.6875rem;
   font-weight: 600;
-  font-family: ui-monospace, monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 .tag-prerequisite { background: #dbeafe; color: #1d4ed8; }

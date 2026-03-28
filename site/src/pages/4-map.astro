@@ -13,58 +13,51 @@ const base = import.meta.env.BASE_URL;
     </div>
 
     <div class="mb-10">
-      <h2>What is actually inside an AI system?</h2>
+      <h2 style="text-align: center;">What's actually inside an AI system?</h2>
+        <p>
+          When you see a demo of an "AI agent" that handles a whole workflow, what you are actually seeing is a combination of different components. A language model that understands and generates text. Tools that do specific things like query a database, call an API or run a calculation. A retrieval layer that looks up information in your documents. And human checkpoints where a person reviews, approves or redirects.
+        </p>
 
-      <p>
-        When you see a demo of an "AI agent" that handles a whole workflow, what you are actually seeing is a combination of different components. A language model that understands and generates text. Tools that do specific things like query a database, call an API or run a calculation. A retrieval layer that looks up information in your documents. And human checkpoints where a person reviews, approves or redirects.
-      </p>
+        <p>
+          None of these components work well in isolation. A language model without tools cannot look anything up. A database tool without a language model cannot interpret a question. A retrieval system without a human checkpoint might surface confidential information to the wrong person. How you put them together determines whether the system is useful or dangerous.
+        </p>
 
-      <p>
-        None of these components work well in isolation. A language model without tools cannot look anything up. A database tool without a language model cannot interpret a question. A retrieval system without a human checkpoint might surface confidential information to the wrong person. How you put them together determines whether the system is useful or dangerous.
-      </p>
-
-      <div class="component-diagram">
-        <div class="diagram-label">What you see: "an AI agent"</div>
-        <div class="diagram-box">
-          <div class="diagram-inner-label">What is actually there:</div>
-          <div class="diagram-components">
-            <div class="diagram-component">
-              <div class="comp-icon">LLM</div>
-              <div class="comp-desc">Language model. Understands text, generates responses, decides what to do next. Can <a href={`${base}resources/#hallucination`}>hallucinate</a>.</div>
+        <div class="component-diagram">
+          <div class="diagram-label">What you see: "an AI agent"</div>
+          <div class="diagram-box">
+            <div class="diagram-inner-label">What is actually there:</div>
+            <div class="diagram-components">
+              <div class="diagram-component">
+                <div class="comp-icon">LLM</div>
+                <div class="comp-desc">Language model. Understands text, generates responses, decides what to do next. Can <a href={`${base}resources/#hallucination`}>hallucinate</a>.</div>
+              </div>
+              <div class="diagram-component">
+                <div class="comp-icon">Tool</div>
+                <div class="comp-desc">Deterministic tools. API calls, database queries, calculations. Exact and reliable but only do what they are told.</div>
+              </div>
+              <div class="diagram-component">
+                <div class="comp-icon">RAG</div>
+                <div class="comp-desc">Retrieval. LLMs have limited context windows, so you store documents as vectors in a database. The LLM queries it to find relevant information before generating a response.</div>
+              </div>
+              <div class="diagram-component">
+                <div class="comp-icon">ML</div>
+                <div class="comp-desc"><a href={`${base}resources/#trained-model`}>Trained models</a>. Classification, scoring, prediction from data. Good at patterns, blind to context.</div>
+              </div>
+              <div class="diagram-component">
+                <div class="comp-icon">Human</div>
+                <div class="comp-desc">Human checkpoints. Review, approve, redirect. Catches what AI misses. Slow but accountable.</div>
+              </div>
             </div>
-            <div class="diagram-component">
-              <div class="comp-icon">Tool</div>
-              <div class="comp-desc">Deterministic tools. API calls, database queries, calculations. Exact and reliable but only do what they are told.</div>
-            </div>
-            <div class="diagram-component">
-              <div class="comp-icon">RAG</div>
-              <div class="comp-desc">Retrieval. LLMs have limited context windows, so you store documents as vectors in a database. The LLM queries it to find relevant information before generating a response.</div>
-            </div>
-            <div class="diagram-component">
-              <div class="comp-icon">ML</div>
-              <div class="comp-desc"><a href={`${base}resources/#trained-model`}>Trained models</a>. Classification, scoring, prediction from data. Good at patterns, blind to context.</div>
-            </div>
-            <div class="diagram-component">
-              <div class="comp-icon">Human</div>
-              <div class="comp-desc">Human checkpoints. Review, approve, redirect. Catches what AI misses. Slow but accountable.</div>
-            </div>
+            <div class="diagram-connections">Connected via <a href={`${base}resources/#tool-calling`}>tool calls</a> and APIs. The LLM decides when to use each component.</div>
           </div>
-          <div class="diagram-connections">Connected via <a href={`${base}resources/#tool-calling`}>tool calls</a> and APIs. The LLM decides when to use each component.</div>
         </div>
-      </div>
     </div>
-
-    <div class="divider"></div>
 
     <div class="mb-10">
       <h2>Design your intervention</h2>
 
       <p>
-        Below is your current workflow alongside a space to describe what you want to change. You do not need to know the technical solution. Just describe the outcome you are after. For the built-in scenarios, we have pre-filled a proposed solution. For your own workflows, you can generate one or write your own.
-      </p>
-
-      <p>
-        The next step (Boundaries) will stress-test this design: what could go wrong with each component, what data privacy concerns exist, what costs to expect and where humans need to stay in the loop.
+        Describe the outcome you are after. For the built-in scenarios, we have pre-filled a proposed solution. For your own workflows, you can generate one or write your own.
       </p>
 
       <InterventionDesigner client:load />
